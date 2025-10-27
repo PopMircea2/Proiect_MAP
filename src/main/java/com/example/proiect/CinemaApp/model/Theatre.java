@@ -21,7 +21,6 @@ public class Theatre {
         return name;
     }
 
-    public Theatre() {}
     public Theatre(String id, String name, String city, List<Hall> halls) {
         this.id = id;
         this.name = name;
