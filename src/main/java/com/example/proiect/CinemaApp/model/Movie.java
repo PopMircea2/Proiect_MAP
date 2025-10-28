@@ -6,6 +6,16 @@ public class Movie {
     private String title;
     private int DurationMin;
     private List<Screening> screenings;
+    private double Rating;
+
+
+    public double getRating() {
+        return Rating;
+    }
+
+    public void setRating(double rating) {
+        Rating = rating;
+    }
 
     public String getId() {
         return id;
@@ -39,10 +49,11 @@ public class Movie {
         this.screenings = screenings;
     }
 
-    public Movie(String id, String title, int durationMin, List<Screening> screenings) {
+    public Movie(String id, String title, int durationMin, double Rating ,List<Screening> screenings) {
         this.id = id;
         this.title = title;
         DurationMin = durationMin;
         this.screenings = screenings;
+        this.Rating = Rating;
     }
 }
