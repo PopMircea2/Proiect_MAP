@@ -3,8 +3,8 @@ package com.example.proiect.CinemaApp.model;
 public class TechnicalOperator extends Staff{
     private String specialization;
 
-    public TechnicalOperator(String id, String name, String specialization) {
-        super(id, name);
+    public TechnicalOperator(String id, String name, String specialization, double hourlyRate, int age) {
+        super(id, name,hourlyRate, age);
         this.specialization = specialization;
     }
 
