@@ -5,23 +5,8 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class HallRepo {
-    private final Map<String, Hall> halls = new HashMap<>();
-
-    public List<Hall> findAll() {
-        return new ArrayList<>(halls.values());
-    }
-
-    public Optional<Hall> findById(String id) {
-        return Optional.ofNullable(halls.get(id));
-    }
-
-    public Hall save(Hall hall) {
-        halls.put(hall.getId(), hall);
-        return hall;
-    }
-
-    public void deleteById(String id) {
-        halls.remove(id);
+public class HallRepo extends MemoryRepo<Hall>{
+    protected HallRepo() {
+        super(Hall::getId);
     }
 }

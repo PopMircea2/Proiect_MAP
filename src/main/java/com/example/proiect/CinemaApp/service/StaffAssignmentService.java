@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StaffAssignment_Service {
+public class StaffAssignmentService {
     private final StaffAssignmentRepo assignmentRepo;
 
-    public StaffAssignment_Service(StaffAssignmentRepo assignmentRepo) {
+    public StaffAssignmentService(StaffAssignmentRepo assignmentRepo) {
         this.assignmentRepo = assignmentRepo;
     }
 
