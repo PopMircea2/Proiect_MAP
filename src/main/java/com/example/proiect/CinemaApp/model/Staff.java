@@ -1,17 +1,19 @@
 package com.example.proiect.CinemaApp.model;
 
+import java.time.LocalDate;
+
 public abstract class Staff {
     private String id;
     private String name;
     private double HourlyRate;
-    private int age;
+    private LocalDate DateBirth;
 
-    public int getAge() {
-        return age;
+    public LocalDate getDateBirth() {
+        return DateBirth;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDateBirth(LocalDate dateBirth) {
+        this.DateBirth = dateBirth;
     }
 
     public double getHourlyRate() {
@@ -38,10 +40,10 @@ public abstract class Staff {
         this.name = name;
     }
 
-    public Staff(String id, String name,double hourlyRate, int age) {
+    public Staff(String id, String name,double hourlyRate, LocalDate DateBirth) {
         this.id = id;
         this.name = name;
         this.HourlyRate = hourlyRate;
-        this.age = age;
+        this.DateBirth = DateBirth;
     }
 }

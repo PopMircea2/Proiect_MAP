@@ -1,27 +1,28 @@
 package com.example.proiect.CinemaApp.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Customer {
     private String id;
-    private int age;
+    private LocalDate DateBirth;
     private String Name;
     private List<Ticket> tickets;
 
 
-    public Customer(String id, int age, String name, List<Ticket> tickets) {
+    public Customer(String id, LocalDate DateBirth, String name, List<Ticket> tickets) {
         this.id = id;
-        this.age = age;
+        this.DateBirth = DateBirth;
         Name = name;
         this.tickets = tickets;
     }
 
-    public int getAge() {
-        return age;
+    public LocalDate getDateBirth() {
+        return DateBirth;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDateBirth(LocalDate dateBirth) {
+        this.DateBirth = dateBirth;
     }
 
     public String getId() {
