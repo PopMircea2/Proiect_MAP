@@ -5,24 +5,10 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class ScreeningRepo {
-    private final Map<String, Screening> screenings = new HashMap<>();
-
-    public List<Screening> findAll() {
-        return new ArrayList<>(screenings.values());
+public class ScreeningRepo extends MemoryRepo<Screening>{
+    protected ScreeningRepo() {
+        super(Screening::getId);
     }
 
-    public Optional<Screening> findById(String id) {
-        return Optional.ofNullable(screenings.get(id));
-    }
-
-    public Screening save(Screening screening) {
-        screenings.put(screening.getId(), screening);
-        return screening;
-    }
-
-    public void deleteById(String id) {
-        screenings.remove(id);
-    }
 }
 

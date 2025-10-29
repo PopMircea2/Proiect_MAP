@@ -5,24 +5,10 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class MovieRepo {
-    private final Map<String, Movie> movies = new HashMap<>();
-
-    public List<Movie> findAll() {
-        return new ArrayList<>(movies.values());
+public class MovieRepo extends MemoryRepo<Movie>{
+    protected MovieRepo() {
+        super(Movie::getId);
     }
 
-    public Optional<Movie> findById(String id) {
-        return Optional.ofNullable(movies.get(id));
-    }
-
-    public Movie save(Movie movie) {
-        movies.put(movie.getId(), movie);
-        return movie;
-    }
-
-    public void deleteById(String id) {
-        movies.remove(id);
-    }
 }
 
