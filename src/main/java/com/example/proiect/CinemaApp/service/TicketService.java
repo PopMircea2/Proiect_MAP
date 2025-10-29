@@ -1,16 +1,16 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Ticket;
-import com.example.proiect.CinemaApp.repository.Ticket_Repo;
+import com.example.proiect.CinemaApp.repository.TicketRepo;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class Ticket_Service {
-    private final Ticket_Repo ticketRepo;
+public class TicketService {
+    private final TicketRepo ticketRepo;
 
-    public Ticket_Service(Ticket_Repo ticketRepo) {
+    public TicketService(TicketRepo ticketRepo) {
         this.ticketRepo = ticketRepo;
     }
 

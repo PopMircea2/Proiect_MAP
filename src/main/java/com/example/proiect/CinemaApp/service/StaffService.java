@@ -1,16 +1,16 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Staff;
-import com.example.proiect.CinemaApp.repository.Staff_Repo;
+import com.example.proiect.CinemaApp.repository.StaffRepo;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class Staff_Service {
-    private final Staff_Repo staffRepo;
+public class StaffService {
+    private final StaffRepo staffRepo;
 
-    public Staff_Service(Staff_Repo staffRepo) {
+    public StaffService(StaffRepo staffRepo) {
         this.staffRepo = staffRepo;
     }
 

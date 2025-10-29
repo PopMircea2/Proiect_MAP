@@ -1,16 +1,16 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Screening;
-import com.example.proiect.CinemaApp.repository.Screening_Repo;
+import com.example.proiect.CinemaApp.repository.ScreeningRepo;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class Screening_Service {
-    private final Screening_Repo screeningRepo;
+public class ScreeningService {
+    private final ScreeningRepo screeningRepo;
 
-    public Screening_Service(Screening_Repo screeningRepo) {
+    public ScreeningService(ScreeningRepo screeningRepo) {
         this.screeningRepo = screeningRepo;
     }
 

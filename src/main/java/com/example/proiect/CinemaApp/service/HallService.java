@@ -1,16 +1,16 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Hall;
-import com.example.proiect.CinemaApp.repository.Hall_Repo;
+import com.example.proiect.CinemaApp.repository.HallRepo;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class Hall_Service {
-    private final Hall_Repo hallRepo;
+public class HallService {
+    private final HallRepo hallRepo;
 
-    public Hall_Service(Hall_Repo hallRepo) {
+    public HallService(HallRepo hallRepo) {
         this.hallRepo = hallRepo;
     }
 

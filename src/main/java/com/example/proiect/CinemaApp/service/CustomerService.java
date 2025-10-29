@@ -2,16 +2,16 @@ package com.example.proiect.CinemaApp.service;
 
 
 import com.example.proiect.CinemaApp.model.Customer;
-import com.example.proiect.CinemaApp.repository.Customer_Repo;
+import com.example.proiect.CinemaApp.repository.CustomerRepo;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class Customer_Service {
-    private final Customer_Repo customerRepo;
+public class CustomerService {
+    private final CustomerRepo customerRepo;
 
-    public Customer_Service(Customer_Repo customerRepo) {
+    public CustomerService(CustomerRepo customerRepo) {
         this.customerRepo = customerRepo;
     }
 

@@ -1,4 +1,5 @@
 package com.example.proiect.CinemaApp.model;
+import java.util.Date;
 import java.util.List;
 
 public class Movie {
@@ -7,6 +8,7 @@ public class Movie {
     private int DurationMin;
     private List<Screening> screenings;
     private double Rating;
+    private Date date;
 
 
     public double getRating() {

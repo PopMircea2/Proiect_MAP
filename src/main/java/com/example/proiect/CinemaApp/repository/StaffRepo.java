@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class Staff_Repo {
+public class StaffRepo {
     private final Map<String, Staff> staffMembers = new HashMap<>();
 
     public List<Staff> findAll() {
