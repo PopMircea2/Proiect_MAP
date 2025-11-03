@@ -7,6 +7,8 @@ public class Ticket {
     private String seatId;
     private double price;
 
+    public Ticket() {}
+
     public String getId() {
         return id;
     }

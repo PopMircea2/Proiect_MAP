@@ -10,6 +10,9 @@ public class Customer {
     private List<Ticket> tickets;
 
 
+    public Customer() {
+    }
+
     public Customer(String id, LocalDate DateBirth, String name, List<Ticket> tickets) {
         this.id = id;
         this.DateBirth = DateBirth;

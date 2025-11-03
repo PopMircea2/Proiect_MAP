@@ -6,6 +6,8 @@ public class Seat {
     private String row;
     private String column;
 
+    public Seat() {}
+
     public String getId() {
         return id;
     }

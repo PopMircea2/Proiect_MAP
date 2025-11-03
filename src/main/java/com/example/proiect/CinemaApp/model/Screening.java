@@ -10,6 +10,8 @@ public class Screening {
     private List<Ticket> tickets;
     private List<StaffAssignment> assignments;
 
+    public Screening() {}
+
     public String getId() {
         return id;
     }

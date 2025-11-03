@@ -5,6 +5,8 @@ public class StaffAssignment {
     private String ScreeningId;
     private String StaffId;
 
+    public StaffAssignment() {}
+
     public String getId() {
         return id;
     }

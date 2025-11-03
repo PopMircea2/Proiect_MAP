@@ -8,6 +8,8 @@ public class Theatre {
     private String city;
     private List<Hall> halls;
 
+    public Theatre() {}
+
     public String getId() {
         return id;
     }
