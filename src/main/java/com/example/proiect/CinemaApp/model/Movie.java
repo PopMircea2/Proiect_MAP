@@ -10,6 +10,10 @@ public class Movie {
     private double Rating;
     private Date date;
 
+    public Movie() {
+
+    }
+
 
     public double getRating() {
         return Rating;
