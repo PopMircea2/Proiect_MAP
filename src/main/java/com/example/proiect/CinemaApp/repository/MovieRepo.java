@@ -6,7 +6,7 @@ import java.util.*;
 
 @Repository
 public class MovieRepo extends MemoryRepo<Movie>{
-    protected MovieRepo() {
+    public MovieRepo() {
         super(Movie::getId);
     }
 
