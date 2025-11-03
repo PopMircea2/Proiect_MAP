@@ -10,12 +10,27 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
     <style>
-        :root{--accent:#0d6efd;--muted:#6c757d}
+        :root{
+            --bg: #f7f9fc;
+            --surface: rgba(255,255,255,0.9);
+            --muted:#6c757d;
+            --text:#0b1220;
+            --accent:#0d6efd;
+        }
+        [data-theme="dark"]{
+            --bg:#071025;
+            --surface: rgba(12,18,32,0.7);
+            --muted:#9aa6b2;
+            --text:#e6eef6;
+            --accent:#66a8ff;
+        }
         html,body{height:100%;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
-        body{background: linear-gradient(180deg,#f7f9fc 0%, #eef3fb 100%);}
-        .navbar {background: rgba(255,255,255,0.9);}
+        body{background: linear-gradient(180deg,var(--bg) 0%, #eef3fb 100%);color:var(--text)}
+        .navbar {background: var(--surface);}
         .hero {background: rgba(255,255,255,0.6);backdrop-filter: blur(6px);border-radius:1rem;padding:1.25rem;box-shadow:0 8px 24px rgba(13,110,253,0.06)}
+        [data-theme="dark"] .hero{background:rgba(255,255,255,0.03)}
         .stat-card{border-radius:.75rem;padding:1rem;background:linear-gradient(180deg,rgba(255,255,255,0.8),rgba(255,255,255,0.6));box-shadow:0 6px 18px rgba(16,24,40,0.04)}
+        [data-theme="dark"] .stat-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:none}
         .entity-card{transition:transform .16s cubic-bezier(.2,.8,.2,1), box-shadow .16s; border-radius:.8rem}
         .entity-card:hover{transform:translateY(-8px);box-shadow:0 12px 40px rgba(2,6,23,0.08)}
         .entity-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:.6rem;font-size:22px}
@@ -24,10 +39,20 @@
         .fade-up.show{opacity:1;transform:none}
         .card-description{color:var(--muted);font-size:.9rem}
         footer{padding:2.25rem 0;color:var(--muted)}
+
+        /* badge pulse */
+        @keyframes pulse {0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+        .badge-pulse{animation:pulse 1.6s ease-in-out infinite}
+
+        /* highlight for search matches */
+        .highlight{background:linear-gradient(90deg,#fff6a5,#ffd76a);padding:.05rem .1rem;border-radius:.15rem}
+
+        /* accessible focus styles */
+        a.entity-card:focus{outline:3px solid rgba(13,110,253,0.12);outline-offset:2px}
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm" role="navigation">
     <div class="container">
         <a class="navbar-brand fw-bold" th:href="@{/}">Cinema Admin</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,12 +64,17 @@
                 <li class="nav-item pe-2"><a class="nav-link" th:href="@{/customers}">Customers</a></li>
                 <li class="nav-item pe-2"><a class="nav-link" th:href="@{/theatres}">Theatres</a></li>
                 <li class="nav-item ms-2"><a class="btn btn-sm btn-outline-primary" th:href="@{/movies/new}">Add Movie</a></li>
+                <li class="nav-item ms-2">
+                    <button id="themeToggle" class="btn btn-sm btn-outline-secondary" aria-label="Toggle theme" title="Toggle theme">
+                        <i id="themeIcon" class="bi bi-moon"></i>
+                    </button>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<main class="container my-5">
+<main class="container my-5" id="pageRoot">
     <div class="row g-4 align-items-center mb-3">
         <div class="col-12 col-md-7">
             <div class="hero">
@@ -76,10 +106,10 @@
             <div class="card p-3 shadow-sm">
                 <div class="d-flex align-items-center gap-3">
                     <div class="flex-grow-1">
-                        <input id="search" type="search" class="form-control search-box" placeholder="Search sections (e.g. ‘movie’, ‘hall’)" aria-label="Search sections">
+                        <input id="search" type="search" class="form-control search-box" placeholder="Press '/' to focus — Search sections (e.g. ‘movie’, ‘hall’)" aria-label="Search sections">
                     </div>
                     <div>
-                        <a class="btn btn-outline-secondary" id="clearSearch">Clear</a>
+                        <button class="btn btn-outline-secondary" id="clearSearch" aria-label="Clear search">Clear</button>
                     </div>
                 </div>
                 <div class="mt-3 small text-muted">Tip: type to filter the cards below</div>
@@ -87,118 +117,118 @@
         </div>
     </div>
 
-    <div class="row g-3" id="cardsContainer">
+    <div class="row g-3" id="cardsContainer" aria-live="polite">
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/movies}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/movies}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon bg-primary text-white"><i class="bi bi-film"></i></div>
+                    <div class="entity-icon bg-primary text-white"><i class="bi bi-film" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Movies</h5>
+                        <h5 class="mb-0 card-title">Movies</h5>
                         <div class="card-description">Manage titles, duration and ratings</div>
                     </div>
                     <div class="ms-auto">
-                        <span class="badge bg-primary rounded-pill" th:text="${moviesCount != null ? moviesCount : ''}"></span>
+                        <span class="badge bg-primary rounded-pill badge-pulse" th:text="${moviesCount != null ? moviesCount : ''}"></span>
                     </div>
                 </div>
             </a>
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/customers}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/customers}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon bg-success text-white"><i class="bi bi-people"></i></div>
+                    <div class="entity-icon bg-success text-white"><i class="bi bi-people" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Customers</h5>
+                        <h5 class="mb-0 card-title">Customers</h5>
                         <div class="card-description">View customers and their tickets</div>
                     </div>
                     <div class="ms-auto">
-                        <span class="badge bg-success rounded-pill" th:text="${customersCount != null ? customersCount : ''}"></span>
+                        <span class="badge bg-success rounded-pill badge-pulse" th:text="${customersCount != null ? customersCount : ''}"></span>
                     </div>
                 </div>
             </a>
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/theatres}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/theatres}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon bg-info text-white"><i class="bi bi-building"></i></div>
+                    <div class="entity-icon bg-info text-white"><i class="bi bi-building" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Theatres</h5>
+                        <h5 class="mb-0 card-title">Theatres</h5>
                         <div class="card-description">Manage theatre locations and halls</div>
                     </div>
                     <div class="ms-auto">
-                        <span class="badge bg-info rounded-pill" th:text="${theatresCount != null ? theatresCount : ''}"></span>
+                        <span class="badge bg-info rounded-pill badge-pulse" th:text="${theatresCount != null ? theatresCount : ''}"></span>
                     </div>
                 </div>
             </a>
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/halls}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/halls}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon bg-warning text-white"><i class="bi bi-camera-reels"></i></div>
+                    <div class="entity-icon bg-warning text-white"><i class="bi bi-camera-reels" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Halls</h5>
+                        <h5 class="mb-0 card-title">Halls</h5>
                         <div class="card-description">Seats & screenings per hall</div>
                     </div>
                     <div class="ms-auto">
-                        <span class="badge bg-warning rounded-pill" th:text="${hallsCount != null ? hallsCount : ''}"></span>
+                        <span class="badge bg-warning rounded-pill badge-pulse" th:text="${hallsCount != null ? hallsCount : ''}"></span>
                     </div>
                 </div>
             </a>
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/seats}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/seats}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon bg-secondary text-white"><i class="bi bi-grid-3x3-gap"></i></div>
+                    <div class="entity-icon bg-secondary text-white"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Seats</h5>
+                        <h5 class="mb-0 card-title">Seats</h5>
                         <div class="card-description">Manage seat layout and labels</div>
                     </div>
                     <div class="ms-auto">
-                        <span class="badge bg-secondary rounded-pill" th:text="${seatsCount != null ? seatsCount : ''}"></span>
+                        <span class="badge bg-secondary rounded-pill badge-pulse" th:text="${seatsCount != null ? seatsCount : ''}"></span>
                     </div>
                 </div>
             </a>
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/screenings}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/screenings}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon bg-danger text-white"><i class="bi bi-calendar3"></i></div>
+                    <div class="entity-icon bg-danger text-white"><i class="bi bi-calendar3" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Screenings</h5>
+                        <h5 class="mb-0 card-title">Screenings</h5>
                         <div class="card-description">Schedule showings and assign halls</div>
                     </div>
                     <div class="ms-auto">
-                        <span class="badge bg-danger rounded-pill" th:text="${screeningsCount != null ? screeningsCount : ''}"></span>
+                        <span class="badge bg-danger rounded-pill badge-pulse" th:text="${screeningsCount != null ? screeningsCount : ''}"></span>
                     </div>
                 </div>
             </a>
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/tickets}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/tickets}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon" style="background:linear-gradient(180deg,#6f42c1,#5a2ea6);color:white"><i class="bi bi-ticket-perforated"></i></div>
+                    <div class="entity-icon" style="background:linear-gradient(180deg,#6f42c1,#5a2ea6);color:white"><i class="bi bi-ticket-perforated" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Tickets</h5>
+                        <h5 class="mb-0 card-title">Tickets</h5>
                         <div class="card-description">Sales, prices and seat assignments</div>
                     </div>
                     <div class="ms-auto">
-                        <span class="badge" style="background:linear-gradient(180deg,#6f42c1,#5a2ea6)" th:text="${ticketsCount != null ? ticketsCount : ''}"></span>
+                        <span class="badge badge-pulse" style="background:linear-gradient(180deg,#6f42c1,#5a2ea6)" th:text="${ticketsCount != null ? ticketsCount : ''}"></span>
                     </div>
                 </div>
             </a>
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/staffassignments}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/staffassignments}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon" style="background:linear-gradient(180deg,#20c997,#17a589);color:white"><i class="bi bi-person-badge"></i></div>
+                    <div class="entity-icon" style="background:linear-gradient(180deg,#20c997,#17a589);color:white"><i class="bi bi-person-badge" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Staff Assignments</h5>
+                        <h5 class="mb-0 card-title">Staff Assignments</h5>
                         <div class="card-description">Assign staff to screenings</div>
                     </div>
                 </div>
@@ -206,11 +236,11 @@
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/supportstaff}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/supportstaff}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon" style="background:linear-gradient(180deg,#6610f2,#4b0fb2);color:white"><i class="bi bi-tools"></i></div>
+                    <div class="entity-icon" style="background:linear-gradient(180deg,#6610f2,#4b0fb2);color:white"><i class="bi bi-tools" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Support Staff</h5>
+                        <h5 class="mb-0 card-title">Support Staff</h5>
                         <div class="card-description">Support roles & details</div>
                     </div>
                 </div>
@@ -218,11 +248,11 @@
         </div>
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-up show">
-            <a th:href="@{/technicaloperator}" class="card h-100 text-decoration-none text-reset entity-card p-3">
+            <a th:href="@{/technicaloperator}" class="card h-100 text-decoration-none text-reset entity-card p-3" tabindex="0">
                 <div class="d-flex gap-3 align-items-center">
-                    <div class="entity-icon bg-dark text-white"><i class="bi bi-wrench"></i></div>
+                    <div class="entity-icon bg-dark text-white"><i class="bi bi-wrench" aria-hidden="true"></i></div>
                     <div>
-                        <h5 class="mb-0">Technical Operators</h5>
+                        <h5 class="mb-0 card-title">Technical Operators</h5>
                         <div class="card-description">Technical specializations</div>
                     </div>
                 </div>
@@ -245,31 +275,75 @@
 </main>
 
 <script>
-    // Small utilities: search/filter and reveal animation
+    // Small utilities: search/filter, highlight, reveal animation and theme toggle
     (function(){
         const search = document.getElementById('search');
         const clearBtn = document.getElementById('clearSearch');
         const container = document.getElementById('cardsContainer');
         const items = Array.from(container.querySelectorAll('.col-12'));
+        const root = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function escapeRegex(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+
+        function highlightText(el, q){
+            if(!q) { el.innerHTML = el.textContent; return; }
+            const rx = new RegExp('(' + escapeRegex(q) + ')','ig');
+            el.innerHTML = el.textContent.replace(rx, '<mark class="highlight">$1</mark>');
+        }
 
         function filter(q){
             const s = q.trim().toLowerCase();
             items.forEach(el=>{
-                const text = el.innerText.toLowerCase();
-                if(!s || text.includes(s)) el.style.display = '';
-                else el.style.display = 'none';
+                const title = el.querySelector('.card-title').textContent.toLowerCase();
+                const descEl = el.querySelector('.card-description');
+                const desc = descEl ? descEl.textContent.toLowerCase() : '';
+                const match = !s || title.includes(s) || desc.includes(s);
+                el.style.display = match ? '' : 'none';
+                // highlight matches in title and description
+                highlightText(el.querySelector('.card-title'), s);
+                if(descEl) highlightText(descEl, s);
             });
         }
+
+        // keyboard shortcut to focus search (/) unless typing in an input
+        document.addEventListener('keydown', (e) => {
+            if(e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA'){
+                e.preventDefault(); search.focus(); search.select();
+            }
+            if(e.key === 'Escape'){
+                search.value=''; filter('');
+            }
+        });
 
         search && search.addEventListener('input', e=>filter(e.target.value));
         clearBtn && clearBtn.addEventListener('click', ()=>{ search.value=''; filter(''); search.focus(); });
 
-        // reveal
+        // reveal animation
         const reveals = document.querySelectorAll('.fade-up');
         const show = ()=>{
-            reveals.forEach((r,i)=>setTimeout(()=>r.classList.add('show'), i*60));
+            reveals.forEach((r,i)=>setTimeout(()=>r.classList.add('show'), i*50));
         }
         if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', show); else show();
+
+        // theme toggle
+        function setTheme(t){
+            if(t==='dark'){ root.setAttribute('data-theme','dark'); themeIcon.className='bi bi-sun'; }
+            else { root.removeAttribute('data-theme'); themeIcon.className='bi bi-moon'; }
+            try{ localStorage.setItem('theme', t); }catch(e){}
+        }
+        const saved = (function(){ try{return localStorage.getItem('theme')}catch(e){return null} })();
+        if(saved) setTheme(saved); else {
+            // prefer dark if user prefers dark in system
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(prefersDark ? 'dark' : 'light');
+        }
+        themeToggle && themeToggle.addEventListener('click', ()=>{
+            const cur = root.getAttribute('data-theme')==='dark' ? 'dark' : 'light';
+            setTheme(cur==='dark' ? 'light' : 'dark');
+        });
+
     })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
