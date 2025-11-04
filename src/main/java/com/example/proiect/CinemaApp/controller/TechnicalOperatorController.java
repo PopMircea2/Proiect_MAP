@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/technicaloperators")
+@RequestMapping("/technicaloperator")
 public class TechnicalOperatorController {
 
     private final TechnicalOperatorService technicalOperatorService;
@@ -24,19 +24,19 @@ public class TechnicalOperatorController {
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
-        model.addAttribute("staff", new TechnicalOperator());
+        model.addAttribute("technicalOperator", new TechnicalOperator());
         return "technicaloperator/form";
     }
 
     @PostMapping
-    public String addTechnicalOperator(@ModelAttribute TechnicalOperator staff) {
-        technicalOperatorService.addTechnicalOperator(staff);
-        return "redirect:/technicaloperators";
+    public String addTechnicalOperator(@ModelAttribute TechnicalOperator technicalOperator) {
+        technicalOperatorService.addTechnicalOperator(technicalOperator);
+        return "redirect:/technicaloperator";
     }
 
     @PostMapping("/{id}/delete")
     public String deleteTechnicalOperator(@PathVariable String id) {
         technicalOperatorService.deleteTechnicalOperator(id);
-        return "redirect:/technicaloperators";
+        return "redirect:/technicaloperator";
     }
 }
