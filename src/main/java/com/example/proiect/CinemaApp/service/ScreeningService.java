@@ -23,7 +23,7 @@ public class ScreeningService {
     }
 
     public Screening addScreening(Screening screening) {
-        return screeningRepo.save(screening);
+        return screeningRepo.add(screening);
     }
 
     public void deleteScreening(String id) {

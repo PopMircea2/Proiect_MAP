@@ -24,7 +24,7 @@ public class MovieService {
     }
 
     public Movie addMovie(Movie movie) {
-        return movieRepo.save(movie);
+        return movieRepo.add(movie);
     }
 
     public void deleteMovie(String id) {

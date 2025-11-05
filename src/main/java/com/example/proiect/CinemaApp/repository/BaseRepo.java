@@ -5,6 +5,6 @@ import java.util.Optional;
 public interface BaseRepo <T>{
     List<T> findAll();
     Optional<T> findById(String id);
-    T save(T entity);
+    T add(T entity);
     void deleteById(String id);
 }

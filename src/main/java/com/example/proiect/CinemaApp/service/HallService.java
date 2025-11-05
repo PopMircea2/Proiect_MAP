@@ -23,7 +23,7 @@ public class HallService {
     }
 
     public Hall addHall(Hall hall) {
-        return hallRepo.save(hall);
+        return hallRepo.add(hall);
     }
 
     public void deleteHall(String id) {

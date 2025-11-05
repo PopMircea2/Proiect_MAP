@@ -23,10 +23,10 @@ public class TheatreService {
     }
 
     public Theatre addTheatre(Theatre theatre) {
-        return theatreRepo.save(theatre);
+        return theatreRepo.add(theatre);
     }
 
-    public void deleteTheatre(String id) {
+    public void deleteTheatrebyId(String id) {
         theatreRepo.deleteById(id);
     }
 }

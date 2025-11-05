@@ -36,7 +36,7 @@ public class SupportStaffController {
 
     @PostMapping("/{id}/delete")
     public String deleteSupportStaff(@PathVariable String id) {
-        supportStaffService.deleteSupportStaff(id);
+        supportStaffService.deleteSupportStaffbyId(id);
         return "redirect:/supportstaff";
     }
 }

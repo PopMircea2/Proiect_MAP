@@ -23,7 +23,7 @@ public class StaffAssignmentService {
     }
 
     public StaffAssignment addAssignment(StaffAssignment assignment) {
-        return assignmentRepo.save(assignment);
+        return assignmentRepo.add(assignment);
     }
 
     public void deleteAssignment(String id) {

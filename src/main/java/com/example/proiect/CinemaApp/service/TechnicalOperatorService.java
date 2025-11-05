@@ -24,10 +24,10 @@ public class TechnicalOperatorService {
     }
 
     public Staff addTechnicalOperator(Staff staff) {
-        return technicalOperatorRepo.save(staff);
+        return technicalOperatorRepo.add(staff);
     }
 
-    public void deleteTechnicalOperator(String id) {
+    public void deleteTechnicalOperatorbyId(String id) {
         technicalOperatorRepo.deleteById(id);
     }
 }

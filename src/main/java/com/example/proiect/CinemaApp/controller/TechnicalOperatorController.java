@@ -36,7 +36,7 @@ public class TechnicalOperatorController {
 
     @PostMapping("/{id}/delete")
     public String deleteTechnicalOperator(@PathVariable String id) {
-        technicalOperatorService.deleteTechnicalOperator(id);
+        technicalOperatorService.deleteTechnicalOperatorbyId(id);
         return "redirect:/technicaloperator";
     }
 }

@@ -36,7 +36,7 @@ public class TheatreController {
 
     @PostMapping("/{id}/delete")
     public String deleteTheatre(@PathVariable String id) {
-        theatreService.deleteTheatre(id);
+        theatreService.deleteTheatrebyId(id);
         return "redirect:/theatres";
     }
 }

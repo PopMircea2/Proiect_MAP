@@ -23,7 +23,7 @@ public class SeatService {
     }
 
     public Seat addSeat(Seat seat) {
-        return seatRepo.save(seat);
+        return seatRepo.add(seat);
     }
 
     public void deleteSeat(String id) {

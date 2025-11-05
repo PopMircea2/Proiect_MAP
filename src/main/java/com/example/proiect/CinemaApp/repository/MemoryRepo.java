@@ -18,8 +18,7 @@ public abstract class MemoryRepo<T> implements BaseRepo<T> {
     public Optional<T> findById(String id) {
         return Optional.ofNullable(entities.get(id));
     }
-    @Override
-    public T save(T entity) {
+    public T add(T entity) {
         String id = getId.apply(entity);
         entities.put(id, entity);
         return entity;

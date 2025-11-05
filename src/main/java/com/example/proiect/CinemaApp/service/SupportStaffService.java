@@ -24,10 +24,10 @@ public class SupportStaffService {
     }
 
     public Staff addSupportStaff(Staff staff) {
-        return supportStaffRepo.save(staff);
+        return supportStaffRepo.add(staff);
     }
 
-    public void deleteSupportStaff(String id) {
+    public void deleteSupportStaffbyId(String id) {
         supportStaffRepo.deleteById(id);
     }
 }

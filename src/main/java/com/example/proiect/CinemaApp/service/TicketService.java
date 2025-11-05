@@ -23,10 +23,10 @@ public class TicketService {
     }
 
     public Ticket addTicket(Ticket ticket) {
-        return ticketRepo.save(ticket);
+        return ticketRepo.add(ticket);
     }
 
-    public void deleteTicket(String id) {
+    public void deleteTicketbyId(String id) {
         ticketRepo.deleteById(id);
     }
 }

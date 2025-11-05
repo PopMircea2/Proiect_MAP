@@ -36,7 +36,7 @@ public class TicketController {
 
     @PostMapping("/{id}/delete")
     public String deleteTicket(@PathVariable String id) {
-        ticketService.deleteTicket(id);
+        ticketService.deleteTicketbyId(id);
         return "redirect:/tickets";
     }
 }
