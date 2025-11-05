@@ -11,7 +11,7 @@
 <div class="container mt-5">
     <h1 class="h4 mb-4">Add New Staff Assignment</h1>
 
-    <form th:action="@{/staffassignments}" th:object="${staffAssignment}" method="post" class="needs-validation" novalidate>
+    <form th:action="@{/staffassignments}" th:object="${assignment}" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label class="form-label">ID</label>
             <input type="text" th:field="*{id}" class="form-control" required>
