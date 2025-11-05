@@ -1,12 +1,15 @@
 package com.example.proiect.CinemaApp.model;
 
+import java.time.LocalDate;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class Screening {
     private String id;
     private String hallId;
     private String movieId;
-    private String date;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate date;
     private List<Ticket> tickets;
     private List<StaffAssignment> assignments;
 
@@ -36,11 +39,11 @@ public class Screening {
         this.movieId = movieId;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -60,7 +63,7 @@ public class Screening {
         this.assignments = assignments;
     }
 
-    public Screening(String id, String hallId, String movieId, String date, List<Ticket> tickets, List<StaffAssignment> assignments) {
+    public Screening(String id, String hallId, String movieId, LocalDate date, List<Ticket> tickets, List<StaffAssignment> assignments) {
         this.id = id;
         this.hallId = hallId;
         this.movieId = movieId;

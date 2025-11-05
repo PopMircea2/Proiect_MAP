@@ -29,4 +29,20 @@ public class Theatre {
         this.city = city;
         this.halls = halls;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setHalls(List<Hall> halls) {
+        this.halls = halls;
+    }
 }

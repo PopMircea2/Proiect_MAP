@@ -30,7 +30,7 @@
                 <td th:text="${screening.id}"></td>
                 <td th:text="${screening.hallId}"></td>
                 <td th:text="${screening.movieId}"></td>
-                <td th:text="${screening.date}"></td>
+                <td th:text="${#temporals.format(screening.date, 'yyyy-MM-dd')}"></td>
                 <td>
                     <form th:action="@{'/screenings/' + ${screening.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
