@@ -26,7 +26,7 @@ public class ScreeningService {
         return screeningRepo.add(screening);
     }
 
-    public void deleteScreening(String id) {
+    public void deleteScreeningbyId(String id) {
         screeningRepo.deleteById(id);
     }
 }

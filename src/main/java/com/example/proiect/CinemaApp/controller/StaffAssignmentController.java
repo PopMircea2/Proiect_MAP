@@ -36,7 +36,7 @@ public class StaffAssignmentController {
 
     @PostMapping("/{id}/delete")
     public String deleteAssignment(@PathVariable String id) {
-        staffAssignmentService.deleteAssignment(id);
+        staffAssignmentService.deleteAssignmentbyId(id);
         return "redirect:/staffassignments";
     }
 }

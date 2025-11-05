@@ -36,7 +36,7 @@ public class ScreeningController {
 
     @PostMapping("/{id}/delete")
     public String deleteScreening(@PathVariable String id) {
-        screeningService.deleteScreening(id);
+        screeningService.deleteScreeningbyId(id);
         return "redirect:/screenings";
     }
 }

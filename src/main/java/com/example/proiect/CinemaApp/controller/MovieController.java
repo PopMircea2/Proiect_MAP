@@ -40,7 +40,7 @@ public class MovieController {
     // Delete a movie
     @PostMapping("/{id}/delete")
     public String deleteMovie(@PathVariable String id) {
-        movieService.deleteMovie(id);
+        movieService.deleteMoviebyId(id);
         return "redirect:/movies";
     }
 }

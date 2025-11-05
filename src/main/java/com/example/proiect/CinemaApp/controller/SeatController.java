@@ -36,7 +36,7 @@ public class SeatController {
 
     @PostMapping("/{id}/delete")
     public String deleteSeat(@PathVariable String id) {
-        seatService.deleteSeat(id);
+        seatService.deleteSeatbyId(id);
         return "redirect:/seats";
     }
 }

@@ -26,7 +26,7 @@ public class HallService {
         return hallRepo.add(hall);
     }
 
-    public void deleteHall(String id) {
+    public void deleteHallbyId(String id) {
         hallRepo.deleteById(id);
     }
 }

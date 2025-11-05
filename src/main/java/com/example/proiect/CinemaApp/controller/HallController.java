@@ -36,7 +36,7 @@ public class HallController {
 
     @PostMapping("/{id}/delete")
     public String deleteHall(@PathVariable String id) {
-        hallService.deleteHall(id);
+        hallService.deleteHallbyId(id);
         return "redirect:/halls";
     }
 }

@@ -26,7 +26,7 @@ public class SeatService {
         return seatRepo.add(seat);
     }
 
-    public void deleteSeat(String id) {
+    public void deleteSeatbyId(String id) {
         seatRepo.deleteById(id);
     }
 }

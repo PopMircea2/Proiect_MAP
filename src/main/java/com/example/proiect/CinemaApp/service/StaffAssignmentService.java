@@ -26,7 +26,7 @@ public class StaffAssignmentService {
         return assignmentRepo.add(assignment);
     }
 
-    public void deleteAssignment(String id) {
+    public void deleteAssignmentbyId(String id) {
         assignmentRepo.deleteById(id);
     }
 }
