@@ -1,13 +1,67 @@
-[
-  {"id":"to1","name":"Tech One","hourlyRate":20.0,"dateBirth":"1975-01-01"},
-  {"id":"to2","name":"Tech Two","hourlyRate":22.0,"dateBirth":"1980-02-02"},
-  {"id":"to3","name":"Tech Three","hourlyRate":19.5,"dateBirth":"1982-03-03"},
-  {"id":"to4","name":"Tech Four","hourlyRate":21.0,"dateBirth":"1978-04-04"},
-  {"id":"to5","name":"Tech Five","hourlyRate":18.0,"dateBirth":"1984-05-05"},
-  {"id":"to6","name":"Tech Six","hourlyRate":20.5,"dateBirth":"1979-06-06"},
-  {"id":"to7","name":"Tech Seven","hourlyRate":23.0,"dateBirth":"1986-07-07"},
-  {"id":"to8","name":"Tech Eight","hourlyRate":17.5,"dateBirth":"1990-08-08"},
-  {"id":"to9","name":"Tech Nine","hourlyRate":16.0,"dateBirth":"1988-09-09"},
-  {"id":"to10","name":"Tech Ten","hourlyRate":19.0,"dateBirth":"1991-10-10"}
-]
-
+[ {
+  "id" : "to2",
+  "name" : "Tech Two",
+  "specialization" : "PROJECTION",
+  "dateBirth" : [ 1980, 2, 2 ],
+  "hourlyRate" : 22.0
+}, {
+  "id" : "to1",
+  "name" : "Tech One",
+  "specialization" : "SOUND",
+  "dateBirth" : [ 1975, 1, 1 ],
+  "hourlyRate" : 20.0
+}, {
+  "id" : "to4",
+  "name" : "Tech Four",
+  "specialization" : "PROJECTION",
+  "dateBirth" : [ 1978, 4, 4 ],
+  "hourlyRate" : 21.0
+}, {
+  "id" : "to3",
+  "name" : "Tech Three",
+  "specialization" : "SOUND",
+  "dateBirth" : [ 1982, 3, 3 ],
+  "hourlyRate" : 19.5
+}, {
+  "id" : "to6",
+  "name" : "Tech Six",
+  "specialization" : "PROJECTION",
+  "dateBirth" : [ 1979, 6, 6 ],
+  "hourlyRate" : 20.5
+}, {
+  "id" : "to5",
+  "name" : "Tech Five",
+  "specialization" : "SOUND",
+  "dateBirth" : [ 1984, 5, 5 ],
+  "hourlyRate" : 18.0
+}, {
+  "id" : "to8",
+  "name" : "Tech Eight",
+  "specialization" : "PROJECTION",
+  "dateBirth" : [ 1990, 8, 8 ],
+  "hourlyRate" : 17.5
+}, {
+  "id" : "to10",
+  "name" : "Tech Ten",
+  "specialization" : "PROJECTION",
+  "dateBirth" : [ 1991, 10, 10 ],
+  "hourlyRate" : 19.0
+}, {
+  "id" : "to7",
+  "name" : "Tech Seven",
+  "specialization" : "SOUND",
+  "dateBirth" : [ 1986, 7, 7 ],
+  "hourlyRate" : 23.0
+}, {
+  "id" : "to11",
+  "name" : "Paul",
+  "specialization" : "SOUND",
+  "dateBirth" : [ 2025, 11, 13 ],
+  "hourlyRate" : 2.0
+}, {
+  "id" : "to9",
+  "name" : "Tek Nine",
+  "specialization" : "PROJECTION",
+  "dateBirth" : [ 1988, 9, 9 ],
+  "hourlyRate" : 16.0
+} ]

@@ -1,13 +1,12 @@
 [
-  {"id":"st1","name":"John Doe","hourlyRate":15.0,"dateBirth":"1980-01-01"},
-  {"id":"st2","name":"Jane Roe","hourlyRate":16.0,"dateBirth":"1985-02-02"},
-  {"id":"st3","name":"Jim Beam","hourlyRate":14.5,"dateBirth":"1990-03-03"},
-  {"id":"st4","name":"Jill Hill","hourlyRate":13.0,"dateBirth":"1982-04-04"},
-  {"id":"st5","name":"Jack Black","hourlyRate":15.5,"dateBirth":"1979-05-05"},
-  {"id":"st6","name":"Jenny White","hourlyRate":14.0,"dateBirth":"1991-06-06"},
-  {"id":"st7","name":"Joe Brown","hourlyRate":12.5,"dateBirth":"1987-07-07"},
-  {"id":"st8","name":"Jessie Pink","hourlyRate":13.5,"dateBirth":"1992-08-08"},
-  {"id":"st9","name":"Jordan Blue","hourlyRate":17.0,"dateBirth":"1983-09-09"},
-  {"id":"st10","name":"Jamie Green","hourlyRate":11.5,"dateBirth":"1994-10-10"}
+  {"id":"st1","name":"John Doe","hourlyRate":15.0,"dateBirth":"1980-01-01","role":"SECURITY"},
+  {"id":"st2","name":"Jane Roe","hourlyRate":16.0,"dateBirth":"1985-02-02","role":"USHER"},
+  {"id":"st3","name":"Jim Beam","hourlyRate":14.5,"dateBirth":"1990-03-03","role":"USHER"},
+  {"id":"st4","name":"Jill Hill","hourlyRate":13.0,"dateBirth":"1982-04-04","role":"USHER"},
+  {"id":"st5","name":"Jack Black","hourlyRate":15.5,"dateBirth":"1979-05-05","role":"SECURITY"},
+  {"id":"st6","name":"Jenny White","hourlyRate":14.0,"dateBirth":"1991-06-06","role":"USHER"},
+  {"id":"st7","name":"Joe Brown","hourlyRate":12.5,"dateBirth":"1987-07-07","role":"SECURITY"},
+  {"id":"st8","name":"Jessie Pink","hourlyRate":13.5,"dateBirth":"1992-08-08","role":"USHER"},
+  {"id":"st9","name":"Jordan Blue","hourlyRate":17.0,"dateBirth":"1983-09-09","role":"USHER"},
+  {"id":"st10","name":"Jamie Green","hourlyRate":11.5,"dateBirth":"1994-10-10","role":"CLEANING"}
 ]
-
