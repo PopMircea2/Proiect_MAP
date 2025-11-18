@@ -1,11 +1,11 @@
 package com.example.proiect.CinemaApp.repository;
 
-import com.example.proiect.CinemaApp.model.Staff;
+import com.example.proiect.CinemaApp.model.SupportStaff;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class SupportStaffRepo extends MemoryRepo<Staff> {
+public class SupportStaffRepo extends InFileRepository<SupportStaff> {
     protected SupportStaffRepo() {
-        super(Staff::getId);
+        super(SupportStaff::getId, SupportStaff.class, "supportstaff.json");
     }
 }

@@ -27,6 +27,11 @@
             <input type="number" th:field="*{durationMin}" class="form-control" required>
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">Rating</label>
+            <input type="number" th:field="*{rating}" class="form-control" step="0.1" min="0" max="10">
+        </div>
+
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary">Add Movie</button>
             <a th:href="@{/movies}" class="btn btn-secondary">Cancel</a>

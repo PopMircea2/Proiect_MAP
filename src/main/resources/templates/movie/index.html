@@ -21,6 +21,7 @@
                 <th>ID</th>
                 <th>Title</th>
                 <th>Duration (min)</th>
+                <th>Rating</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -29,6 +30,7 @@
                 <td th:text="${movie.id}"></td>
                 <td th:text="${movie.title}"></td>
                 <td th:text="${movie.durationMin}"></td>
+                <td th:text="${movie.rating}"></td>
                 <td>
                     <form th:action="@{'/movies/' + ${movie.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>

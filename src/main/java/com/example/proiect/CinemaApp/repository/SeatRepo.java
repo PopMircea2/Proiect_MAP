@@ -5,9 +5,8 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class SeatRepo extends MemoryRepo<Seat> {
+public class SeatRepo extends InFileRepository<Seat> {
     protected SeatRepo() {
-        super(Seat::getId);
+        super(Seat::getId, Seat.class, "seats.json");
     }
 }
-

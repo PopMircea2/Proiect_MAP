@@ -5,10 +5,9 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class ScreeningRepo extends MemoryRepo<Screening>{
+public class ScreeningRepo extends InFileRepository<Screening>{
     protected ScreeningRepo() {
-        super(Screening::getId);
+        super(Screening::getId, Screening.class, "screenings.json");
     }
 
 }
-

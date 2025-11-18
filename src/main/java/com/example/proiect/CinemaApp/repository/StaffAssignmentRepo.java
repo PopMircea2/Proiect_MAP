@@ -5,9 +5,8 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class StaffAssignmentRepo extends MemoryRepo<StaffAssignment>{
+public class StaffAssignmentRepo extends InFileRepository<StaffAssignment>{
     protected StaffAssignmentRepo() {
-        super(StaffAssignment::getId);
+        super(StaffAssignment::getId, StaffAssignment.class, "staffassignments.json");
     }
 }
-

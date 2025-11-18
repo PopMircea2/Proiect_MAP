@@ -1,6 +1,6 @@
 package com.example.proiect.CinemaApp.service;
 
-import com.example.proiect.CinemaApp.model.Staff;
+import com.example.proiect.CinemaApp.model.TechnicalOperator;
 import com.example.proiect.CinemaApp.repository.TechnicalOperatorRepo;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +15,15 @@ public class TechnicalOperatorService {
         this.technicalOperatorRepo = technicalOperatorRepo;
     }
 
-    public List<Staff> getAllTechnicalOperators() {
+    public List<TechnicalOperator> getAllTechnicalOperators() {
         return technicalOperatorRepo.findAll();
     }
 
-    public Optional<Staff> getTechnicalOperatorById(String id) {
+    public Optional<TechnicalOperator> getTechnicalOperatorById(String id) {
         return technicalOperatorRepo.findById(id);
     }
 
-    public Staff addTechnicalOperator(Staff staff) {
+    public TechnicalOperator addTechnicalOperator(TechnicalOperator staff) {
         return technicalOperatorRepo.add(staff);
     }
 

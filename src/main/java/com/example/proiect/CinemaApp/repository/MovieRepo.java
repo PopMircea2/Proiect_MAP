@@ -5,10 +5,9 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class MovieRepo extends MemoryRepo<Movie>{
+public class MovieRepo extends InFileRepository<Movie>{
     public MovieRepo() {
-        super(Movie::getId);
+        super(Movie::getId, Movie.class, "movies.json");
     }
 
 }
-

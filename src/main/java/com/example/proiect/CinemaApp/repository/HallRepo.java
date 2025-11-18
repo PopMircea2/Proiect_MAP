@@ -5,8 +5,8 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class HallRepo extends MemoryRepo<Hall>{
+public class HallRepo extends InFileRepository<Hall>{
     protected HallRepo() {
-        super(Hall::getId);
+        super(Hall::getId, Hall.class, "halls.json");
     }
 }

@@ -5,9 +5,8 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class TheatreRepo extends MemoryRepo<Theatre>{
+public class TheatreRepo extends InFileRepository<Theatre>{
     protected TheatreRepo() {
-        super(Theatre::getId);
+        super(Theatre::getId, Theatre.class, "theatres.json");
     }
 }
-
