@@ -1,10 +1,4 @@
 [ {
-  "id" : "1",
-  "title" : "Spider Man",
-  "screenings" : null,
-  "rating" : 7.2,
-  "durationMin" : 120
-}, {
   "id" : "2",
   "title" : "Adventure Day",
   "screenings" : null,
