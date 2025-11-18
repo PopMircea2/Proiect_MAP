@@ -1,0 +1,13 @@
+[
+  {"id":"tkt1","screeningId":"sc1","customerId":"c1","seatId":"s1","price":12.5},
+  {"id":"tkt2","screeningId":"sc1","customerId":"c2","seatId":"s2","price":12.5},
+  {"id":"tkt3","screeningId":"sc2","customerId":"c3","seatId":"s3","price":10.0},
+  {"id":"tkt4","screeningId":"sc3","customerId":"c4","seatId":"s4","price":9.0},
+  {"id":"tkt5","screeningId":"sc4","customerId":"c5","seatId":"s5","price":11.0},
+  {"id":"tkt6","screeningId":"sc5","customerId":"c6","seatId":"s6","price":13.0},
+  {"id":"tkt7","screeningId":"sc6","customerId":"c7","seatId":"s7","price":8.5},
+  {"id":"tkt8","screeningId":"sc7","customerId":"c8","seatId":"s8","price":12.0},
+  {"id":"tkt9","screeningId":"sc8","customerId":"c9","seatId":"s9","price":14.0},
+  {"id":"tkt10","screeningId":"sc9","customerId":"c10","seatId":"s10","price":15.0}
+]
+
