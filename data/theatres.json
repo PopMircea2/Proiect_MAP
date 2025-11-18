@@ -1,0 +1,13 @@
+[
+  {"id":"t1","name":"Central Cinema","city":"Bucharest"},
+  {"id":"t2","name":"East Cinema","city":"Cluj"},
+  {"id":"t3","name":"West Cinema","city":"Timisoara"},
+  {"id":"t4","name":"North Cinema","city":"Iasi"},
+  {"id":"t5","name":"South Cinema","city":"Craiova"},
+  {"id":"t6","name":"River Cinema","city":"Brasov"},
+  {"id":"t7","name":"Hill Cinema","city":"Sibiu"},
+  {"id":"t8","name":"Park Cinema","city":"Oradea"},
+  {"id":"t9","name":"City Cinema","city":"Galati"},
+  {"id":"t10","name":"Metro Cinema","city":"Ploiesti"}
+]
+

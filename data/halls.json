@@ -1,0 +1,13 @@
+[
+  {"id":"h1","name":"Hall A","theatreId":"t1","capacity":100},
+  {"id":"h2","name":"Hall B","theatreId":"t1","capacity":80},
+  {"id":"h3","name":"Hall C","theatreId":"t2","capacity":120},
+  {"id":"h4","name":"Hall D","theatreId":"t3","capacity":60},
+  {"id":"h5","name":"Hall E","theatreId":"t4","capacity":90},
+  {"id":"h6","name":"Hall F","theatreId":"t5","capacity":110},
+  {"id":"h7","name":"Hall G","theatreId":"t6","capacity":70},
+  {"id":"h8","name":"Hall H","theatreId":"t7","capacity":50},
+  {"id":"h9","name":"Hall I","theatreId":"t8","capacity":95},
+  {"id":"h10","name":"Hall J","theatreId":"t9","capacity":85}
+]
+
