@@ -22,6 +22,13 @@ public class CustomerController {
         return "customer/index";
     }
 
+    // Show details for a specific customer
+    @GetMapping("/{id}")
+    public String showCustomerDetails(@PathVariable String id, Model model) {
+        customerService.getCustomerById(id).ifPresentOrElse(c -> model.addAttribute("customer", c), () -> model.addAttribute("customer", new com.example.proiect.CinemaApp.model.Customer()));
+        return "customer/show";
+    }
+
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("customer", new Customer());

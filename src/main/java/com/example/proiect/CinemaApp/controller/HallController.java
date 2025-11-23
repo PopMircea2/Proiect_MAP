@@ -22,6 +22,12 @@ public class HallController {
         return "hall/index";
     }
 
+    @GetMapping("/{id}")
+    public String showHallDetails(@PathVariable String id, Model model) {
+        hallService.getHallById(id).ifPresentOrElse(h -> model.addAttribute("hall", h), () -> model.addAttribute("hall", new com.example.proiect.CinemaApp.model.Hall()));
+        return "hall/show";
+    }
+
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("hall", new Hall());

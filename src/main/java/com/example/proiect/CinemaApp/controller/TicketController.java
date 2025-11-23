@@ -22,6 +22,12 @@ public class TicketController {
         return "ticket/index";
     }
 
+    @GetMapping("/{id}")
+    public String showTicketDetails(@PathVariable String id, Model model) {
+        ticketService.getTicketById(id).ifPresentOrElse(t -> model.addAttribute("ticket", t), () -> model.addAttribute("ticket", new com.example.proiect.CinemaApp.model.Ticket()));
+        return "ticket/show";
+    }
+
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("ticket", new Ticket());

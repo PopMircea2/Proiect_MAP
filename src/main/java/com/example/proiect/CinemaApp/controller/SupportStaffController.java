@@ -22,6 +22,12 @@ public class SupportStaffController {
         return "supportstaff/index";
     }
 
+    @GetMapping("/{id}")
+    public String showSupportStaffDetails(@PathVariable String id, Model model) {
+        supportStaffService.getSupportStaffById(id).ifPresentOrElse(s -> model.addAttribute("supportStaff", s), () -> model.addAttribute("supportStaff", new com.example.proiect.CinemaApp.model.SupportStaff()));
+        return "supportstaff/show";
+    }
+
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("supportStaff", new SupportStaff());

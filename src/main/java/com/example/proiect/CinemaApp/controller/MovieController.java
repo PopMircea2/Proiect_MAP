@@ -23,6 +23,13 @@ public class MovieController {
         return "movie/index";
     }
 
+    // Show details for a specific movie
+    @GetMapping("/{id}")
+    public String showMovieDetails(@PathVariable String id, Model model) {
+        movieService.getMovieById(id).ifPresentOrElse(m -> model.addAttribute("movie", m), () -> model.addAttribute("movie", new com.example.proiect.CinemaApp.model.Movie()));
+        return "movie/show";
+    }
+
     // Show form to create a new movie
     @GetMapping("/new")
     public String showCreateForm(Model model) {

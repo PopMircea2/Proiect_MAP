@@ -27,3 +27,39 @@ body {
   border-color: #3b82f6;
 }
 
+/* New styles for nicer buttons and small UI polish */
+.btn {
+  border-radius: 9999px; /* pill */
+  padding: 0.35rem 0.75rem;
+  font-weight: 600;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.btn-outline-primary {
+  color: #3b82f6;
+  border-color: rgba(59,130,246,0.35);
+}
+
+.btn-outline-primary:hover {
+  background-color: rgba(59,130,246,0.06);
+}
+
+.btn-primary:hover, .btn-success:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(59,130,246,0.08);
+}
+
+.card {
+  border: 0;
+  border-radius: 12px;
+}
+
+.container .table-responsive {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+}

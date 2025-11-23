@@ -20,7 +20,6 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Theatre ID</th>
                 <th>Capacity</th>
                 <th>Actions</th>
             </tr>
@@ -29,9 +28,9 @@
             <tr th:each="hall : ${halls}">
                 <td th:text="${hall.id}"></td>
                 <td th:text="${hall.name}"></td>
-                <td th:text="${hall.theatreId}"></td>
                 <td th:text="${hall.capacity}"></td>
                 <td>
+                    <a th:href="@{|/halls/${hall.id}|}" class="btn btn-sm btn-outline-primary me-1">Details</a>
                     <a th:href="@{|/halls/${hall.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/halls/' + ${hall.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>

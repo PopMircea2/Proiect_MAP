@@ -22,6 +22,12 @@ public class ScreeningController {
         return "screening/index";
     }
 
+    @GetMapping("/{id}")
+    public String showScreeningDetails(@PathVariable String id, Model model) {
+        screeningService.getScreeningById(id).ifPresentOrElse(s -> model.addAttribute("screening", s), () -> model.addAttribute("screening", new com.example.proiect.CinemaApp.model.Screening()));
+        return "screening/show";
+    }
+
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("screening", new Screening());

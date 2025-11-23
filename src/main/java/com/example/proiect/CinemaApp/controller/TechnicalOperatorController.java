@@ -22,6 +22,12 @@ public class TechnicalOperatorController {
         return "technicaloperator/index";
     }
 
+    @GetMapping("/{id}")
+    public String showTechnicalOperatorDetails(@PathVariable String id, Model model) {
+        technicalOperatorService.getTechnicalOperatorById(id).ifPresentOrElse(t -> model.addAttribute("technicalOperator", t), () -> model.addAttribute("technicalOperator", new com.example.proiect.CinemaApp.model.TechnicalOperator()));
+        return "technicaloperator/show";
+    }
+
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("technicalOperator", new TechnicalOperator());

@@ -20,9 +20,6 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Specialization</th>
-                <th>Hourly Rate</th>
-                <th>Date of Birth</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -30,10 +27,8 @@
             <tr th:each="op : ${technicaloperators}">
                 <td th:text="${op.id}"></td>
                 <td th:text="${op.name}"></td>
-                <td th:text="${op.specialization}"></td>
-                <td th:text="${op.hourlyRate}"></td>
-                <td th:text="${op.dateBirth}"></td>
                 <td>
+                    <a th:href="@{|/technicaloperator/${op.id}|}" class="btn btn-sm btn-outline-primary me-1">Details</a>
                     <a th:href="@{|/technicaloperator/${op.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/technicaloperator/' + ${op.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>

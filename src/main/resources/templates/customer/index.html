@@ -20,7 +20,6 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Date of Birth</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -28,8 +27,8 @@
             <tr th:each="customer : ${customers}">
                 <td th:text="${customer.id}"></td>
                 <td th:text="${customer.name}"></td>
-                <td th:text="${customer.dateBirth}"></td>
                 <td>
+                    <a th:href="@{|/customers/${customer.id}|}" class="btn btn-sm btn-outline-primary me-1">Details</a>
                     <a th:href="@{|/customers/${customer.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/customers/' + ${customer.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
