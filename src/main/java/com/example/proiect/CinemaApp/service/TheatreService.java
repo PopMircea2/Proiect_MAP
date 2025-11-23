@@ -1,16 +1,16 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Theatre;
-import com.example.proiect.CinemaApp.repository.TheatreRepo;
+import com.example.proiect.CinemaApp.repository.TheatreJpaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TheatreService {
-    private final TheatreRepo theatreRepo;
+    private final TheatreJpaRepository theatreRepo;
 
-    public TheatreService(TheatreRepo theatreRepo) {
+    public TheatreService(TheatreJpaRepository theatreRepo) {
         this.theatreRepo = theatreRepo;
     }
 
@@ -23,7 +23,7 @@ public class TheatreService {
     }
 
     public Theatre addTheatre(Theatre theatre) {
-        return theatreRepo.add(theatre);
+        return theatreRepo.save(theatre);
     }
 
     public void deleteTheatrebyId(String id) {

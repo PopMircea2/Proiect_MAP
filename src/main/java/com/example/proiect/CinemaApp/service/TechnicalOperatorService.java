@@ -1,7 +1,7 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.TechnicalOperator;
-import com.example.proiect.CinemaApp.repository.TechnicalOperatorRepo;
+import com.example.proiect.CinemaApp.repository.TechnicalOperatorJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.Optional;
 
 @Service
 public class TechnicalOperatorService {
-    private final TechnicalOperatorRepo technicalOperatorRepo;
+    private final TechnicalOperatorJpaRepository technicalOperatorRepo;
 
-    public TechnicalOperatorService(TechnicalOperatorRepo technicalOperatorRepo) {
+    public TechnicalOperatorService(TechnicalOperatorJpaRepository technicalOperatorRepo) {
         this.technicalOperatorRepo = technicalOperatorRepo;
     }
 
@@ -23,8 +23,8 @@ public class TechnicalOperatorService {
         return technicalOperatorRepo.findById(id);
     }
 
-    public TechnicalOperator addTechnicalOperator(TechnicalOperator staff) {
-        return technicalOperatorRepo.add(staff);
+    public TechnicalOperator addTechnicalOperator(TechnicalOperator technicalOperator) {
+        return technicalOperatorRepo.save(technicalOperator);
     }
 
     public void deleteTechnicalOperatorbyId(String id) {

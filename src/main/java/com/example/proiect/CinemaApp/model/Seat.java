@@ -1,10 +1,22 @@
 package com.example.proiect.CinemaApp.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Seat")
 public class Seat {
+    @Id
+    @Column(name = "Id")
     private String id;
+
+    @Column(name = "HallId")
     private String hallId;
-    private String row;
-    private String column;
+
+    @Column(name = "RowLabel")
+    private String rowLabel;
+
+    @Column(name = "ColumnNumber")
+    private int columnNumber;
 
     public Seat() {}
 
@@ -24,26 +36,26 @@ public class Seat {
         this.hallId = hallId;
     }
 
-    public String getRow() {
-        return row;
+    public String getRowLabel() {
+        return rowLabel;
     }
 
-    public void setRow(String row) {
-        this.row = row;
+    public void setRowLabel(String rowLabel) {
+        this.rowLabel = rowLabel;
     }
 
-    public String getColumn() {
-        return column;
+    public int getColumnNumber() {
+        return columnNumber;
     }
 
-    public void setColumn(String column) {
-        this.column = column;
+    public void setColumnNumber(int columnNumber) {
+        this.columnNumber = columnNumber;
     }
 
-    public Seat(String id, String hallId, String row, String column) {
+    public Seat(String id, String hallId, String rowLabel, int columnNumber) {
         this.id = id;
         this.hallId = hallId;
-        this.row = row;
-        this.column = column;
+        this.rowLabel = rowLabel;
+        this.columnNumber = columnNumber;
     }
 }

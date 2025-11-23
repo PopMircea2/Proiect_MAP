@@ -1,16 +1,16 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Screening;
-import com.example.proiect.CinemaApp.repository.ScreeningRepo;
+import com.example.proiect.CinemaApp.repository.ScreeningJpaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ScreeningService {
-    private final ScreeningRepo screeningRepo;
+    private final ScreeningJpaRepository screeningRepo;
 
-    public ScreeningService(ScreeningRepo screeningRepo) {
+    public ScreeningService(ScreeningJpaRepository screeningRepo) {
         this.screeningRepo = screeningRepo;
     }
 
@@ -23,7 +23,7 @@ public class ScreeningService {
     }
 
     public Screening addScreening(Screening screening) {
-        return screeningRepo.add(screening);
+        return screeningRepo.save(screening);
     }
 
     public void deleteScreeningbyId(String id) {

@@ -1,27 +1,41 @@
 package com.example.proiect.CinemaApp.model;
 
 import java.time.LocalDate;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Staff")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Staff {
+    @Id
+    @Column(name = "Id")
     private String id;
+
+    @Column(name = "Name")
     private String name;
-    private double HourlyRate;
-    private LocalDate DateBirth;
+
+    @Column(name = "hourlyRate")
+    private double hourlyRate;
+
+    @Column(name = "BirthDate")
+    private LocalDate dateBirth;
+
+    public Staff() {}
 
     public LocalDate getDateBirth() {
-        return DateBirth;
+        return dateBirth;
     }
 
     public void setDateBirth(LocalDate dateBirth) {
-        this.DateBirth = dateBirth;
+        this.dateBirth = dateBirth;
     }
 
     public double getHourlyRate() {
-        return HourlyRate;
+        return hourlyRate;
     }
 
     public void setHourlyRate(double hourlyRate) {
-        HourlyRate = hourlyRate;
+        this.hourlyRate = hourlyRate;
     }
 
     public String getId() {
@@ -43,7 +57,7 @@ public abstract class Staff {
     public Staff(String id, String name,double hourlyRate, LocalDate DateBirth) {
         this.id = id;
         this.name = name;
-        this.HourlyRate = hourlyRate;
-        this.DateBirth = DateBirth;
+        this.hourlyRate = hourlyRate;
+        this.dateBirth = DateBirth;
     }
 }

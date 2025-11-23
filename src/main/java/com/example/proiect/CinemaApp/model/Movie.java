@@ -1,13 +1,28 @@
 package com.example.proiect.CinemaApp.model;
 import java.util.Date;
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Movie")
 public class Movie {
+    @Id
+    @Column(name = "Id")
     private String id;
+
+    @Column(name = "Title")
     private String title;
+
+    @Column(name = "DurationMin")
     private int DurationMin;
+
+    @Transient
     private List<Screening> screenings;
+
+    @Column(name = "Rating")
     private double Rating;
+
+    @Transient
     private Date date;
 
     public Movie() {

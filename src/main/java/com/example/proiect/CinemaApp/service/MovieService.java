@@ -2,16 +2,16 @@ package com.example.proiect.CinemaApp.service;
 
 
 import com.example.proiect.CinemaApp.model.Movie;
-import com.example.proiect.CinemaApp.repository.MovieRepo;
+import com.example.proiect.CinemaApp.repository.MovieJpaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MovieService {
-    private final MovieRepo movieRepo;
+    private final MovieJpaRepository movieRepo;
 
-    public MovieService(MovieRepo movieRepo) {
+    public MovieService(MovieJpaRepository movieRepo) {
         this.movieRepo = movieRepo;
     }
 
@@ -24,7 +24,7 @@ public class MovieService {
     }
 
     public Movie addMovie(Movie movie) {
-        return movieRepo.add(movie);
+        return movieRepo.save(movie);
     }
 
     public void deleteMoviebyId(String id) {

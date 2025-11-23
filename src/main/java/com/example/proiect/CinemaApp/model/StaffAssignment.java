@@ -1,6 +1,11 @@
 package com.example.proiect.CinemaApp.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "StaffAssignment")
 public class StaffAssignment {
+    @Id
     private String id;
     private String ScreeningId;
     private String StaffId;

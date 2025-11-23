@@ -1,11 +1,10 @@
 package com.example.proiect.CinemaApp.repository;
 
 import com.example.proiect.CinemaApp.model.TechnicalOperator;
-import org.springframework.stereotype.Repository;
+import java.util.*;
 
-@Repository
 public class TechnicalOperatorRepo extends InFileRepository<TechnicalOperator>{
-    protected TechnicalOperatorRepo(){
+    protected TechnicalOperatorRepo() {
         super(TechnicalOperator::getId, TechnicalOperator.class, "technicaloperators.json");
     }
 }

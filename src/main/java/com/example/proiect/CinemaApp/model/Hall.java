@@ -1,13 +1,20 @@
 package com.example.proiect.CinemaApp.model;
 
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Hall")
 public class Hall {
+    @Id
     private String id;
     private String name;
     private String theatreId;
     private int capacity;
+
+    @Transient
     private List<Seat> seats;
+    @Transient
     private List<Screening> screenings;
 
     public String getId() {

@@ -1,11 +1,17 @@
 package com.example.proiect.CinemaApp.model;
 
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Theatre")
 public class Theatre {
+    @Id
     private String id;
     private String name;
     private String city;
+
+    @Transient
     private List<Hall> halls;
 
     public Theatre() {}

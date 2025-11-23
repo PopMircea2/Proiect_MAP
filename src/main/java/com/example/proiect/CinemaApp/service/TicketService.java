@@ -1,16 +1,16 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Ticket;
-import com.example.proiect.CinemaApp.repository.TicketRepo;
+import com.example.proiect.CinemaApp.repository.TicketJpaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TicketService {
-    private final TicketRepo ticketRepo;
+    private final TicketJpaRepository ticketRepo;
 
-    public TicketService(TicketRepo ticketRepo) {
+    public TicketService(TicketJpaRepository ticketRepo) {
         this.ticketRepo = ticketRepo;
     }
 
@@ -23,7 +23,7 @@ public class TicketService {
     }
 
     public Ticket addTicket(Ticket ticket) {
-        return ticketRepo.add(ticket);
+        return ticketRepo.save(ticket);
     }
 
     public void deleteTicketbyId(String id) {

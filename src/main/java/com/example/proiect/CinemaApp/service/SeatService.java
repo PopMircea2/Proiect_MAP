@@ -1,16 +1,17 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Seat;
-import com.example.proiect.CinemaApp.repository.SeatRepo;
+import com.example.proiect.CinemaApp.repository.SeatJpaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SeatService {
-    private final SeatRepo seatRepo;
+    private final SeatJpaRepository seatRepo;
 
-    public SeatService(SeatRepo seatRepo) {
+    public SeatService(SeatJpaRepository seatRepo) {
         this.seatRepo = seatRepo;
     }
 
@@ -23,7 +24,10 @@ public class SeatService {
     }
 
     public Seat addSeat(Seat seat) {
-        return seatRepo.add(seat);
+        if (seat.getId() == null || seat.getId().isBlank()) {
+            seat.setId(UUID.randomUUID().toString());
+        }
+        return seatRepo.save(seat);
     }
 
     public void deleteSeatbyId(String id) {

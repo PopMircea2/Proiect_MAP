@@ -1,12 +1,10 @@
 package com.example.proiect.CinemaApp.repository;
 
 import com.example.proiect.CinemaApp.model.Ticket;
-import org.springframework.stereotype.Repository;
 import java.util.*;
 
-@Repository
 public class TicketRepo extends InFileRepository<Ticket>{
     protected TicketRepo() {
-        super(Ticket::getId, Ticket.class, "tickets.json");
+        super(t -> t.getId() == null ? null : t.getId().toString(), Ticket.class, "tickets.json");
     }
 }

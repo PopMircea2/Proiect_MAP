@@ -1,31 +1,44 @@
 package com.example.proiect.CinemaApp.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 
+@Entity
+@Table(name = "Customer")
 public class Customer {
+    @Id
+    @Column(name = "Id")
     private String id;
-    private LocalDate DateBirth;
-    private String Name;
-    private List<Ticket> tickets;
 
+    @Column(name = "Name")
+    private String name;
+
+    @Column(name = "BirthDate")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate dateBirth;
+
+    @Transient
+    private List<Ticket> tickets = new ArrayList<>();
 
     public Customer() {
     }
 
-    public Customer(String id, LocalDate DateBirth, String name, List<Ticket> tickets) {
+    public Customer(String id, LocalDate dateBirth, String name, List<Ticket> tickets) {
         this.id = id;
-        this.DateBirth = DateBirth;
-        Name = name;
-        this.tickets = tickets;
+        this.dateBirth = dateBirth;
+        this.name = name;
+        if (tickets != null) this.tickets = tickets;
     }
 
     public LocalDate getDateBirth() {
-        return DateBirth;
+        return dateBirth;
     }
 
     public void setDateBirth(LocalDate dateBirth) {
-        this.DateBirth = dateBirth;
+        this.dateBirth = dateBirth;
     }
 
     public String getId() {
@@ -37,11 +50,11 @@ public class Customer {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public List<Ticket> getTickets() {
@@ -51,5 +64,4 @@ public class Customer {
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
-
 }

@@ -1,8 +1,14 @@
 package com.example.proiect.CinemaApp.model;
 
 import java.time.LocalDate;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "SupportStaff")
+@PrimaryKeyJoinColumn(name = "StaffId", referencedColumnName = "Id")
 public class SupportStaff extends Staff {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Role", columnDefinition = "VARCHAR(50)")
     private SupportStaffRole role;
 
     public SupportStaff() { super(null, null, 0.0, null); }

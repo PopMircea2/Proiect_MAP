@@ -1,7 +1,7 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.SupportStaff;
-import com.example.proiect.CinemaApp.repository.SupportStaffRepo;
+import com.example.proiect.CinemaApp.repository.SupportStaffJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.Optional;
 
 @Service
 public class SupportStaffService {
-    private final SupportStaffRepo supportStaffRepo;
+    private final SupportStaffJpaRepository supportStaffRepo;
 
-    public SupportStaffService(SupportStaffRepo supportStaffRepo) {
+    public SupportStaffService(SupportStaffJpaRepository supportStaffRepo) {
         this.supportStaffRepo = supportStaffRepo;
     }
 
@@ -24,7 +24,7 @@ public class SupportStaffService {
     }
 
     public SupportStaff addSupportStaff(SupportStaff staff) {
-        return supportStaffRepo.add(staff);
+        return supportStaffRepo.save(staff);
     }
 
     public void deleteSupportStaffbyId(String id) {

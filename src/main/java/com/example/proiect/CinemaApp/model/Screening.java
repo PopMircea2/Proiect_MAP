@@ -3,14 +3,21 @@ package com.example.proiect.CinemaApp.model;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Screening")
 public class Screening {
+    @Id
     private String id;
     private String hallId;
     private String movieId;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
+
+    @Transient
     private List<Ticket> tickets;
+    @Transient
     private List<StaffAssignment> assignments;
 
     public Screening() {}

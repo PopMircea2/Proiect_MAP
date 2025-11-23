@@ -1,56 +1,13 @@
-[ {
-  "id" : "c3",
-  "tickets" : null,
-  "dateBirth" : [ 1978, 1, 3 ],
-  "name" : "Carol"
-}, {
-  "id" : "c4",
-  "tickets" : null,
-  "dateBirth" : [ 2000, 11, 11 ],
-  "name" : "Dave"
-}, {
-  "id" : "c5",
-  "tickets" : null,
-  "dateBirth" : [ 1995, 6, 30 ],
-  "name" : "Eve"
-}, {
-  "id" : "c11",
-  "tickets" : null,
-  "dateBirth" : [ 2025, 11, 21 ],
-  "name" : "Andrei"
-}, {
-  "id" : "c6",
-  "tickets" : null,
-  "dateBirth" : [ 1982, 9, 9 ],
-  "name" : "Frank"
-}, {
-  "id" : "c10",
-  "tickets" : null,
-  "dateBirth" : [ 1992, 5, 25 ],
-  "name" : "Judy"
-}, {
-  "id" : "c7",
-  "tickets" : null,
-  "dateBirth" : [ 1975, 2, 20 ],
-  "name" : "Grace"
-}, {
-  "id" : "c8",
-  "tickets" : null,
-  "dateBirth" : [ 1998, 12, 1 ],
-  "name" : "Heidi"
-}, {
-  "id" : "c9",
-  "tickets" : null,
-  "dateBirth" : [ 1988, 3, 15 ],
-  "name" : "Ivan"
-}, {
-  "id" : "c1",
-  "tickets" : null,
-  "dateBirth" : [ 1985, 4, 12 ],
-  "name" : "Alice"
-}, {
-  "id" : "c2",
-  "tickets" : null,
-  "dateBirth" : [ 1990, 7, 22 ],
-  "name" : "Bob"
-} ]
+[
+  {"id":"c1","dateBirth":"1985-04-12","name":"Alice"},
+  {"id":"c2","dateBirth":"1990-07-22","name":"Bob"},
+  {"id":"c3","dateBirth":"1978-01-03","name":"Carol"},
+  {"id":"c4","dateBirth":"2000-11-11","name":"Dave"},
+  {"id":"c5","dateBirth":"1995-06-30","name":"Eve"},
+  {"id":"c6","dateBirth":"1982-09-09","name":"Frank"},
+  {"id":"c7","dateBirth":"1975-02-20","name":"Grace"},
+  {"id":"c8","dateBirth":"1998-12-01","name":"Heidi"},
+  {"id":"c9","dateBirth":"1988-03-15","name":"Ivan"},
+  {"id":"c10","dateBirth":"1992-05-25","name":"Judy"}
+]
+

@@ -1,13 +1,30 @@
 package com.example.proiect.CinemaApp.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Ticket")
 public class Ticket {
+    @Id
     private String id;
+
     private String screeningId;
-    private String customerId;
+
     private String seatId;
+
     private double price;
 
+    private String customerId;
+
     public Ticket() {}
+
+    public Ticket(String id, String screeningId, String customerId, String seatId, double price) {
+        this.id = id;
+        this.screeningId = screeningId;
+        this.customerId = customerId;
+        this.seatId = seatId;
+        this.price = price;
+    }
 
     public String getId() {
         return id;
@@ -46,14 +63,6 @@ public class Ticket {
     }
 
     public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Ticket(String id, String screeningId, String customerId, String seatId, double price) {
-        this.id = id;
-        this.screeningId = screeningId;
-        this.customerId = customerId;
-        this.seatId = seatId;
         this.price = price;
     }
 }

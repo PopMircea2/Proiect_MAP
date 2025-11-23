@@ -29,8 +29,8 @@
             <tr th:each="seat : ${seats}">
                 <td th:text="${seat.id}"></td>
                 <td th:text="${seat.hallId}"></td>
-                <td th:text="${seat.row}"></td>
-                <td th:text="${seat.column}"></td>
+                <td th:text="${seat.rowLabel}"></td>
+                <td th:text="${seat.columnNumber}"></td>
                 <td>
                     <a th:href="@{|/seats/${seat.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/seats/' + ${seat.id} + '/delete'}" method="post" style="display:inline">
