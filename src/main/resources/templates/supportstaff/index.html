@@ -34,6 +34,7 @@
                 <td th:text="${staff.dateBirth}"></td>
                 <td th:text="${staff.role}"></td>
                 <td>
+                    <a th:href="@{|/supportstaff/${staff.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/supportstaff/' + ${staff.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>

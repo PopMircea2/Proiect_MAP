@@ -39,4 +39,17 @@ public class TheatreController {
         theatreService.deleteTheatrebyId(id);
         return "redirect:/theatres";
     }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable String id, Model model) {
+        theatreService.getTheatreById(id).ifPresentOrElse(t -> model.addAttribute("theatre", t), () -> model.addAttribute("theatre", new Theatre()));
+        return "theatre/form-update";
+    }
+
+    @PostMapping("/{id}")
+    public String updateTheatre(@PathVariable String id, @ModelAttribute Theatre theatre) {
+        theatre.setId(id);
+        theatreService.addTheatre(theatre);
+        return "redirect:/theatres";
+    }
 }

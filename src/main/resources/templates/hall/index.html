@@ -32,6 +32,7 @@
                 <td th:text="${hall.theatreId}"></td>
                 <td th:text="${hall.capacity}"></td>
                 <td>
+                    <a th:href="@{|/halls/${hall.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/halls/' + ${hall.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>

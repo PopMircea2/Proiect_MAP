@@ -39,4 +39,17 @@ public class ScreeningController {
         screeningService.deleteScreeningbyId(id);
         return "redirect:/screenings";
     }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable String id, Model model) {
+        screeningService.getScreeningById(id).ifPresentOrElse(s -> model.addAttribute("screening", s), () -> model.addAttribute("screening", new Screening()));
+        return "screening/form-update";
+    }
+
+    @PostMapping("/{id}")
+    public String updateScreening(@PathVariable String id, @ModelAttribute Screening screening) {
+        screening.setId(id);
+        screeningService.addScreening(screening);
+        return "redirect:/screenings";
+    }
 }

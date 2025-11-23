@@ -39,4 +39,17 @@ public class SeatController {
         seatService.deleteSeatbyId(id);
         return "redirect:/seats";
     }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable String id, Model model) {
+        seatService.getSeatById(id).ifPresentOrElse(s -> model.addAttribute("seat", s), () -> model.addAttribute("seat", new Seat()));
+        return "seat/form-update";
+    }
+
+    @PostMapping("/{id}")
+    public String updateSeat(@PathVariable String id, @ModelAttribute Seat seat) {
+        seat.setId(id);
+        seatService.addSeat(seat);
+        return "redirect:/seats";
+    }
 }

@@ -39,4 +39,18 @@ public class HallController {
         hallService.deleteHallbyId(id);
         return "redirect:/halls";
     }
+
+    // Edit endpoints
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable String id, Model model) {
+        hallService.getHallById(id).ifPresentOrElse(h -> model.addAttribute("hall", h), () -> model.addAttribute("hall", new Hall()));
+        return "hall/form-update";
+    }
+
+    @PostMapping("/{id}")
+    public String updateHall(@PathVariable String id, @ModelAttribute Hall hall) {
+        hall.setId(id);
+        hallService.addHall(hall);
+        return "redirect:/halls";
+    }
 }

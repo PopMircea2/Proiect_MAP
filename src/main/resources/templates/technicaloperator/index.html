@@ -34,6 +34,7 @@
                 <td th:text="${op.hourlyRate}"></td>
                 <td th:text="${op.dateBirth}"></td>
                 <td>
+                    <a th:href="@{|/technicaloperator/${op.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/technicaloperator/' + ${op.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>

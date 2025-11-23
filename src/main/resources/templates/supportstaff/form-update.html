@@ -1,0 +1,52 @@
+<!--/* @thymesVar id="supportStaff" type="com.example.proiect.CinemaApp.model.SupportStaff" */-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Update Support Staff</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="h4 mb-4">Update Support Staff</h1>
+
+    <form th:action="@{|/supportstaff/${supportStaff.id}|}" th:object="${supportStaff}" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="id" class="form-label">ID</label>
+            <input id="id" type="text" th:field="*{id}" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" th:field="*{name}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="hourlyRate" class="form-label">Hourly Rate</label>
+            <input id="hourlyRate" type="number" step="0.01" th:field="*{hourlyRate}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="dateBirth" class="form-label">Date of Birth</label>
+            <input id="dateBirth" type="date" th:field="*{dateBirth}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select id="role" th:field="*{role}" class="form-select">
+                <option th:each="r : ${T(com.example.proiect.CinemaApp.model.SupportStaffRole).values()}"
+                        th:value="${r.name()}" th:text="${r.displayName}"></option>
+            </select>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Update Support Staff</button>
+            <a th:href="@{/supportstaff}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

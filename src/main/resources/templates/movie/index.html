@@ -32,6 +32,7 @@
                 <td th:text="${movie.durationMin}"></td>
                 <td th:text="${movie.rating}"></td>
                 <td>
+                    <a th:href="@{|/movies/${movie.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/movies/' + ${movie.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>

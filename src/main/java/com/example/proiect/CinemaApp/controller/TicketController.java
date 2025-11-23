@@ -39,4 +39,17 @@ public class TicketController {
         ticketService.deleteTicketbyId(id);
         return "redirect:/tickets";
     }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable String id, Model model) {
+        ticketService.getTicketById(id).ifPresentOrElse(t -> model.addAttribute("ticket", t), () -> model.addAttribute("ticket", new Ticket()));
+        return "ticket/form-update";
+    }
+
+    @PostMapping("/{id}")
+    public String updateTicket(@PathVariable String id, @ModelAttribute Ticket ticket) {
+        ticket.setId(id);
+        ticketService.addTicket(ticket);
+        return "redirect:/tickets";
+    }
 }

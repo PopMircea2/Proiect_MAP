@@ -43,4 +43,20 @@ public class MovieController {
         movieService.deleteMoviebyId(id);
         return "redirect:/movies";
     }
+
+    // Show form to edit existing movie
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable String id, Model model) {
+        movieService.getMovieById(id).ifPresentOrElse(m -> model.addAttribute("movie", m), () -> model.addAttribute("movie", new Movie()));
+        return "movie/form-update";
+    }
+
+    // Process update submission
+    @PostMapping("/{id}")
+    public String updateMovie(@PathVariable String id, @ModelAttribute Movie movie) {
+        // ensure id consistency
+        movie.setId(id);
+        movieService.addMovie(movie); // add replaces existing
+        return "redirect:/movies";
+    }
 }

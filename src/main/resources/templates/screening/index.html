@@ -32,6 +32,7 @@
                 <td th:text="${screening.movieId}"></td>
                 <td th:text="${#temporals.format(screening.date, 'yyyy-MM-dd')}"></td>
                 <td>
+                    <a th:href="@{|/screenings/${screening.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/screenings/' + ${screening.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>

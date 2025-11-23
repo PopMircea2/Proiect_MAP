@@ -30,6 +30,7 @@
                 <td th:text="${sa.screeningId}"></td>
                 <td th:text="${sa.staffId}"></td>
                 <td>
+                    <a th:href="@{|/staffassignments/${sa.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/staffassignments/' + ${sa.id} + '/delete'}" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>

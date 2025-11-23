@@ -39,4 +39,17 @@ public class TechnicalOperatorController {
         technicalOperatorService.deleteTechnicalOperatorbyId(id);
         return "redirect:/technicaloperator";
     }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable String id, Model model) {
+        technicalOperatorService.getTechnicalOperatorById(id).ifPresentOrElse(t -> model.addAttribute("technicalOperator", t), () -> model.addAttribute("technicalOperator", new TechnicalOperator()));
+        return "technicaloperator/form-update";
+    }
+
+    @PostMapping("/{id}")
+    public String updateTechnicalOperator(@PathVariable String id, @ModelAttribute TechnicalOperator technicalOperator) {
+        technicalOperator.setId(id);
+        technicalOperatorService.addTechnicalOperator(technicalOperator);
+        return "redirect:/technicaloperator";
+    }
 }

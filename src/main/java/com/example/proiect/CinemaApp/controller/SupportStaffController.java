@@ -39,4 +39,17 @@ public class SupportStaffController {
         supportStaffService.deleteSupportStaffbyId(id);
         return "redirect:/supportstaff";
     }
+
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable String id, Model model) {
+        supportStaffService.getSupportStaffById(id).ifPresentOrElse(s -> model.addAttribute("supportStaff", s), () -> model.addAttribute("supportStaff", new SupportStaff()));
+        return "supportstaff/form-update";
+    }
+
+    @PostMapping("/{id}")
+    public String updateSupportStaff(@PathVariable String id, @ModelAttribute SupportStaff staff) {
+        staff.setId(id);
+        supportStaffService.addSupportStaff(staff);
+        return "redirect:/supportstaff";
+    }
 }
