@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 @Table(name = "TechnicalOperator")
 @PrimaryKeyJoinColumn(name = "StaffId", referencedColumnName = "Id")
 public class TechnicalOperator extends Staff{
-    @Enumerated(EnumType.STRING)
     @Column(name = "Specialization", columnDefinition = "VARCHAR(50)")
     private TechnicalOperatorSpecialization specialization;
 
