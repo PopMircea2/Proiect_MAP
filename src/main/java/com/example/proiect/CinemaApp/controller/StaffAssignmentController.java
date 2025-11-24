@@ -1,8 +1,6 @@
 package com.example.proiect.CinemaApp.controller;
 
 import com.example.proiect.CinemaApp.model.StaffAssignment;
-import com.example.proiect.CinemaApp.model.SupportStaff;
-import com.example.proiect.CinemaApp.model.TechnicalOperator;
 import com.example.proiect.CinemaApp.service.StaffAssignmentService;
 import com.example.proiect.CinemaApp.service.ScreeningService;
 import com.example.proiect.CinemaApp.service.SupportStaffService;
@@ -37,8 +35,12 @@ public class StaffAssignmentController {
     }
 
     @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("assignment", new StaffAssignment());
+    public String showCreateForm(@RequestParam(value = "screeningId", required = false) String screeningId, Model model) {
+        StaffAssignment sa = new StaffAssignment();
+        if (screeningId != null && !screeningId.isBlank()) {
+            sa.setScreeningId(screeningId);
+        }
+        model.addAttribute("assignment", sa);
         model.addAttribute("screenings", screeningService.getAllScreenings());
         List<Object> staff = new ArrayList<>();
         staff.addAll(supportStaffService.getAllSupportStaff());
@@ -49,6 +51,21 @@ public class StaffAssignmentController {
 
     @PostMapping
     public String addAssignment(@ModelAttribute StaffAssignment assignment) {
+        // ensure staff entity is resolved from staffId before saving to avoid DB constraint (StaffId NOT NULL)
+        if (assignment.getStaffId() != null && !assignment.getStaffId().isBlank()) {
+            String sid = assignment.getStaffId();
+            supportStaffService.getSupportStaffById(sid).ifPresentOrElse(
+                    st -> assignment.setStaff(st),
+                    () -> technicalOperatorService.getTechnicalOperatorById(sid).ifPresent(assignment::setStaff)
+            );
+        }
+
+        // If staff could not be resolved, redirect back to the form with an error indicator
+        if (assignment.getStaff() == null) {
+            String screeningParam = (assignment.getScreeningId() != null ? "&screeningId=" + assignment.getScreeningId() : "");
+            return "redirect:/staffassignments/new?error=staffNotFound" + screeningParam;
+        }
+
         staffAssignmentService.addAssignment(assignment);
         return "redirect:/staffassignments";
     }
