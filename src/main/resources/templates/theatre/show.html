@@ -13,12 +13,13 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h4 class="card-title">Theatre <span th:text="${theatre.name}"></span></h4>
-            <p><strong>Halls:</strong>
-                <span th:if="${theatre.halls == null}">None</span>
-                <ul th:if="${theatre.halls != null}">
-                    <li th:each="h : ${theatre.halls}" th:text="${h}"></li>
+            <div>
+                <strong>Halls:</strong>
+                <span th:if="${theatre.halls == null || #lists.isEmpty(theatre.halls)}">None</span>
+                <ul th:if="${theatre.halls != null && !#lists.isEmpty(theatre.halls)}">
+                    <li th:each="h : ${theatre.halls}" th:text="${h.name + ' (' + h.id + ')'}"></li>
                 </ul>
-            </p>
+            </div>
             <div class="mt-3">
                 <a th:href="@{|/theatres/${theatre.id}/edit|}" class="btn btn-primary me-2">Edit</a>
                 <form th:action="@{/theatres/{id}/delete(id=${theatre.id})}" method="post" style="display:inline">

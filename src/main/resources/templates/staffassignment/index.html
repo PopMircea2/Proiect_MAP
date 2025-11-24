@@ -19,16 +19,16 @@
             <thead class="table-light">
             <tr>
                 <th>ID</th>
-                <th>Screening ID</th>
-                <th>Staff ID</th>
+                <th>Screening</th>
+                <th>Staff</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="sa : ${assignments}">
                 <td th:text="${sa.id}"></td>
-                <td th:text="${sa.screeningId}"></td>
-                <td th:text="${sa.staffId}"></td>
+                <td th:text="${sa.screening != null ? (sa.screening.movie != null ? sa.screening.movie.title + ' (' + sa.screening.id + ')' : sa.screening.id) : sa.screeningId}"></td>
+                <td th:text="${sa.staff != null ? sa.staff.name + ' (' + sa.staff.id + ')' : sa.staffId}"></td>
                 <td>
                     <a th:href="@{|/staffassignments/${sa.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>
                     <form th:action="@{'/staffassignments/' + ${sa.id} + '/delete'}" method="post" style="display:inline">

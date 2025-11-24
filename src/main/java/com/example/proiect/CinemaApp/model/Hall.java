@@ -7,14 +7,23 @@ import jakarta.persistence.*;
 @Table(name = "Hall")
 public class Hall {
     @Id
+    @Column(name = "Id")
     private String id;
+
+    @Column(name = "Name")
     private String name;
-    private String theatreId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TheatreId", referencedColumnName = "Id")
+    private Theatre theatre;
+
+    @Column(name = "Capacity")
     private int capacity;
 
-    @Transient
+    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Seat> seats;
-    @Transient
+
+    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings;
 
     public String getId() {
@@ -29,11 +38,11 @@ public class Hall {
     public void setName(String name) {
         this.name = name;
     }
-    public String getTheatreId() {
-        return theatreId;
+    public Theatre getTheatre() {
+        return theatre;
     }
-    public void setTheatreId(String theatreId) {
-        this.theatreId = theatreId;
+    public void setTheatre(Theatre theatre) {
+        this.theatre = theatre;
     }
     public int getCapacity() {
         return capacity;
@@ -55,10 +64,10 @@ public class Hall {
     }
     public Hall() {}
 
-    public Hall(String id, String name, String theatreId, int capacity, List<Seat> seats, List<Screening> screenings) {
+    public Hall(String id, String name, Theatre theatre, int capacity, List<Seat> seats, List<Screening> screenings) {
         this.id = id;
         this.name = name;
-        this.theatreId = theatreId;
+        this.theatre = theatre;
         this.capacity = capacity;
         this.seats = seats;
         this.screenings = screenings;

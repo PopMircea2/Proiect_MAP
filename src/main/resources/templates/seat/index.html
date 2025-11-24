@@ -28,7 +28,7 @@
             <tbody>
             <tr th:each="seat : ${seats}">
                 <td th:text="${seat.id}"></td>
-                <td th:text="${seat.hallId}"></td>
+                <td th:text="${seat.hall != null ? seat.hall.id : seat.hallId}"></td>
                 <td th:text="${seat.rowLabel}"></td>
                 <td th:text="${seat.columnNumber}"></td>
                 <td>

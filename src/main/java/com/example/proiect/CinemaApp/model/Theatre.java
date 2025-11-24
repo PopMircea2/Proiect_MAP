@@ -7,11 +7,16 @@ import jakarta.persistence.*;
 @Table(name = "Theatre")
 public class Theatre {
     @Id
+    @Column(name = "Id")
     private String id;
+
+    @Column(name = "Name")
     private String name;
+
+    @Column(name = "City")
     private String city;
 
-    @Transient
+    @OneToMany(mappedBy = "theatre", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hall> halls;
 
     public Theatre() {}

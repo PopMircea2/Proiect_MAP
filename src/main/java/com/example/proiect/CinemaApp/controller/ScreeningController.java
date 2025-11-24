@@ -2,6 +2,8 @@ package com.example.proiect.CinemaApp.controller;
 
 import com.example.proiect.CinemaApp.model.Screening;
 import com.example.proiect.CinemaApp.service.ScreeningService;
+import com.example.proiect.CinemaApp.service.HallService;
+import com.example.proiect.CinemaApp.service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +13,13 @@ import org.springframework.web.bind.annotation.*;
 public class ScreeningController {
 
     private final ScreeningService screeningService;
+    private final HallService hallService;
+    private final MovieService movieService;
 
-    public ScreeningController(ScreeningService screeningService) {
+    public ScreeningController(ScreeningService screeningService, HallService hallService, MovieService movieService) {
         this.screeningService = screeningService;
+        this.hallService = hallService;
+        this.movieService = movieService;
     }
 
     @GetMapping
@@ -31,6 +37,8 @@ public class ScreeningController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("screening", new Screening());
+        model.addAttribute("halls", hallService.getAllHalls());
+        model.addAttribute("movies", movieService.getAllMovies());
         return "screening/form";
     }
 
@@ -49,6 +57,8 @@ public class ScreeningController {
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable String id, Model model) {
         screeningService.getScreeningById(id).ifPresentOrElse(s -> model.addAttribute("screening", s), () -> model.addAttribute("screening", new Screening()));
+        model.addAttribute("halls", hallService.getAllHalls());
+        model.addAttribute("movies", movieService.getAllMovies());
         return "screening/form-update";
     }
 

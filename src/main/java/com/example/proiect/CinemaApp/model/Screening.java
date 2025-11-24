@@ -1,6 +1,6 @@
 package com.example.proiect.CinemaApp.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.*;
@@ -9,15 +9,30 @@ import jakarta.persistence.*;
 @Table(name = "Screening")
 public class Screening {
     @Id
+    @Column(name = "Id")
     private String id;
-    private String hallId;
-    private String movieId;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "HallId", referencedColumnName = "Id")
+    private Hall hall;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MovieId", referencedColumnName = "Id")
+    private Movie movie;
 
     @Transient
-    private List<Ticket> tickets;
+    private String hallId;
+
     @Transient
+    private String movieId;
+
+    @Column(name = "Date")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime date;
+
+    @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;
+    @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StaffAssignment> assignments;
 
     public Screening() {}
@@ -30,7 +45,24 @@ public class Screening {
         this.id = id;
     }
 
+    public Hall getHall() {
+        return hall;
+    }
+
+    public void setHall(Hall hall) {
+        this.hall = hall;
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
     public String getHallId() {
+        if (hall != null && hall.getId() != null) return hall.getId();
         return hallId;
     }
 
@@ -39,6 +71,7 @@ public class Screening {
     }
 
     public String getMovieId() {
+        if (movie != null && movie.getId() != null) return movie.getId();
         return movieId;
     }
 
@@ -46,11 +79,11 @@ public class Screening {
         this.movieId = movieId;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -70,10 +103,10 @@ public class Screening {
         this.assignments = assignments;
     }
 
-    public Screening(String id, String hallId, String movieId, LocalDate date, List<Ticket> tickets, List<StaffAssignment> assignments) {
+    public Screening(String id, Hall hall, Movie movie, LocalDateTime date, List<Ticket> tickets, List<StaffAssignment> assignments) {
         this.id = id;
-        this.hallId = hallId;
-        this.movieId = movieId;
+        this.hall = hall;
+        this.movie = movie;
         this.date = date;
         this.tickets = tickets;
         this.assignments = assignments;

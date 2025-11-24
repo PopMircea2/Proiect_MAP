@@ -1,5 +1,4 @@
 package com.example.proiect.CinemaApp.model;
-import java.util.Date;
 import java.util.List;
 import jakarta.persistence.*;
 
@@ -16,25 +15,22 @@ public class Movie {
     @Column(name = "DurationMin")
     private int DurationMin;
 
-    @Transient
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings;
 
     @Column(name = "Rating")
-    private double Rating;
-
-    @Transient
-    private Date date;
+    private Double Rating;
 
     public Movie() {
 
     }
 
 
-    public double getRating() {
+    public Double getRating() {
         return Rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(Double rating) {
         Rating = rating;
     }
 
@@ -70,7 +66,7 @@ public class Movie {
         this.screenings = screenings;
     }
 
-    public Movie(String id, String title, int durationMin, double Rating ,List<Screening> screenings) {
+    public Movie(String id, String title, int durationMin, Double Rating ,List<Screening> screenings) {
         this.id = id;
         this.title = title;
         DurationMin = durationMin;

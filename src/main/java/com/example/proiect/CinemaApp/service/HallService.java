@@ -3,6 +3,7 @@ package com.example.proiect.CinemaApp.service;
 import com.example.proiect.CinemaApp.model.Hall;
 import com.example.proiect.CinemaApp.repository.HallJpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,12 +15,26 @@ public class HallService {
         this.hallRepo = hallRepo;
     }
 
+    @Transactional(readOnly = true)
     public List<Hall> getAllHalls() {
-        return hallRepo.findAll();
+        List<Hall> halls = hallRepo.findAll();
+        for (Hall h : halls) {
+            if (h.getTheatre() != null) h.getTheatre().getName();
+            if (h.getSeats() != null) h.getSeats().size();
+            if (h.getScreenings() != null) h.getScreenings().size();
+        }
+        return halls;
     }
 
+    @Transactional(readOnly = true)
     public Optional<Hall> getHallById(String id) {
-        return hallRepo.findById(id);
+        Optional<Hall> opt = hallRepo.findById(id);
+        opt.ifPresent(h -> {
+            if (h.getTheatre() != null) h.getTheatre().getName();
+            if (h.getSeats() != null) h.getSeats().size();
+            if (h.getScreenings() != null) h.getScreenings().size();
+        });
+        return opt;
     }
 
     public Hall addHall(Hall hall) {

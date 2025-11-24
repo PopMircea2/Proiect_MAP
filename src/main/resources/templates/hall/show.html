@@ -13,19 +13,21 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h4 class="card-title">Hall <span th:text="${hall.name}"></span></h4>
-            <p><strong>Theatre ID:</strong> <span th:text="${hall.theatreId}"></span></p>
-            <p><strong>Seats:</strong>
-                <span th:if="${hall.seats == null}">None</span>
-                <ul th:if="${hall.seats != null}">
-                    <li th:each="s : ${hall.seats}" th:text="${s}"></li>
+            <p><strong>Theatre:</strong> <span th:text="${hall.theatre != null ? hall.theatre.name + ' ('+hall.theatre.id+')' : ''}"></span></p>
+            <div>
+                <strong>Seats:</strong>
+                <span th:if="${hall.seats == null || #lists.isEmpty(hall.seats)}">None</span>
+                <ul th:if="${hall.seats != null && !#lists.isEmpty(hall.seats)}">
+                    <li th:each="s : ${hall.seats}" th:text="${s.rowLabel + '-' + s.columnNumber + ' (' + s.id + ')'}"></li>
                 </ul>
-            </p>
-            <p><strong>Screenings:</strong>
-                <span th:if="${hall.screenings == null}">None</span>
-                <ul th:if="${hall.screenings != null}">
-                    <li th:each="sc : ${hall.screenings}" th:text="${sc}"></li>
+            </div>
+            <div>
+                <strong>Screenings:</strong>
+                <span th:if="${hall.screenings == null || #lists.isEmpty(hall.screenings)}">None</span>
+                <ul th:if="${hall.screenings != null && !#lists.isEmpty(hall.screenings)}">
+                    <li th:each="sc : ${hall.screenings}" th:text="${sc.movie != null ? sc.movie.title + ' ('+sc.movie.id+')' : sc.movieId}"></li>
                 </ul>
-            </p>
+            </div>
             <div class="mt-3">
                 <a th:href="@{|/halls/${hall.id}/edit|}" class="btn btn-primary me-2">Edit</a>
                 <form th:action="@{/halls/{id}/delete(id=${hall.id})}" method="post" style="display:inline">

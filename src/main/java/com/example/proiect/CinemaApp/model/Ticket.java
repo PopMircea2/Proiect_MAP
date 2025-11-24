@@ -6,23 +6,40 @@ import jakarta.persistence.*;
 @Table(name = "Ticket")
 public class Ticket {
     @Id
+    @Column(name = "Id")
     private String id;
 
-    private String screeningId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ScreeningId", referencedColumnName = "Id")
+    private Screening screening;
 
-    private String seatId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SeatId", referencedColumnName = "Id")
+    private Seat seat;
 
+    @Column(name = "Price")
     private double price;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CustomerId", referencedColumnName = "Id")
+    private Customer customer;
+
+    @Transient
+    private String screeningId;
+
+    @Transient
+    private String seatId;
+
+    @Transient
     private String customerId;
 
     public Ticket() {}
 
-    public Ticket(String id, String screeningId, String customerId, String seatId, double price) {
+    public Ticket(String id, Screening screening, Customer customer, Seat seat, double price) {
         this.id = id;
-        this.screeningId = screeningId;
-        this.customerId = customerId;
-        this.seatId = seatId;
+        this.screening = screening;
+        this.customer = customer;
+        this.seat = seat;
         this.price = price;
     }
 
@@ -34,28 +51,28 @@ public class Ticket {
         this.id = id;
     }
 
-    public String getScreeningId() {
-        return screeningId;
+    public Screening getScreening() {
+        return screening;
     }
 
-    public void setScreeningId(String screeningId) {
-        this.screeningId = screeningId;
+    public void setScreening(Screening screening) {
+        this.screening = screening;
     }
 
-    public String getSeatId() {
-        return seatId;
+    public Seat getSeat() {
+        return seat;
     }
 
-    public void setSeatId(String seatId) {
-        this.seatId = seatId;
+    public void setSeat(Seat seat) {
+        this.seat = seat;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public double getPrice() {
@@ -64,5 +81,32 @@ public class Ticket {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getScreeningId() {
+        if (screening != null && screening.getId() != null) return screening.getId();
+        return screeningId;
+    }
+
+    public void setScreeningId(String screeningId) {
+        this.screeningId = screeningId;
+    }
+
+    public String getSeatId() {
+        if (seat != null && seat.getId() != null) return seat.getId();
+        return seatId;
+    }
+
+    public void setSeatId(String seatId) {
+        this.seatId = seatId;
+    }
+
+    public String getCustomerId() {
+        if (customer != null && customer.getId() != null) return customer.getId();
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 }

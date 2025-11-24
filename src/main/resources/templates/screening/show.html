@@ -13,8 +13,9 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h4 class="card-title">Screening <span th:text="${screening.id}"></span></h4>
-            <p><strong>Hall ID:</strong> <span th:text="${screening.hallId}"></span></p>
-            <p><strong>Movie ID:</strong> <span th:text="${screening.movieId}"></span></p>
+            <p><strong>Hall:</strong> <span th:text="${screening.hall != null ? screening.hall.name + ' (' + screening.hall.id + ')' : screening.hallId}"></span></p>
+            <p><strong>Movie:</strong> <span th:text="${screening.movie != null ? screening.movie.title + ' (' + screening.movie.id + ')' : screening.movieId}"></span></p>
+            <p><strong>Date:</strong> <span th:text="${screening.date}"></span></p>
             <div class="mt-3">
                 <a th:href="@{|/screenings/${screening.id}/edit|}" class="btn btn-primary me-2">Edit</a>
                 <form th:action="@{/screenings/{id}/delete(id=${screening.id})}" method="post" style="display:inline">

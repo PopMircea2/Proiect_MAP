@@ -20,6 +20,9 @@ public abstract class Staff {
     @Column(name = "BirthDate")
     private LocalDate dateBirth;
 
+    @Column(name = "StaffType")
+    private String staffType;
+
     public Staff() {}
 
     public LocalDate getDateBirth() {

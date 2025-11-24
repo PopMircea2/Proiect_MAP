@@ -18,13 +18,17 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Screening ID</label>
-            <input type="text" th:field="*{screeningId}" class="form-control" required>
+            <label class="form-label">Screening</label>
+            <select th:field="*{screeningId}" class="form-select" required>
+                <option th:each="s : ${screenings}" th:value="${s.id}" th:text="${s.movie != null ? s.movie.title + ' (' + s.id + ')' : s.id}"></option>
+            </select>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Staff ID</label>
-            <input type="text" th:field="*{staffId}" class="form-control" required>
+            <label class="form-label">Staff</label>
+            <select th:field="*{staffId}" class="form-select" required>
+                <option th:each="st : ${staffList}" th:value="${st.id}" th:text="${st.name + ' (' + st.id + ')'}"></option>
+            </select>
         </div>
 
         <div class="d-flex gap-2">

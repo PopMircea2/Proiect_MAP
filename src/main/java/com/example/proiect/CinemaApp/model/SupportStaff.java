@@ -13,8 +13,9 @@ public class SupportStaff extends Staff {
 
     public SupportStaff() { super(null, null, 0.0, null); }
 
-    public SupportStaff(String id, String name, double hourlyRate, LocalDate DateBirth) {
+    public SupportStaff(String id, String name, SupportStaffRole role, double hourlyRate, LocalDate DateBirth) {
         super(id, name,hourlyRate, DateBirth);
+        this.role = role;
     }
     public SupportStaffRole getRole() { return role; }
     public void setRole(SupportStaffRole role) { this.role = role; }

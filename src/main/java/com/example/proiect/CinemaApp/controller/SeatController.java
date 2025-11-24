@@ -2,6 +2,7 @@ package com.example.proiect.CinemaApp.controller;
 
 import com.example.proiect.CinemaApp.model.Seat;
 import com.example.proiect.CinemaApp.service.SeatService;
+import com.example.proiect.CinemaApp.service.HallService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class SeatController {
 
     private final SeatService seatService;
+    private final HallService hallService;
 
-    public SeatController(SeatService seatService) {
+    public SeatController(SeatService seatService, HallService hallService) {
         this.seatService = seatService;
+        this.hallService = hallService;
     }
 
     @GetMapping
@@ -25,6 +28,7 @@ public class SeatController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("seat", new Seat());
+        model.addAttribute("halls", hallService.getAllHalls());
         return "seat/form";
     }
 
@@ -43,6 +47,7 @@ public class SeatController {
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable String id, Model model) {
         seatService.getSeatById(id).ifPresentOrElse(s -> model.addAttribute("seat", s), () -> model.addAttribute("seat", new Seat()));
+        model.addAttribute("halls", hallService.getAllHalls());
         return "seat/form-update";
     }
 

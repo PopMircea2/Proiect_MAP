@@ -13,9 +13,10 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h4 class="card-title">Ticket <span th:text="${ticket.id}"></span></h4>
-            <p><strong>Screening ID:</strong> <span th:text="${ticket.screeningId}"></span></p>
-            <p><strong>Customer ID:</strong> <span th:text="${ticket.customerId}"></span></p>
-            <p><strong>Seat ID:</strong> <span th:text="${ticket.seatId}"></span></p>
+            <p><strong>Screening:</strong> <span th:text="${ticket.screening != null ? ticket.screening.id : ''}"></span></p>
+            <p><strong>Customer:</strong> <span th:text="${ticket.customer != null ? ticket.customer.name + ' (' + ticket.customer.id + ')' : ''}"></span></p>
+            <p><strong>Seat:</strong> <span th:text="${ticket.seat != null ? ticket.seat.rowLabel + '-' + ticket.seat.columnNumber + ' (' + ticket.seat.id + ')' : ''}"></span></p>
+            <p><strong>Price:</strong> <span th:text="${ticket.price}"></span></p>
             <div class="mt-3">
                 <a th:href="@{|/tickets/${ticket.id}/edit|}" class="btn btn-primary me-2">Edit</a>
                 <form th:action="@{/tickets/{id}/delete(id=${ticket.id})}" method="post" style="display:inline">

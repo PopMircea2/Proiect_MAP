@@ -18,8 +18,10 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Hall ID</label>
-            <input type="text" th:field="*{hallId}" class="form-control" required>
+            <label class="form-label">Hall</label>
+            <select th:field="*{hallId}" class="form-select" required>
+                <option th:each="h : ${halls}" th:value="${h.id}" th:text="${h.name + ' (' + h.id + ')'}"></option>
+            </select>
         </div>
 
         <div class="mb-3">

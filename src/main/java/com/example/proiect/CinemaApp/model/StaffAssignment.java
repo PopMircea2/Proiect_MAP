@@ -6,9 +6,22 @@ import jakarta.persistence.*;
 @Table(name = "StaffAssignment")
 public class StaffAssignment {
     @Id
+    @Column(name = "Id")
     private String id;
-    private String ScreeningId;
-    private String StaffId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ScreeningId", referencedColumnName = "Id")
+    private Screening screening;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "StaffId", referencedColumnName = "Id")
+    private Staff staff;
+
+    @Transient
+    private String screeningId;
+
+    @Transient
+    private String staffId;
 
     public StaffAssignment() {}
 
@@ -20,25 +33,43 @@ public class StaffAssignment {
         this.id = id;
     }
 
+    public Screening getScreening() {
+        return screening;
+    }
+
+    public void setScreening(Screening screening) {
+        this.screening = screening;
+    }
+
+    public Staff getStaff() {
+        return staff;
+    }
+
+    public void setStaff(Staff staff) {
+        this.staff = staff;
+    }
+
     public String getScreeningId() {
-        return ScreeningId;
+        if (screening != null && screening.getId() != null) return screening.getId();
+        return screeningId;
     }
 
     public void setScreeningId(String screeningId) {
-        ScreeningId = screeningId;
+        this.screeningId = screeningId;
     }
 
     public String getStaffId() {
-        return StaffId;
+        if (staff != null && staff.getId() != null) return staff.getId();
+        return staffId;
     }
 
     public void setStaffId(String staffId) {
-        StaffId = staffId;
+        this.staffId = staffId;
     }
 
-    public StaffAssignment(String id, String screeningId, String staffId) {
+    public StaffAssignment(String id, Screening screening, Staff staff) {
         this.id = id;
-        ScreeningId = screeningId;
-        StaffId = staffId;
+        this.screening = screening;
+        this.staff = staff;
     }
 }

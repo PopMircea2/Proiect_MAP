@@ -2,6 +2,9 @@ package com.example.proiect.CinemaApp.controller;
 
 import com.example.proiect.CinemaApp.model.Ticket;
 import com.example.proiect.CinemaApp.service.TicketService;
+import com.example.proiect.CinemaApp.service.ScreeningService;
+import com.example.proiect.CinemaApp.service.SeatService;
+import com.example.proiect.CinemaApp.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +14,15 @@ import org.springframework.web.bind.annotation.*;
 public class TicketController {
 
     private final TicketService ticketService;
+    private final ScreeningService screeningService;
+    private final SeatService seatService;
+    private final CustomerService customerService;
 
-    public TicketController(TicketService ticketService) {
+    public TicketController(TicketService ticketService, ScreeningService screeningService, SeatService seatService, CustomerService customerService) {
         this.ticketService = ticketService;
+        this.screeningService = screeningService;
+        this.seatService = seatService;
+        this.customerService = customerService;
     }
 
     @GetMapping
@@ -31,6 +40,9 @@ public class TicketController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("ticket", new Ticket());
+        model.addAttribute("screenings", screeningService.getAllScreenings());
+        model.addAttribute("seats", seatService.getAllSeats());
+        model.addAttribute("customers", customerService.getAllCustomers());
         return "ticket/form";
     }
 
@@ -49,6 +61,9 @@ public class TicketController {
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable String id, Model model) {
         ticketService.getTicketById(id).ifPresentOrElse(t -> model.addAttribute("ticket", t), () -> model.addAttribute("ticket", new Ticket()));
+        model.addAttribute("screenings", screeningService.getAllScreenings());
+        model.addAttribute("seats", seatService.getAllSeats());
+        model.addAttribute("customers", customerService.getAllCustomers());
         return "ticket/form-update";
     }
 

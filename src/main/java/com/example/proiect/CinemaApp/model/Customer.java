@@ -20,7 +20,7 @@ public class Customer {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateBirth;
 
-    @Transient
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets = new ArrayList<>();
 
     public Customer() {

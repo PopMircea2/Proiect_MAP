@@ -18,18 +18,24 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Screening ID</label>
-            <input type="text" th:field="*{screeningId}" class="form-control" required>
+            <label class="form-label">Screening</label>
+            <select th:field="*{screeningId}" class="form-select" required>
+                <option th:each="s : ${screenings}" th:value="${s.id}" th:text="${s.movie != null ? s.movie.title + ' (' + s.id + ')' : s.id}"></option>
+            </select>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Customer ID</label>
-            <input type="text" th:field="*{customerId}" class="form-control" required>
+            <label class="form-label">Customer</label>
+            <select th:field="*{customerId}" class="form-select" required>
+                <option th:each="c : ${customers}" th:value="${c.id}" th:text="${c.name + ' (' + c.id + ')' }"></option>
+            </select>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Seat ID</label>
-            <input type="text" th:field="*{seatId}" class="form-control" required>
+            <label class="form-label">Seat</label>
+            <select th:field="*{seatId}" class="form-select" required>
+                <option th:each="st : ${seats}" th:value="${st.id}" th:text="${st.rowLabel + '-' + st.columnNumber + ' (' + st.id + ')' }"></option>
+            </select>
         </div>
 
         <div class="mb-3">
