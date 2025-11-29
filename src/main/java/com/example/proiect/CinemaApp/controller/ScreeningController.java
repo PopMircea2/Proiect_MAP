@@ -6,7 +6,9 @@ import com.example.proiect.CinemaApp.service.HallService;
 import com.example.proiect.CinemaApp.service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/screenings")
@@ -43,9 +45,21 @@ public class ScreeningController {
     }
 
     @PostMapping
-    public String addScreening(@ModelAttribute Screening screening) {
-        screeningService.addScreening(screening);
-        return "redirect:/screenings";
+    public String addScreening(@Valid @ModelAttribute Screening screening, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("halls", hallService.getAllHalls());
+            model.addAttribute("movies", movieService.getAllMovies());
+            return "screening/form";
+        }
+        try {
+            screeningService.addScreening(screening);
+            return "redirect:/screenings";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add screening: " + e.getMessage());
+            model.addAttribute("halls", hallService.getAllHalls());
+            model.addAttribute("movies", movieService.getAllMovies());
+            return "screening/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -63,9 +77,22 @@ public class ScreeningController {
     }
 
     @PostMapping("/{id}")
-    public String updateScreening(@PathVariable String id, @ModelAttribute Screening screening) {
-        screening.setId(id);
-        screeningService.addScreening(screening);
-        return "redirect:/screenings";
+    public String updateScreening(@PathVariable String id, @Valid @ModelAttribute Screening screening, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            screening.setId(id);
+            model.addAttribute("halls", hallService.getAllHalls());
+            model.addAttribute("movies", movieService.getAllMovies());
+            return "screening/form-update";
+        }
+        try {
+            screening.setId(id);
+            screeningService.addScreening(screening);
+            return "redirect:/screenings";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update screening: " + e.getMessage());
+            model.addAttribute("halls", hallService.getAllHalls());
+            model.addAttribute("movies", movieService.getAllMovies());
+            return "screening/form-update";
+        }
     }
 }

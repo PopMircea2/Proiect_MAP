@@ -2,6 +2,7 @@ package com.example.proiect.CinemaApp.model;
 
 import java.util.List;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "Hall")
@@ -10,13 +11,17 @@ public class Hall {
     @Column(name = "Id")
     private String id;
 
+    @NotBlank(message = "Name is required")
+    @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters")
     @Column(name = "Name")
     private String name;
 
+    @NotNull(message = "Theatre is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TheatreId", referencedColumnName = "Id")
     private Theatre theatre;
 
+    @Positive(message = "Capacity must be positive")
     @Column(name = "Capacity")
     private int capacity;
 

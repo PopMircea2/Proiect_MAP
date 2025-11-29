@@ -4,7 +4,9 @@ import com.example.proiect.CinemaApp.model.SupportStaff;
 import com.example.proiect.CinemaApp.service.SupportStaffService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/supportstaff")
@@ -35,9 +37,17 @@ public class SupportStaffController {
     }
 
     @PostMapping
-    public String addSupportStaff(@ModelAttribute SupportStaff staff) {
-        supportStaffService.addSupportStaff(staff);
-        return "redirect:/supportstaff";
+    public String addSupportStaff(@Valid @ModelAttribute SupportStaff staff, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "supportstaff/form";
+        }
+        try {
+            supportStaffService.addSupportStaff(staff);
+            return "redirect:/supportstaff";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add support staff: " + e.getMessage());
+            return "supportstaff/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -53,9 +63,18 @@ public class SupportStaffController {
     }
 
     @PostMapping("/{id}")
-    public String updateSupportStaff(@PathVariable String id, @ModelAttribute SupportStaff staff) {
-        staff.setId(id);
-        supportStaffService.addSupportStaff(staff);
-        return "redirect:/supportstaff";
+    public String updateSupportStaff(@PathVariable String id, @Valid @ModelAttribute SupportStaff staff, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            staff.setId(id);
+            return "supportstaff/form-update";
+        }
+        try {
+            staff.setId(id);
+            supportStaffService.addSupportStaff(staff);
+            return "redirect:/supportstaff";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update support staff: " + e.getMessage());
+            return "supportstaff/form-update";
+        }
     }
 }

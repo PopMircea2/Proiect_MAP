@@ -4,7 +4,9 @@ import com.example.proiect.CinemaApp.model.Customer;
 import com.example.proiect.CinemaApp.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/customers")
@@ -36,9 +38,17 @@ public class CustomerController {
     }
 
     @PostMapping
-    public String addCustomer(@ModelAttribute Customer customer) {
-        customerService.addCustomer(customer);
-        return "redirect:/customers";
+    public String addCustomer(@Valid @ModelAttribute Customer customer, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "customer/form";
+        }
+        try {
+            customerService.addCustomer(customer);
+            return "redirect:/customers";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add customer: " + e.getMessage());
+            return "customer/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -54,9 +64,18 @@ public class CustomerController {
     }
 
     @PostMapping("/{id}")
-    public String updateCustomer(@PathVariable String id, @ModelAttribute Customer customer) {
-        customer.setId(id);
-        customerService.addCustomer(customer);
-        return "redirect:/customers";
+    public String updateCustomer(@PathVariable String id, @Valid @ModelAttribute Customer customer, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            customer.setId(id);
+            return "customer/form-update";
+        }
+        try {
+            customer.setId(id);
+            customerService.addCustomer(customer);
+            return "redirect:/customers";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update customer: " + e.getMessage());
+            return "customer/form-update";
+        }
     }
 }

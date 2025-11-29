@@ -1,6 +1,7 @@
 package com.example.proiect.CinemaApp.model;
 import java.util.List;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "Movie")
@@ -9,15 +10,20 @@ public class Movie {
     @Column(name = "Id")
     private String id;
 
+    @NotBlank(message = "Title is required")
+    @Size(min = 1, max = 200, message = "Title must be between 1 and 200 characters")
     @Column(name = "Title")
     private String title;
 
+    @Positive(message = "Duration must be positive")
     @Column(name = "DurationMin")
     private int DurationMin;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings;
 
+    @DecimalMin(value = "0.0", message = "Rating must be at least 0.0")
+    @DecimalMax(value = "10.0", message = "Rating must not exceed 10.0")
     @Column(name = "Rating")
     private Double Rating;
 

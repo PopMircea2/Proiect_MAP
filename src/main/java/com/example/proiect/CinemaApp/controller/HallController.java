@@ -4,7 +4,9 @@ import com.example.proiect.CinemaApp.model.Hall;
 import com.example.proiect.CinemaApp.service.HallService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/halls")
@@ -35,9 +37,17 @@ public class HallController {
     }
 
     @PostMapping
-    public String addHall(@ModelAttribute Hall hall) {
-        hallService.addHall(hall);
-        return "redirect:/halls";
+    public String addHall(@Valid @ModelAttribute Hall hall, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "hall/form";
+        }
+        try {
+            hallService.addHall(hall);
+            return "redirect:/halls";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add hall: " + e.getMessage());
+            return "hall/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -54,9 +64,18 @@ public class HallController {
     }
 
     @PostMapping("/{id}")
-    public String updateHall(@PathVariable String id, @ModelAttribute Hall hall) {
-        hall.setId(id);
-        hallService.addHall(hall);
-        return "redirect:/halls";
+    public String updateHall(@PathVariable String id, @Valid @ModelAttribute Hall hall, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            hall.setId(id);
+            return "hall/form-update";
+        }
+        try {
+            hall.setId(id);
+            hallService.addHall(hall);
+            return "redirect:/halls";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update hall: " + e.getMessage());
+            return "hall/form-update";
+        }
     }
 }

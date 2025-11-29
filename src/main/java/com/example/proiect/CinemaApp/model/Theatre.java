@@ -2,6 +2,7 @@ package com.example.proiect.CinemaApp.model;
 
 import java.util.List;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "Theatre")
@@ -10,9 +11,13 @@ public class Theatre {
     @Column(name = "Id")
     private String id;
 
+    @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     @Column(name = "Name")
     private String name;
 
+    @NotBlank(message = "City is required")
+    @Size(min = 2, max = 100, message = "City must be between 2 and 100 characters")
     @Column(name = "City")
     private String city;
 

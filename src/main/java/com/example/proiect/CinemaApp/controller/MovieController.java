@@ -4,7 +4,9 @@ import com.example.proiect.CinemaApp.model.Movie;
 import com.example.proiect.CinemaApp.service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/movies")
@@ -39,9 +41,17 @@ public class MovieController {
 
     // Process form submission
     @PostMapping
-    public String addMovie(@ModelAttribute Movie movie) {
-        movieService.addMovie(movie);
-        return "redirect:/movies";
+    public String addMovie(@Valid @ModelAttribute Movie movie, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "movie/form";
+        }
+        try {
+            movieService.addMovie(movie);
+            return "redirect:/movies";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add movie: " + e.getMessage());
+            return "movie/form";
+        }
     }
 
     // Delete a movie
@@ -60,10 +70,19 @@ public class MovieController {
 
     // Process update submission
     @PostMapping("/{id}")
-    public String updateMovie(@PathVariable String id, @ModelAttribute Movie movie) {
-        // ensure id consistency
-        movie.setId(id);
-        movieService.addMovie(movie); // add replaces existing
-        return "redirect:/movies";
+    public String updateMovie(@PathVariable String id, @Valid @ModelAttribute Movie movie, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            movie.setId(id);
+            return "movie/form-update";
+        }
+        try {
+            // ensure id consistency
+            movie.setId(id);
+            movieService.addMovie(movie); // add replaces existing
+            return "redirect:/movies";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update movie: " + e.getMessage());
+            return "movie/form-update";
+        }
     }
 }

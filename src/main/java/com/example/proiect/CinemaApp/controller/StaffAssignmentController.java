@@ -7,7 +7,9 @@ import com.example.proiect.CinemaApp.service.SupportStaffService;
 import com.example.proiect.CinemaApp.service.TechnicalOperatorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,24 +52,42 @@ public class StaffAssignmentController {
     }
 
     @PostMapping
-    public String addAssignment(@ModelAttribute StaffAssignment assignment) {
-        // ensure staff entity is resolved from staffId before saving to avoid DB constraint (StaffId NOT NULL)
-        if (assignment.getStaffId() != null && !assignment.getStaffId().isBlank()) {
-            String sid = assignment.getStaffId();
-            supportStaffService.getSupportStaffById(sid).ifPresentOrElse(
-                    st -> assignment.setStaff(st),
-                    () -> technicalOperatorService.getTechnicalOperatorById(sid).ifPresent(assignment::setStaff)
-            );
+    public String addAssignment(@Valid @ModelAttribute StaffAssignment assignment, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("screenings", screeningService.getAllScreenings());
+            List<Object> staff = new ArrayList<>();
+            staff.addAll(supportStaffService.getAllSupportStaff());
+            staff.addAll(technicalOperatorService.getAllTechnicalOperators());
+            model.addAttribute("staffList", staff);
+            return "staffassignment/form";
         }
+        try {
+            // ensure staff entity is resolved from staffId before saving to avoid DB constraint (StaffId NOT NULL)
+            if (assignment.getStaffId() != null && !assignment.getStaffId().isBlank()) {
+                String sid = assignment.getStaffId();
+                supportStaffService.getSupportStaffById(sid).ifPresentOrElse(
+                        st -> assignment.setStaff(st),
+                        () -> technicalOperatorService.getTechnicalOperatorById(sid).ifPresent(assignment::setStaff)
+                );
+            }
 
-        // If staff could not be resolved, redirect back to the form with an error indicator
-        if (assignment.getStaff() == null) {
-            String screeningParam = (assignment.getScreeningId() != null ? "&screeningId=" + assignment.getScreeningId() : "");
-            return "redirect:/staffassignments/new?error=staffNotFound" + screeningParam;
+            // If staff could not be resolved, redirect back to the form with an error indicator
+            if (assignment.getStaff() == null) {
+                String screeningParam = (assignment.getScreeningId() != null ? "&screeningId=" + assignment.getScreeningId() : "");
+                return "redirect:/staffassignments/new?error=staffNotFound" + screeningParam;
+            }
+
+            staffAssignmentService.addAssignment(assignment);
+            return "redirect:/staffassignments";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add staff assignment: " + e.getMessage());
+            model.addAttribute("screenings", screeningService.getAllScreenings());
+            List<Object> staff = new ArrayList<>();
+            staff.addAll(supportStaffService.getAllSupportStaff());
+            staff.addAll(technicalOperatorService.getAllTechnicalOperators());
+            model.addAttribute("staffList", staff);
+            return "staffassignment/form";
         }
-
-        staffAssignmentService.addAssignment(assignment);
-        return "redirect:/staffassignments";
     }
 
     @PostMapping("/{id}/delete")
@@ -88,9 +108,28 @@ public class StaffAssignmentController {
     }
 
     @PostMapping("/{id}")
-    public String updateAssignment(@PathVariable String id, @ModelAttribute StaffAssignment assignment) {
-        assignment.setId(id);
-        staffAssignmentService.addAssignment(assignment);
-        return "redirect:/staffassignments";
+    public String updateAssignment(@PathVariable String id, @Valid @ModelAttribute StaffAssignment assignment, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            assignment.setId(id);
+            model.addAttribute("screenings", screeningService.getAllScreenings());
+            List<Object> staff = new ArrayList<>();
+            staff.addAll(supportStaffService.getAllSupportStaff());
+            staff.addAll(technicalOperatorService.getAllTechnicalOperators());
+            model.addAttribute("staffList", staff);
+            return "staffassignment/form-update";
+        }
+        try {
+            assignment.setId(id);
+            staffAssignmentService.addAssignment(assignment);
+            return "redirect:/staffassignments";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update staff assignment: " + e.getMessage());
+            model.addAttribute("screenings", screeningService.getAllScreenings());
+            List<Object> staff = new ArrayList<>();
+            staff.addAll(supportStaffService.getAllSupportStaff());
+            staff.addAll(technicalOperatorService.getAllTechnicalOperators());
+            model.addAttribute("staffList", staff);
+            return "staffassignment/form-update";
+        }
     }
 }

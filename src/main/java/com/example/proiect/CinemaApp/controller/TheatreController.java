@@ -4,7 +4,9 @@ import com.example.proiect.CinemaApp.model.Theatre;
 import com.example.proiect.CinemaApp.service.TheatreService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/theatres")
@@ -35,9 +37,17 @@ public class TheatreController {
     }
 
     @PostMapping
-    public String addTheatre(@ModelAttribute Theatre theatre) {
-        theatreService.addTheatre(theatre);
-        return "redirect:/theatres";
+    public String addTheatre(@Valid @ModelAttribute Theatre theatre, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "theatre/form";
+        }
+        try {
+            theatreService.addTheatre(theatre);
+            return "redirect:/theatres";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add theatre: " + e.getMessage());
+            return "theatre/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -53,9 +63,18 @@ public class TheatreController {
     }
 
     @PostMapping("/{id}")
-    public String updateTheatre(@PathVariable String id, @ModelAttribute Theatre theatre) {
-        theatre.setId(id);
-        theatreService.addTheatre(theatre);
-        return "redirect:/theatres";
+    public String updateTheatre(@PathVariable String id, @Valid @ModelAttribute Theatre theatre, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            theatre.setId(id);
+            return "theatre/form-update";
+        }
+        try {
+            theatre.setId(id);
+            theatreService.addTheatre(theatre);
+            return "redirect:/theatres";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update theatre: " + e.getMessage());
+            return "theatre/form-update";
+        }
     }
 }

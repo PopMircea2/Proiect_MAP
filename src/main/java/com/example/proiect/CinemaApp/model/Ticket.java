@@ -1,6 +1,7 @@
 package com.example.proiect.CinemaApp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "Ticket")
@@ -9,17 +10,21 @@ public class Ticket {
     @Column(name = "Id")
     private String id;
 
+    @NotNull(message = "Screening is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ScreeningId", referencedColumnName = "Id")
     private Screening screening;
 
+    @NotNull(message = "Seat is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SeatId", referencedColumnName = "Id")
     private Seat seat;
 
+    @Positive(message = "Price must be positive")
     @Column(name = "Price")
     private double price;
 
+    @NotNull(message = "Customer is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CustomerId", referencedColumnName = "Id")
     private Customer customer;

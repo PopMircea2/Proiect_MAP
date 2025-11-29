@@ -5,7 +5,9 @@ import com.example.proiect.CinemaApp.service.SeatService;
 import com.example.proiect.CinemaApp.service.HallService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/seats")
@@ -33,9 +35,19 @@ public class SeatController {
     }
 
     @PostMapping
-    public String addSeat(@ModelAttribute Seat seat) {
-        seatService.addSeat(seat);
-        return "redirect:/seats";
+    public String addSeat(@Valid @ModelAttribute Seat seat, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("halls", hallService.getAllHalls());
+            return "seat/form";
+        }
+        try {
+            seatService.addSeat(seat);
+            return "redirect:/seats";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add seat: " + e.getMessage());
+            model.addAttribute("halls", hallService.getAllHalls());
+            return "seat/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -52,9 +64,20 @@ public class SeatController {
     }
 
     @PostMapping("/{id}")
-    public String updateSeat(@PathVariable String id, @ModelAttribute Seat seat) {
-        seat.setId(id);
-        seatService.addSeat(seat);
-        return "redirect:/seats";
+    public String updateSeat(@PathVariable String id, @Valid @ModelAttribute Seat seat, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            seat.setId(id);
+            model.addAttribute("halls", hallService.getAllHalls());
+            return "seat/form-update";
+        }
+        try {
+            seat.setId(id);
+            seatService.addSeat(seat);
+            return "redirect:/seats";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update seat: " + e.getMessage());
+            model.addAttribute("halls", hallService.getAllHalls());
+            return "seat/form-update";
+        }
     }
 }

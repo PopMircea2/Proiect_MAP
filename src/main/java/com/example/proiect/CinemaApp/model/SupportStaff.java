@@ -2,11 +2,13 @@ package com.example.proiect.CinemaApp.model;
 
 import java.time.LocalDate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "SupportStaff")
 @PrimaryKeyJoinColumn(name = "StaffId", referencedColumnName = "Id")
 public class SupportStaff extends Staff {
+    @NotNull(message = "Role is required")
     @Column(name = "Role", columnDefinition = "VARCHAR(50)")
     private SupportStaffRole role;
 

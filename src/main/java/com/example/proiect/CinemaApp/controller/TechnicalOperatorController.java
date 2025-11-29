@@ -4,7 +4,9 @@ import com.example.proiect.CinemaApp.model.TechnicalOperator;
 import com.example.proiect.CinemaApp.service.TechnicalOperatorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/technicaloperator")
@@ -35,9 +37,17 @@ public class TechnicalOperatorController {
     }
 
     @PostMapping
-    public String addTechnicalOperator(@ModelAttribute TechnicalOperator technicalOperator) {
-        technicalOperatorService.addTechnicalOperator(technicalOperator);
-        return "redirect:/technicaloperator";
+    public String addTechnicalOperator(@Valid @ModelAttribute TechnicalOperator technicalOperator, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "technicaloperator/form";
+        }
+        try {
+            technicalOperatorService.addTechnicalOperator(technicalOperator);
+            return "redirect:/technicaloperator";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add technical operator: " + e.getMessage());
+            return "technicaloperator/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -53,9 +63,18 @@ public class TechnicalOperatorController {
     }
 
     @PostMapping("/{id}")
-    public String updateTechnicalOperator(@PathVariable String id, @ModelAttribute TechnicalOperator technicalOperator) {
-        technicalOperator.setId(id);
-        technicalOperatorService.addTechnicalOperator(technicalOperator);
-        return "redirect:/technicaloperator";
+    public String updateTechnicalOperator(@PathVariable String id, @Valid @ModelAttribute TechnicalOperator technicalOperator, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            technicalOperator.setId(id);
+            return "technicaloperator/form-update";
+        }
+        try {
+            technicalOperator.setId(id);
+            technicalOperatorService.addTechnicalOperator(technicalOperator);
+            return "redirect:/technicaloperator";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update technical operator: " + e.getMessage());
+            return "technicaloperator/form-update";
+        }
     }
 }

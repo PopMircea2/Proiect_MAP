@@ -1,6 +1,7 @@
 package com.example.proiect.CinemaApp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,13 @@ public class Customer {
     @Column(name = "Id")
     private String id;
 
+    @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     @Column(name = "Name")
     private String name;
 
+    @NotNull(message = "Birth date is required")
+    @Past(message = "Birth date must be in the past")
     @Column(name = "BirthDate")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateBirth;

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "Screening")
@@ -12,10 +13,12 @@ public class Screening {
     @Column(name = "Id")
     private String id;
 
+    @NotNull(message = "Hall is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HallId", referencedColumnName = "Id")
     private Hall hall;
 
+    @NotNull(message = "Movie is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MovieId", referencedColumnName = "Id")
     private Movie movie;
@@ -26,6 +29,8 @@ public class Screening {
     @Transient
     private String movieId;
 
+    @NotNull(message = "Date is required")
+    @Future(message = "Screening date must be in the future")
     @Column(name = "Date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime date;

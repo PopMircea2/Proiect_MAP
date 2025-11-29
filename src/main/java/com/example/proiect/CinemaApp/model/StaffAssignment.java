@@ -1,6 +1,7 @@
 package com.example.proiect.CinemaApp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "StaffAssignment")
@@ -9,10 +10,12 @@ public class StaffAssignment {
     @Column(name = "Id")
     private String id;
 
+    @NotNull(message = "Screening is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ScreeningId", referencedColumnName = "Id")
     private Screening screening;
 
+    @NotNull(message = "Staff is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StaffId", referencedColumnName = "Id")
     private Staff staff;

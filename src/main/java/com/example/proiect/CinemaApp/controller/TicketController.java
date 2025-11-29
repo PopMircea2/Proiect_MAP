@@ -7,7 +7,9 @@ import com.example.proiect.CinemaApp.service.SeatService;
 import com.example.proiect.CinemaApp.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/tickets")
@@ -47,9 +49,23 @@ public class TicketController {
     }
 
     @PostMapping
-    public String addTicket(@ModelAttribute Ticket ticket) {
-        ticketService.addTicket(ticket);
-        return "redirect:/tickets";
+    public String addTicket(@Valid @ModelAttribute Ticket ticket, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("screenings", screeningService.getAllScreenings());
+            model.addAttribute("seats", seatService.getAllSeats());
+            model.addAttribute("customers", customerService.getAllCustomers());
+            return "ticket/form";
+        }
+        try {
+            ticketService.addTicket(ticket);
+            return "redirect:/tickets";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to add ticket: " + e.getMessage());
+            model.addAttribute("screenings", screeningService.getAllScreenings());
+            model.addAttribute("seats", seatService.getAllSeats());
+            model.addAttribute("customers", customerService.getAllCustomers());
+            return "ticket/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -68,9 +84,24 @@ public class TicketController {
     }
 
     @PostMapping("/{id}")
-    public String updateTicket(@PathVariable String id, @ModelAttribute Ticket ticket) {
-        ticket.setId(id);
-        ticketService.addTicket(ticket);
-        return "redirect:/tickets";
+    public String updateTicket(@PathVariable String id, @Valid @ModelAttribute Ticket ticket, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            ticket.setId(id);
+            model.addAttribute("screenings", screeningService.getAllScreenings());
+            model.addAttribute("seats", seatService.getAllSeats());
+            model.addAttribute("customers", customerService.getAllCustomers());
+            return "ticket/form-update";
+        }
+        try {
+            ticket.setId(id);
+            ticketService.addTicket(ticket);
+            return "redirect:/tickets";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Failed to update ticket: " + e.getMessage());
+            model.addAttribute("screenings", screeningService.getAllScreenings());
+            model.addAttribute("seats", seatService.getAllSeats());
+            model.addAttribute("customers", customerService.getAllCustomers());
+            return "ticket/form-update";
+        }
     }
 }

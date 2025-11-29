@@ -1,6 +1,7 @@
 package com.example.proiect.CinemaApp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "Seat")
@@ -9,6 +10,7 @@ public class Seat {
     @Column(name = "Id")
     private String id;
 
+    @NotNull(message = "Hall is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HallId", referencedColumnName = "Id")
     private Hall hall;
@@ -16,9 +18,12 @@ public class Seat {
     @Transient
     private String hallId;
 
+    @NotBlank(message = "Row label is required")
+    @Size(min = 1, max = 10, message = "Row label must be between 1 and 10 characters")
     @Column(name = "RowLabel")
     private String rowLabel;
 
+    @Positive(message = "Column number must be positive")
     @Column(name = "ColumnNumber")
     private int columnNumber;
 
