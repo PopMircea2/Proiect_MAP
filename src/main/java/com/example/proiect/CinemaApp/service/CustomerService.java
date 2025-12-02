@@ -3,6 +3,7 @@ package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Customer;
 import com.example.proiect.CinemaApp.repository.CustomerJpaRepository;
+import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -35,10 +36,20 @@ public class CustomerService {
 
     public Customer addCustomer(Customer customer) {
         if (customer.getId() == null || customer.getId().isBlank()) {
-            throw new IllegalArgumentException("ID is required and cannot be empty");
+            throw new BusinessValidationException("ID is required and cannot be empty");
         }
         if (customerRepo.existsById(customer.getId())) {
-            throw new IllegalArgumentException("A customer with ID '" + customer.getId() + "' already exists");
+            throw new BusinessValidationException("A customer with ID '" + customer.getId() + "' already exists");
+        }
+        return customerRepo.save(customer);
+    }
+
+    public Customer updateCustomer(Customer customer) {
+        if (customer.getId() == null || customer.getId().isBlank()) {
+            throw new BusinessValidationException("ID is required and cannot be empty");
+        }
+        if (!customerRepo.existsById(customer.getId())) {
+            throw new BusinessValidationException("Customer with ID '" + customer.getId() + "' does not exist");
         }
         return customerRepo.save(customer);
     }

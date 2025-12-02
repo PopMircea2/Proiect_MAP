@@ -86,7 +86,7 @@ public class ScreeningController {
         }
         try {
             screening.setId(id);
-            screeningService.addScreening(screening);
+            screeningService.updateScreening(screening);
             return "redirect:/screenings";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update screening: " + e.getMessage());

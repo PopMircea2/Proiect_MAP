@@ -8,6 +8,7 @@ import com.example.proiect.CinemaApp.repository.TicketJpaRepository;
 import com.example.proiect.CinemaApp.repository.ScreeningJpaRepository;
 import com.example.proiect.CinemaApp.repository.SeatJpaRepository;
 import com.example.proiect.CinemaApp.repository.CustomerJpaRepository;
+import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,17 +68,53 @@ public class TicketService {
             ticket.setCustomer(c);
         }
 
-        if (ticket.getScreening() == null) throw new IllegalArgumentException("Screening is required");
-        if (ticket.getSeat() == null) throw new IllegalArgumentException("Seat is required");
-        if (ticket.getCustomer() == null) throw new IllegalArgumentException("Customer is required");
-        if (ticket.getPrice() <= 0.0) throw new IllegalArgumentException("Price must be positive");
+        if (ticket.getScreening() == null) throw new BusinessValidationException("Screening is required");
+        if (ticket.getSeat() == null) throw new BusinessValidationException("Seat is required");
+        if (ticket.getCustomer() == null) throw new BusinessValidationException("Customer is required");
+        if (ticket.getPrice() <= 0.0) throw new BusinessValidationException("Price must be positive");
 
         try {
             return ticketRepo.save(ticket);
         } catch (DataIntegrityViolationException ex) {
-            throw new IllegalArgumentException("Failed to save ticket: " + ex.getMostSpecificCause().getMessage(), ex);
+            throw new BusinessValidationException("Failed to save ticket: " + ex.getMostSpecificCause().getMessage(), ex);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to save ticket: " + ex.getMessage(), ex);
+            throw new BusinessValidationException("Failed to save ticket: " + ex.getMessage(), ex);
+        }
+    }
+
+    public Ticket updateTicket(Ticket ticket) {
+        // For update, ID must exist and not be blank
+        if (ticket.getId() == null || ticket.getId().isBlank()) {
+            throw new BusinessValidationException("ID is required for update");
+        }
+        if (!ticketRepo.existsById(ticket.getId())) {
+            throw new BusinessValidationException("Ticket with ID '" + ticket.getId() + "' does not exist");
+        }
+
+        if (ticket.getScreeningId() != null && !ticket.getScreeningId().isBlank()) {
+            Screening s = screeningRepo.findById(ticket.getScreeningId()).orElse(null);
+            ticket.setScreening(s);
+        }
+        if (ticket.getSeatId() != null && !ticket.getSeatId().isBlank()) {
+            Seat st = seatRepo.findById(ticket.getSeatId()).orElse(null);
+            ticket.setSeat(st);
+        }
+        if (ticket.getCustomerId() != null && !ticket.getCustomerId().isBlank()) {
+            Customer c = customerRepo.findById(ticket.getCustomerId()).orElse(null);
+            ticket.setCustomer(c);
+        }
+
+        if (ticket.getScreening() == null) throw new BusinessValidationException("Screening is required");
+        if (ticket.getSeat() == null) throw new BusinessValidationException("Seat is required");
+        if (ticket.getCustomer() == null) throw new BusinessValidationException("Customer is required");
+        if (ticket.getPrice() <= 0.0) throw new BusinessValidationException("Price must be positive");
+
+        try {
+            return ticketRepo.save(ticket);
+        } catch (DataIntegrityViolationException ex) {
+            throw new BusinessValidationException("Failed to save ticket: " + ex.getMostSpecificCause().getMessage(), ex);
+        } catch (Exception ex) {
+            throw new BusinessValidationException("Failed to save ticket: " + ex.getMessage(), ex);
         }
     }
 

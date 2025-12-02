@@ -70,7 +70,7 @@ public class SupportStaffController {
         }
         try {
             staff.setId(id);
-            supportStaffService.addSupportStaff(staff);
+            supportStaffService.updateSupportStaff(staff);
             return "redirect:/supportstaff";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update support staff: " + e.getMessage());

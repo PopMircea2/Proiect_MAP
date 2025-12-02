@@ -70,7 +70,7 @@ public class TechnicalOperatorController {
         }
         try {
             technicalOperator.setId(id);
-            technicalOperatorService.addTechnicalOperator(technicalOperator);
+            technicalOperatorService.updateTechnicalOperator(technicalOperator);
             return "redirect:/technicaloperator";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update technical operator: " + e.getMessage());

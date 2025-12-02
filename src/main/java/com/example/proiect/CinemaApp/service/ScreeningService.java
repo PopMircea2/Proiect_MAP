@@ -6,6 +6,7 @@ import com.example.proiect.CinemaApp.model.Movie;
 import com.example.proiect.CinemaApp.repository.ScreeningJpaRepository;
 import com.example.proiect.CinemaApp.repository.HallJpaRepository;
 import com.example.proiect.CinemaApp.repository.MovieJpaRepository;
+import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,10 +56,10 @@ public class ScreeningService {
     public Screening addScreening(Screening screening) {
         // validate ID
         if (screening.getId() == null || screening.getId().isBlank()) {
-            throw new IllegalArgumentException("ID is required and cannot be empty");
+            throw new BusinessValidationException("ID is required and cannot be empty");
         }
         if (screeningRepo.existsById(screening.getId())) {
-            throw new IllegalArgumentException("A screening with ID '" + screening.getId() + "' already exists");
+            throw new BusinessValidationException("A screening with ID '" + screening.getId() + "' already exists");
         }
 
         // resolve hall/movie
@@ -72,15 +73,47 @@ public class ScreeningService {
         }
 
         // validate required fields
-        if (screening.getHall() == null) throw new IllegalArgumentException("Hall is required");
-        if (screening.getMovie() == null) throw new IllegalArgumentException("Movie is required");
-        if (screening.getDate() == null) throw new IllegalArgumentException("Date is required");
+        if (screening.getHall() == null) throw new BusinessValidationException("Hall is required");
+        if (screening.getMovie() == null) throw new BusinessValidationException("Movie is required");
+        if (screening.getDate() == null) throw new BusinessValidationException("Date is required");
         try {
             return screeningRepo.save(screening);
         } catch (DataIntegrityViolationException ex) {
-            throw new IllegalArgumentException("Failed to save screening: " + ex.getMostSpecificCause().getMessage(), ex);
+            throw new BusinessValidationException("Failed to save screening: " + ex.getMostSpecificCause().getMessage(), ex);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to save screening: " + ex.getMessage(), ex);
+            throw new BusinessValidationException("Failed to save screening: " + ex.getMessage(), ex);
+        }
+    }
+
+    public Screening updateScreening(Screening screening) {
+        // validate ID
+        if (screening.getId() == null || screening.getId().isBlank()) {
+            throw new BusinessValidationException("ID is required and cannot be empty");
+        }
+        if (!screeningRepo.existsById(screening.getId())) {
+            throw new BusinessValidationException("Screening with ID '" + screening.getId() + "' does not exist");
+        }
+
+        // resolve hall/movie
+        if (screening.getHallId() != null && !screening.getHallId().isBlank()) {
+            Hall h = hallRepo.findById(screening.getHallId()).orElse(null);
+            screening.setHall(h);
+        }
+        if (screening.getMovieId() != null && !screening.getMovieId().isBlank()) {
+            Movie m = movieRepo.findById(screening.getMovieId()).orElse(null);
+            screening.setMovie(m);
+        }
+
+        // validate required fields
+        if (screening.getHall() == null) throw new BusinessValidationException("Hall is required");
+        if (screening.getMovie() == null) throw new BusinessValidationException("Movie is required");
+        if (screening.getDate() == null) throw new BusinessValidationException("Date is required");
+        try {
+            return screeningRepo.save(screening);
+        } catch (DataIntegrityViolationException ex) {
+            throw new BusinessValidationException("Failed to save screening: " + ex.getMostSpecificCause().getMessage(), ex);
+        } catch (Exception ex) {
+            throw new BusinessValidationException("Failed to save screening: " + ex.getMessage(), ex);
         }
     }
 

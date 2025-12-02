@@ -70,7 +70,7 @@ public class TheatreController {
         }
         try {
             theatre.setId(id);
-            theatreService.addTheatre(theatre);
+            theatreService.updateTheatre(theatre);
             return "redirect:/theatres";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update theatre: " + e.getMessage());

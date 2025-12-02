@@ -94,7 +94,7 @@ public class TicketController {
         }
         try {
             ticket.setId(id);
-            ticketService.addTicket(ticket);
+            ticketService.updateTicket(ticket);
             return "redirect:/tickets";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update ticket: " + e.getMessage());

@@ -4,6 +4,7 @@ import com.example.proiect.CinemaApp.model.Hall;
 import com.example.proiect.CinemaApp.model.Theatre;
 import com.example.proiect.CinemaApp.repository.HallJpaRepository;
 import com.example.proiect.CinemaApp.repository.TheatreJpaRepository;
+import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -48,29 +49,58 @@ public class HallService {
     public Hall addHall(Hall hall) {
         // Check for empty ID
         if (hall.getId() == null || hall.getId().isBlank()) {
-            throw new IllegalArgumentException("ID is required and cannot be empty");
+            throw new BusinessValidationException("ID is required and cannot be empty");
         }
 
         // Check for duplicate ID
         if (hallRepo.existsById(hall.getId())) {
-            throw new IllegalArgumentException("A hall with ID '" + hall.getId() + "' already exists");
+            throw new BusinessValidationException("A hall with ID '" + hall.getId() + "' already exists");
         }
 
         if (hall.getName() == null || hall.getName().isBlank()) {
-            throw new IllegalArgumentException("Name is required");
+            throw new BusinessValidationException("Name is required");
         }
         if (hall.getTheatre() == null) {
-            throw new IllegalArgumentException("Theatre is required");
+            throw new BusinessValidationException("Theatre is required");
         }
         if (hall.getCapacity() <= 0) {
-            throw new IllegalArgumentException("Capacity must be positive");
+            throw new BusinessValidationException("Capacity must be positive");
         }
         try {
             return hallRepo.save(hall);
         } catch (DataIntegrityViolationException ex) {
-            throw new IllegalArgumentException("Failed to save hall: " + ex.getMostSpecificCause().getMessage(), ex);
+            throw new BusinessValidationException("Failed to save hall: " + ex.getMostSpecificCause().getMessage(), ex);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to save hall: " + ex.getMessage(), ex);
+            throw new BusinessValidationException("Failed to save hall: " + ex.getMessage(), ex);
+        }
+    }
+
+    public Hall updateHall(Hall hall) {
+        // Check for empty ID
+        if (hall.getId() == null || hall.getId().isBlank()) {
+            throw new BusinessValidationException("ID is required and cannot be empty");
+        }
+
+        // Check if hall exists
+        if (!hallRepo.existsById(hall.getId())) {
+            throw new BusinessValidationException("Hall with ID '" + hall.getId() + "' does not exist");
+        }
+
+        if (hall.getName() == null || hall.getName().isBlank()) {
+            throw new BusinessValidationException("Name is required");
+        }
+        if (hall.getTheatre() == null) {
+            throw new BusinessValidationException("Theatre is required");
+        }
+        if (hall.getCapacity() <= 0) {
+            throw new BusinessValidationException("Capacity must be positive");
+        }
+        try {
+            return hallRepo.save(hall);
+        } catch (DataIntegrityViolationException ex) {
+            throw new BusinessValidationException("Failed to save hall: " + ex.getMostSpecificCause().getMessage(), ex);
+        } catch (Exception ex) {
+            throw new BusinessValidationException("Failed to save hall: " + ex.getMessage(), ex);
         }
     }
 

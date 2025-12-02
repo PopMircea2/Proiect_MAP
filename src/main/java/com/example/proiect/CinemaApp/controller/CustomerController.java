@@ -71,7 +71,7 @@ public class CustomerController {
         }
         try {
             customer.setId(id);
-            customerService.addCustomer(customer);
+            customerService.updateCustomer(customer);
             return "redirect:/customers";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update customer: " + e.getMessage());

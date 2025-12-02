@@ -78,7 +78,7 @@ public class MovieController {
         try {
             // ensure id consistency
             movie.setId(id);
-            movieService.addMovie(movie); // add replaces existing
+            movieService.updateMovie(movie);
             return "redirect:/movies";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update movie: " + e.getMessage());

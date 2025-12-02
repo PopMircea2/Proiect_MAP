@@ -78,7 +78,7 @@ public class HallController {
         }
         try {
             hall.setId(id);
-            hallService.addHall(hall);
+            hallService.updateHall(hall);
             return "redirect:/halls";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update hall: " + e.getMessage());

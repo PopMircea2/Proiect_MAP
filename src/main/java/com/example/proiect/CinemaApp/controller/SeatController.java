@@ -72,7 +72,7 @@ public class SeatController {
         }
         try {
             seat.setId(id);
-            seatService.addSeat(seat);
+            seatService.updateSeat(seat);
             return "redirect:/seats";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update seat: " + e.getMessage());

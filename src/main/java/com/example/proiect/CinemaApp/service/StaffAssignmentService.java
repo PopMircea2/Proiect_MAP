@@ -4,6 +4,7 @@ import com.example.proiect.CinemaApp.model.StaffAssignment;
 import com.example.proiect.CinemaApp.model.Screening;
 import com.example.proiect.CinemaApp.repository.StaffAssignmentJpaRepository;
 import com.example.proiect.CinemaApp.repository.ScreeningJpaRepository;
+import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,15 +66,51 @@ public class StaffAssignmentService {
             );
         }
 
-        if (assignment.getScreening() == null) throw new IllegalArgumentException("Screening is required");
-        if (assignment.getStaff() == null) throw new IllegalArgumentException("Staff is required");
+        if (assignment.getScreening() == null) throw new BusinessValidationException("Screening is required");
+        if (assignment.getStaff() == null) throw new BusinessValidationException("Staff is required");
 
         try {
             return assignmentRepo.save(assignment);
         } catch (DataIntegrityViolationException ex) {
-            throw new IllegalArgumentException("Failed to save assignment: " + ex.getMostSpecificCause().getMessage(), ex);
+            throw new BusinessValidationException("Failed to save assignment: " + ex.getMostSpecificCause().getMessage(), ex);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to save assignment: " + ex.getMessage(), ex);
+            throw new BusinessValidationException("Failed to save assignment: " + ex.getMessage(), ex);
+        }
+    }
+
+    public StaffAssignment updateAssignment(StaffAssignment assignment) {
+        // For update, ID must exist and not be blank
+        if (assignment.getId() == null || assignment.getId().isBlank()) {
+            throw new BusinessValidationException("ID is required for update");
+        }
+        if (!assignmentRepo.existsById(assignment.getId())) {
+            throw new BusinessValidationException("Staff assignment with ID '" + assignment.getId() + "' does not exist");
+        }
+
+        // resolve screening
+        if (assignment.getScreeningId() != null && !assignment.getScreeningId().isBlank()) {
+            Screening s = screeningRepo.findById(assignment.getScreeningId()).orElse(null);
+            assignment.setScreening(s);
+        }
+        // resolve staff: try support staff first, then technical operators
+        if (assignment.getStaffId() != null && !assignment.getStaffId().isBlank()) {
+            String sid = assignment.getStaffId();
+            // try support staff
+            supportStaffService.getSupportStaffById(sid).ifPresentOrElse(
+                    st -> assignment.setStaff(st),
+                    () -> technicalOperatorService.getTechnicalOperatorById(sid).ifPresent(assignment::setStaff)
+            );
+        }
+
+        if (assignment.getScreening() == null) throw new BusinessValidationException("Screening is required");
+        if (assignment.getStaff() == null) throw new BusinessValidationException("Staff is required");
+
+        try {
+            return assignmentRepo.save(assignment);
+        } catch (DataIntegrityViolationException ex) {
+            throw new BusinessValidationException("Failed to save assignment: " + ex.getMostSpecificCause().getMessage(), ex);
+        } catch (Exception ex) {
+            throw new BusinessValidationException("Failed to save assignment: " + ex.getMessage(), ex);
         }
     }
 

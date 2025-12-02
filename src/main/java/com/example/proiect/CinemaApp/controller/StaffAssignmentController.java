@@ -120,7 +120,7 @@ public class StaffAssignmentController {
         }
         try {
             assignment.setId(id);
-            staffAssignmentService.addAssignment(assignment);
+            staffAssignmentService.updateAssignment(assignment);
             return "redirect:/staffassignments";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to update staff assignment: " + e.getMessage());
