@@ -49,6 +49,9 @@
             <div class="invalid-feedback" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
         </div>
 
+        <!-- ensure staffType is submitted so DB column is not null -->
+        <input type="hidden" th:field="*{staffType}" th:value="'support'" />
+
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary">Add Support Staff</button>
             <a th:href="@{/supportstaff}" class="btn btn-secondary">Cancel</a>

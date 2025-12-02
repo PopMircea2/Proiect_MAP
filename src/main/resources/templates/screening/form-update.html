@@ -11,29 +11,34 @@
 <div class="container mt-5">
     <h1 class="h4 mb-4">Update Screening</h1>
 
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
     <form th:action="@{|/screenings/${screening.id}|}" th:object="${screening}" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label class="form-label">ID</label>
-            <input type="text" th:field="*{id}" class="form-control" readonly>
+            <input type="text" th:field="*{id}" id="id" class="form-control" readonly>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Hall</label>
-            <select th:field="*{hallId}" class="form-select" required>
+            <select th:field="*{hallId}" id="hallId" class="form-select" th:classappend="${#fields.hasErrors('hallId')} ? 'is-invalid' : ''" required>
                 <option th:each="h : ${halls}" th:value="${h.id}" th:text="${h.name + ' (' + h.id + ')'}" th:selected="${screening.hall != null ? h.id == screening.hall.id : h.id == screening.hallId}"></option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('hallId')}" th:errors="*{hallId}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Movie</label>
-            <select th:field="*{movieId}" class="form-select" required>
+            <select th:field="*{movieId}" id="movieId" class="form-select" th:classappend="${#fields.hasErrors('movieId')} ? 'is-invalid' : ''" required>
                 <option th:each="m : ${movies}" th:value="${m.id}" th:text="${m.title + ' (' + m.id + ')'}" th:selected="${screening.movie != null ? m.id == screening.movie.id : m.id == screening.movieId}"></option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('movieId')}" th:errors="*{movieId}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Date</label>
-            <input type="datetime-local" th:field="*{date}" class="form-control" required>
+            <input type="datetime-local" th:field="*{date}" id="date" class="form-control" th:classappend="${#fields.hasErrors('date')} ? 'is-invalid' : ''" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
         </div>
 
         <div class="d-flex gap-2">

@@ -1,18 +1,26 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Hall;
+import com.example.proiect.CinemaApp.model.Theatre;
 import com.example.proiect.CinemaApp.repository.HallJpaRepository;
+import com.example.proiect.CinemaApp.repository.TheatreJpaRepository;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class HallService {
     private final HallJpaRepository hallRepo;
+    private final TheatreJpaRepository theatreRepo;
 
-    public HallService(HallJpaRepository hallRepo) {
+    // Single constructor: allow theatreRepo to be null if not present in the context
+    public HallService(HallJpaRepository hallRepo, @Nullable TheatreJpaRepository theatreRepo) {
         this.hallRepo = hallRepo;
+        this.theatreRepo = theatreRepo;
     }
 
     @Transactional(readOnly = true)
@@ -38,7 +46,32 @@ public class HallService {
     }
 
     public Hall addHall(Hall hall) {
-        return hallRepo.save(hall);
+        // Check for empty ID
+        if (hall.getId() == null || hall.getId().isBlank()) {
+            throw new IllegalArgumentException("ID is required and cannot be empty");
+        }
+
+        // Check for duplicate ID
+        if (hallRepo.existsById(hall.getId())) {
+            throw new IllegalArgumentException("A hall with ID '" + hall.getId() + "' already exists");
+        }
+
+        if (hall.getName() == null || hall.getName().isBlank()) {
+            throw new IllegalArgumentException("Name is required");
+        }
+        if (hall.getTheatre() == null) {
+            throw new IllegalArgumentException("Theatre is required");
+        }
+        if (hall.getCapacity() <= 0) {
+            throw new IllegalArgumentException("Capacity must be positive");
+        }
+        try {
+            return hallRepo.save(hall);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalArgumentException("Failed to save hall: " + ex.getMostSpecificCause().getMessage(), ex);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Failed to save hall: " + ex.getMessage(), ex);
+        }
     }
 
     public void deleteHallbyId(String id) {

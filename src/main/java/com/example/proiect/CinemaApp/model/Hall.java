@@ -8,6 +8,7 @@ import jakarta.validation.constraints.*;
 @Table(name = "Hall")
 public class Hall {
     @Id
+    @NotBlank(message = "ID is required")
     @Column(name = "Id")
     private String id;
 

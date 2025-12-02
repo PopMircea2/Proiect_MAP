@@ -4,11 +4,13 @@ import com.example.proiect.CinemaApp.model.StaffAssignment;
 import com.example.proiect.CinemaApp.model.Screening;
 import com.example.proiect.CinemaApp.repository.StaffAssignmentJpaRepository;
 import com.example.proiect.CinemaApp.repository.ScreeningJpaRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class StaffAssignmentService {
@@ -46,6 +48,8 @@ public class StaffAssignmentService {
     }
 
     public StaffAssignment addAssignment(StaffAssignment assignment) {
+        if (assignment.getId() == null || assignment.getId().isBlank()) assignment.setId(UUID.randomUUID().toString());
+
         // resolve screening
         if (assignment.getScreeningId() != null && !assignment.getScreeningId().isBlank()) {
             Screening s = screeningRepo.findById(assignment.getScreeningId()).orElse(null);
@@ -61,7 +65,16 @@ public class StaffAssignmentService {
             );
         }
 
-        return assignmentRepo.save(assignment);
+        if (assignment.getScreening() == null) throw new IllegalArgumentException("Screening is required");
+        if (assignment.getStaff() == null) throw new IllegalArgumentException("Staff is required");
+
+        try {
+            return assignmentRepo.save(assignment);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalArgumentException("Failed to save assignment: " + ex.getMostSpecificCause().getMessage(), ex);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Failed to save assignment: " + ex.getMessage(), ex);
+        }
     }
 
     public void deleteAssignmentbyId(String id) {

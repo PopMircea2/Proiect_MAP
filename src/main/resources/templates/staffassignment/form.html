@@ -16,24 +16,29 @@
         The selected staff member couldn't be found. Please choose a valid staff from the list.
     </div>
 
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
     <form th:action="@{/staffassignments}" th:object="${assignment}" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label class="form-label">ID</label>
-            <input type="text" th:field="*{id}" class="form-control" required>
+            <input type="text" th:field="*{id}" id="id" class="form-control" th:classappend="${#fields.hasErrors('id')} ? 'is-invalid' : ''" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Screening</label>
-            <select th:field="*{screeningId}" class="form-select" required>
+            <select th:field="*{screeningId}" id="screeningId" class="form-select" th:classappend="${#fields.hasErrors('screeningId')} ? 'is-invalid' : ''" required>
                 <option th:each="s : ${screenings}" th:value="${s.id}" th:text="${s.movie != null ? s.movie.title + ' (' + s.id + ')' : s.id}"></option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('screeningId')}" th:errors="*{screeningId}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Staff</label>
-            <select th:field="*{staffId}" class="form-select" required>
+            <select th:field="*{staffId}" id="staffId" class="form-select" th:classappend="${#fields.hasErrors('staffId')} ? 'is-invalid' : ''" required>
                 <option th:each="st : ${staffList}" th:value="${st.id}" th:text="${st.name + ' (' + st.id + ')'}"></option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('staffId')}" th:errors="*{staffId}"></div>
         </div>
 
         <div class="d-flex gap-2">

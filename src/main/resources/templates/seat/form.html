@@ -11,27 +11,33 @@
 <div class="container mt-5">
     <h1 class="h4 mb-4">Add New Seat</h1>
 
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
     <form th:action="@{/seats}" th:object="${seat}" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label class="form-label">ID</label>
-            <input type="text" th:field="*{id}" class="form-control">
+            <input type="text" th:field="*{id}" id="id" class="form-control" th:classappend="${#fields.hasErrors('id')} ? 'is-invalid' : ''">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Hall</label>
-            <select th:field="*{hallId}" class="form-select" required>
+            <select th:field="*{hallId}" id="hallId" class="form-select" required th:classappend="${#fields.hasErrors('hallId')} ? 'is-invalid' : ''">
                 <option th:each="h : ${halls}" th:value="${h.id}" th:text="${h.name + ' (' + h.id + ')'}"></option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('hallId')}" th:errors="*{hallId}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Row</label>
-            <input type="text" th:field="*{rowLabel}" class="form-control" required>
+            <input type="text" th:field="*{rowLabel}" id="rowLabel" class="form-control" required th:classappend="${#fields.hasErrors('rowLabel')} ? 'is-invalid' : ''">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('rowLabel')}" th:errors="*{rowLabel}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Column</label>
-            <input type="number" th:field="*{columnNumber}" class="form-control" required>
+            <input type="number" th:field="*{columnNumber}" id="columnNumber" class="form-control" required th:classappend="${#fields.hasErrors('columnNumber')} ? 'is-invalid' : ''">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('columnNumber')}" th:errors="*{columnNumber}"></div>
         </div>
 
         <div class="d-flex gap-2">

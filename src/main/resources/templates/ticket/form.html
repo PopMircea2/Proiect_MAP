@@ -11,36 +11,43 @@
 <div class="container mt-5">
     <h1 class="h4 mb-4">Add New Ticket</h1>
 
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
     <form th:action="@{/tickets}" th:object="${ticket}" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label class="form-label">ID</label>
-            <input type="text" th:field="*{id}" class="form-control" required>
+            <input type="text" th:field="*{id}" id="id" class="form-control" th:classappend="${#fields.hasErrors('id')} ? 'is-invalid' : ''" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Screening</label>
-            <select th:field="*{screeningId}" class="form-select" required>
+            <select th:field="*{screeningId}" id="screeningId" class="form-select" th:classappend="${#fields.hasErrors('screeningId')} ? 'is-invalid' : ''" required>
                 <option th:each="s : ${screenings}" th:value="${s.id}" th:text="${s.movie != null ? s.movie.title + ' (' + s.id + ')' : s.id}"></option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('screeningId')}" th:errors="*{screeningId}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Customer</label>
-            <select th:field="*{customerId}" class="form-select" required>
+            <select th:field="*{customerId}" id="customerId" class="form-select" th:classappend="${#fields.hasErrors('customerId')} ? 'is-invalid' : ''" required>
                 <option th:each="c : ${customers}" th:value="${c.id}" th:text="${c.name + ' (' + c.id + ')' }"></option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Seat</label>
-            <select th:field="*{seatId}" class="form-select" required>
+            <select th:field="*{seatId}" id="seatId" class="form-select" th:classappend="${#fields.hasErrors('seatId')} ? 'is-invalid' : ''" required>
                 <option th:each="st : ${seats}" th:value="${st.id}" th:text="${st.rowLabel + '-' + st.columnNumber + ' (' + st.id + ')' }"></option>
             </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('seatId')}" th:errors="*{seatId}"></div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Price</label>
-            <input type="number" step="0.01" th:field="*{price}" class="form-control" required>
+            <input type="number" step="0.01" th:field="*{price}" id="price" class="form-control" th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
         </div>
 
         <div class="d-flex gap-2">

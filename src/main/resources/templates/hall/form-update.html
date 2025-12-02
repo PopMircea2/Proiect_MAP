@@ -1,39 +1,42 @@
-<!DOCTYPE html>
+<!-- file: `src/main/resources/templates/hall/form-update.html` -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Update Hall</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="h4 mb-4">Update Hall</h1>
+<div class="container mt-4">
+    <h1 class="h4 mb-3">Update Hall</h1>
 
-    <form th:action="@{|/halls/${hall.id}|}" th:object="${hall}" method="post" class="needs-validation" novalidate>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+    <form th:action="@{/halls/{id}(id=${hall.id})}" th:object="${hall}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
         <div class="mb-3">
-            <label class="form-label">ID</label>
-            <input type="text" th:field="*{id}" class="form-control" readonly>
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" th:field="*{name}" class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" required />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" th:field="*{name}" class="form-control" required>
+            <label for="capacity" class="form-label">Capacity</label>
+            <input id="capacity" type="number" th:field="*{capacity}" class="form-control" th:classappend="${#fields.hasErrors('capacity')} ? 'is-invalid' : ''" min="1" required />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></div>
         </div>
 
+        <!-- IMPORTANT: bind to nested theatre.id instead of theatreId -->
         <div class="mb-3">
-            <label class="form-label">Theatre ID</label>
-            <input type="text" th:field="*{theatreId}" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Capacity</label>
-            <input type="number" th:field="*{capacity}" class="form-control" required>
+            <label for="theatre" class="form-label">Theatre</label>
+            <select id="theatre" th:field="*{theatre.id}" class="form-select" th:classappend="${#fields.hasErrors('theatre')} ? 'is-invalid' : ''" required>
+                <option th:each="t : ${theatres}" th:value="${t.id}" th:text="${t.name}">Theatre</option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('theatre')}" th:errors="*{theatre}"></div>
         </div>
 
         <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">Update Hall</button>
+            <button type="submit" class="btn btn-primary">Save</button>
             <a th:href="@{/halls}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>

@@ -6,10 +6,12 @@ import com.example.proiect.CinemaApp.model.Movie;
 import com.example.proiect.CinemaApp.repository.ScreeningJpaRepository;
 import com.example.proiect.CinemaApp.repository.HallJpaRepository;
 import com.example.proiect.CinemaApp.repository.MovieJpaRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ScreeningService {
@@ -51,6 +53,14 @@ public class ScreeningService {
     }
 
     public Screening addScreening(Screening screening) {
+        // validate ID
+        if (screening.getId() == null || screening.getId().isBlank()) {
+            throw new IllegalArgumentException("ID is required and cannot be empty");
+        }
+        if (screeningRepo.existsById(screening.getId())) {
+            throw new IllegalArgumentException("A screening with ID '" + screening.getId() + "' already exists");
+        }
+
         // resolve hall/movie
         if (screening.getHallId() != null && !screening.getHallId().isBlank()) {
             Hall h = hallRepo.findById(screening.getHallId()).orElse(null);
@@ -60,7 +70,18 @@ public class ScreeningService {
             Movie m = movieRepo.findById(screening.getMovieId()).orElse(null);
             screening.setMovie(m);
         }
-        return screeningRepo.save(screening);
+
+        // validate required fields
+        if (screening.getHall() == null) throw new IllegalArgumentException("Hall is required");
+        if (screening.getMovie() == null) throw new IllegalArgumentException("Movie is required");
+        if (screening.getDate() == null) throw new IllegalArgumentException("Date is required");
+        try {
+            return screeningRepo.save(screening);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalArgumentException("Failed to save screening: " + ex.getMostSpecificCause().getMessage(), ex);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Failed to save screening: " + ex.getMessage(), ex);
+        }
     }
 
     public void deleteScreeningbyId(String id) {

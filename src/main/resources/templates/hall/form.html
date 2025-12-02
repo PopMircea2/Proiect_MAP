@@ -11,25 +11,34 @@
 <div class="container mt-5">
     <h1 class="h4 mb-4">Add New Hall</h1>
 
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
     <form th:action="@{/halls}" th:object="${hall}" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
-            <label class="form-label">ID</label>
-            <input type="text" th:field="*{id}" class="form-control" required>
+            <label for="id" class="form-label">ID</label>
+            <input id="id" type="text" th:field="*{id}" class="form-control" th:classappend="${#fields.hasErrors('id')} ? 'is-invalid' : ''" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" th:field="*{name}" class="form-control" required>
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" th:field="*{name}" class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Theatre ID</label>
-            <input type="text" th:field="*{theatreId}" class="form-control" required>
+            <label for="theatre" class="form-label">Theatre</label>
+            <select id="theatre" th:field="*{theatre.id}" class="form-select" th:classappend="${#fields.hasErrors('theatre')} ? 'is-invalid' : ''" required>
+                <option value="">Select a theatre</option>
+                <option th:each="t : ${theatres}" th:value="${t.id}" th:text="${t.name}">Theatre</option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('theatre')}" th:errors="*{theatre}"></div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Capacity</label>
-            <input type="number" th:field="*{capacity}" class="form-control" required>
+            <label for="capacity" class="form-label">Capacity</label>
+            <input id="capacity" type="number" th:field="*{capacity}" class="form-control" th:classappend="${#fields.hasErrors('capacity')} ? 'is-invalid' : ''" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></div>
         </div>
 
         <div class="d-flex gap-2">

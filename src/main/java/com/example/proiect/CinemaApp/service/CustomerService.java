@@ -35,7 +35,10 @@ public class CustomerService {
 
     public Customer addCustomer(Customer customer) {
         if (customer.getId() == null || customer.getId().isBlank()) {
-            customer.setId(UUID.randomUUID().toString());
+            throw new IllegalArgumentException("ID is required and cannot be empty");
+        }
+        if (customerRepo.existsById(customer.getId())) {
+            throw new IllegalArgumentException("A customer with ID '" + customer.getId() + "' already exists");
         }
         return customerRepo.save(customer);
     }

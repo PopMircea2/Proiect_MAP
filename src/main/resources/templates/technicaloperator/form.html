@@ -49,6 +49,9 @@
             <div class="invalid-feedback" th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}"></div>
         </div>
 
+        <!-- ensure staffType is submitted so DB column is not null -->
+        <input type="hidden" th:field="*{staffType}" th:value="'technical'" />
+
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary">Add Technical Operator</button>
             <a th:href="@{/technicaloperator}" class="btn btn-secondary">Cancel</a>

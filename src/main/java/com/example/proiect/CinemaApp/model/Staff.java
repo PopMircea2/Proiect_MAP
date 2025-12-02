@@ -3,6 +3,7 @@ package com.example.proiect.CinemaApp.model;
 import java.time.LocalDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Staff")
@@ -23,6 +24,7 @@ public abstract class Staff {
 
     @NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be in the past")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "BirthDate")
     private LocalDate dateBirth;
 
@@ -35,8 +37,11 @@ public abstract class Staff {
     @PreUpdate
     private void ensureStaffType() {
         if (this.staffType == null || this.staffType.isBlank()) {
-            // store concrete class name (e.g. SupportStaff, TechnicalOperator) so DB column is never null
-            this.staffType = this.getClass().getSimpleName();
+            // Map concrete classes to the short DB values used in data.sql (lowercase)
+            String cls = this.getClass().getSimpleName();
+            if ("SupportStaff".equals(cls)) this.staffType = "support";
+            else if ("TechnicalOperator".equals(cls)) this.staffType = "technical";
+            else this.staffType = cls.toLowerCase();
         }
     }
 

@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "Customer")
 public class Customer {
     @Id
+    @NotBlank(message = "ID is required")
     @Column(name = "Id")
     private String id;
 

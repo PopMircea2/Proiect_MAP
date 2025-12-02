@@ -8,10 +8,12 @@ import com.example.proiect.CinemaApp.repository.TicketJpaRepository;
 import com.example.proiect.CinemaApp.repository.ScreeningJpaRepository;
 import com.example.proiect.CinemaApp.repository.SeatJpaRepository;
 import com.example.proiect.CinemaApp.repository.CustomerJpaRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TicketService {
@@ -50,6 +52,8 @@ public class TicketService {
     }
 
     public Ticket addTicket(Ticket ticket) {
+        if (ticket.getId() == null || ticket.getId().isBlank()) ticket.setId(UUID.randomUUID().toString());
+
         if (ticket.getScreeningId() != null && !ticket.getScreeningId().isBlank()) {
             Screening s = screeningRepo.findById(ticket.getScreeningId()).orElse(null);
             ticket.setScreening(s);
@@ -62,7 +66,19 @@ public class TicketService {
             Customer c = customerRepo.findById(ticket.getCustomerId()).orElse(null);
             ticket.setCustomer(c);
         }
-        return ticketRepo.save(ticket);
+
+        if (ticket.getScreening() == null) throw new IllegalArgumentException("Screening is required");
+        if (ticket.getSeat() == null) throw new IllegalArgumentException("Seat is required");
+        if (ticket.getCustomer() == null) throw new IllegalArgumentException("Customer is required");
+        if (ticket.getPrice() <= 0.0) throw new IllegalArgumentException("Price must be positive");
+
+        try {
+            return ticketRepo.save(ticket);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalArgumentException("Failed to save ticket: " + ex.getMostSpecificCause().getMessage(), ex);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Failed to save ticket: " + ex.getMessage(), ex);
+        }
     }
 
     public void deleteTicketbyId(String id) {
