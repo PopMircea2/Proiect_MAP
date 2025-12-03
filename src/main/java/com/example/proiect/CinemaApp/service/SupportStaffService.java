@@ -29,7 +29,10 @@ public class SupportStaffService {
     public SupportStaff addSupportStaff(SupportStaff staff) {
         // ensure id
         if (staff.getId() == null || staff.getId().isBlank()) {
-            staff.setId(UUID.randomUUID().toString());
+            throw new BusinessValidationException("ID is required and cannot be empty");
+        }
+        if (supportStaffRepo.existsById(staff.getId())) {
+            throw new BusinessValidationException("SupportSatff with ID '" + staff.getId() + "' already exists");
         }
         // ensure staffType column is set (defensive, because DB requires it)
         if (staff.getStaffType() == null || staff.getStaffType().isBlank()) {

@@ -29,7 +29,10 @@ public class TechnicalOperatorService {
     public TechnicalOperator addTechnicalOperator(TechnicalOperator technicalOperator) {
         // ensure id
         if (technicalOperator.getId() == null || technicalOperator.getId().isBlank()) {
-            technicalOperator.setId(UUID.randomUUID().toString());
+            throw new BusinessValidationException("ID is required and cannot be empty");
+        }
+        if (technicalOperatorRepo.existsById(technicalOperator.getId())) {
+            throw new BusinessValidationException("Customer with ID '" + technicalOperator.getId() + "' does not exist");
         }
         // ensure staffType
         if (technicalOperator.getStaffType() == null || technicalOperator.getStaffType().isBlank()) {

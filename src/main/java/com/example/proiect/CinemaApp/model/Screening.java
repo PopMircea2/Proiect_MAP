@@ -10,7 +10,6 @@ import jakarta.validation.constraints.*;
 @Table(name = "Screening")
 public class Screening {
     @Id
-    //@NotBlank(message = "ID is required")
     @Column(name = "Id")
     private String id;
 
