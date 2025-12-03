@@ -10,12 +10,12 @@ public class Ticket {
     @Column(name = "Id")
     private String id;
 
-    @NotNull(message = "Screening is required")
+    //@NotNull(message = "Screening is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ScreeningId", referencedColumnName = "Id")
     private Screening screening;
 
-    @NotNull(message = "Seat is required")
+    //@NotNull(message = "Seat is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SeatId", referencedColumnName = "Id")
     private Seat seat;
@@ -24,7 +24,7 @@ public class Ticket {
     @Column(name = "Price")
     private double price;
 
-    @NotNull(message = "Customer is required")
+    //@NotNull(message = "Customer is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CustomerId", referencedColumnName = "Id")
     private Customer customer;

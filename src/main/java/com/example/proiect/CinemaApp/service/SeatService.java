@@ -31,7 +31,10 @@ public class SeatService {
 
     public Seat addSeat(Seat seat) {
         if (seat.getId() == null || seat.getId().isBlank()) {
-            seat.setId(UUID.randomUUID().toString());
+            throw new BusinessValidationException("ID is required and cannot be empty");
+        }
+        if (seatRepo.existsById(seat.getId())) {
+            throw new BusinessValidationException("Seat with ID '" + seat.getId() + "' exists already");
         }
         // Resolve hall relation from transient hallId if provided
         String hallId = seat.getHallId();
@@ -60,6 +63,7 @@ public class SeatService {
         if (!seatRepo.existsById(seat.getId())) {
             throw new BusinessValidationException("Seat with ID '" + seat.getId() + "' does not exist");
         }
+
         // Resolve hall relation from transient hallId if provided
         String hallId = seat.getHallId();
         if (hallId != null && !hallId.isBlank()) {

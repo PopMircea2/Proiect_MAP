@@ -47,6 +47,7 @@ public class ScreeningController {
     @PostMapping
     public String addScreening(@Valid @ModelAttribute Screening screening, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "Failed to add screening: " + bindingResult.toString());
             model.addAttribute("halls", hallService.getAllHalls());
             model.addAttribute("movies", movieService.getAllMovies());
             return "screening/form";

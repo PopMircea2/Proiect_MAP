@@ -20,7 +20,7 @@ public class Customer {
     @Column(name = "Name")
     private String name;
 
-    @NotNull(message = "Birth date is required")
+    //@NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be in the past")
     @Column(name = "BirthDate")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

@@ -10,16 +10,16 @@ import jakarta.validation.constraints.*;
 @Table(name = "Screening")
 public class Screening {
     @Id
-    @NotBlank(message = "ID is required")
+    //@NotBlank(message = "ID is required")
     @Column(name = "Id")
     private String id;
 
-    @NotNull(message = "Hall is required")
+    //@NotNull(message = "Hall is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HallId", referencedColumnName = "Id")
     private Hall hall;
 
-    @NotNull(message = "Movie is required")
+    //@NotNull(message = "Movie is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MovieId", referencedColumnName = "Id")
     private Movie movie;
@@ -30,7 +30,7 @@ public class Screening {
     @Transient
     private String movieId;
 
-    @NotNull(message = "Date is required")
+    //@NotNull(message = "Date is required")
     @Future(message = "Screening date must be in the future")
     @Column(name = "Date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

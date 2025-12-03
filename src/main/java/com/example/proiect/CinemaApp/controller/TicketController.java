@@ -20,8 +20,8 @@ public class TicketController {
     private final SeatService seatService;
     private final CustomerService customerService;
 
-    public TicketController(TicketService ticketService, ScreeningService screeningService, SeatService seatService, CustomerService customerService) {
-        this.ticketService = ticketService;
+    public TicketController(TicketService tiketService, ScreeningService screeningService, SeatService seatService, CustomerService customerService) {
+        this.ticketService = tiketService;
         this.screeningService = screeningService;
         this.seatService = seatService;
         this.customerService = customerService;
@@ -51,6 +51,7 @@ public class TicketController {
     @PostMapping
     public String addTicket(@Valid @ModelAttribute Ticket ticket, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "Failed to add ticket: " + bindingResult.toString());
             model.addAttribute("screenings", screeningService.getAllScreenings());
             model.addAttribute("seats", seatService.getAllSeats());
             model.addAttribute("customers", customerService.getAllCustomers());

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "TechnicalOperator")
 @PrimaryKeyJoinColumn(name = "StaffId", referencedColumnName = "Id")
 public class TechnicalOperator extends Staff{
-    @NotNull(message = "Specialization is required")
+    //@NotNull(message = "Specialization is required")
     @Column(name = "Specialization", columnDefinition = "VARCHAR(50)")
     private TechnicalOperatorSpecialization specialization;
 

@@ -53,7 +53,12 @@ public class TicketService {
     }
 
     public Ticket addTicket(Ticket ticket) {
-        if (ticket.getId() == null || ticket.getId().isBlank()) ticket.setId(UUID.randomUUID().toString());
+        if (ticket.getId() == null || ticket.getId().isBlank()){
+            throw new BusinessValidationException("ID is required and cannot be empty");
+        }
+        if (ticketRepo.existsById(ticket.getId())) {
+            throw new BusinessValidationException("Ticket with ID '" + ticket.getId() + "' already exists");
+        }
 
         if (ticket.getScreeningId() != null && !ticket.getScreeningId().isBlank()) {
             Screening s = screeningRepo.findById(ticket.getScreeningId()).orElse(null);

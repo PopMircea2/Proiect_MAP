@@ -13,7 +13,7 @@ public abstract class Staff {
     @Column(name = "Id")
     private String id;
 
-    @NotBlank(message = "Name is required")
+    //@NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     @Column(name = "Name")
     private String name;
@@ -22,7 +22,7 @@ public abstract class Staff {
     @Column(name = "hourlyRate")
     private double hourlyRate;
 
-    @NotNull(message = "Birth date is required")
+    //@NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be in the past")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "BirthDate")
