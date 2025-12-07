@@ -17,9 +17,12 @@
             <p><strong>Duration (min):</strong> <span th:text="${movie.durationMin}"></span></p>
             <p><strong>Screenings:</strong>
                 <span th:if="${movie.screenings == null}">None</span>
-                <ul th:if="${movie.screenings != null}">
-                    <li th:each="s : ${movie.screenings}" th:text="${s}"></li>
-                </ul>
+            <ul th:if="${movie.screenings != null}">
+                <li th:each="s : ${movie.screenings}">
+                    <span th:text="${#temporals.format(s.date, 'dd-MM-yyyy HH:mm')}"></span>
+                    <span th:if="${s.hall != null}" th:text="' at ' + ${s.hall.name}"></span>
+                </li>
+            </ul>
             </p>
             <div class="mt-3">
                 <a th:href="@{|/movies/${movie.id}/edit|}" class="btn btn-primary me-2">Edit</a>

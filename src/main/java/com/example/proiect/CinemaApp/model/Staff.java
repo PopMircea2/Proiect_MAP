@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Staff {
     @Id
+    @NotBlank(message = "ID is required")
     @Column(name = "Id")
     private String id;
 

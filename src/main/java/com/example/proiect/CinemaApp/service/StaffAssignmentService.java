@@ -51,7 +51,11 @@ public class StaffAssignmentService {
     public StaffAssignment addAssignment(StaffAssignment assignment) {
         if (assignment.getId() == null || assignment.getId().isBlank()) assignment.setId(UUID.randomUUID().toString());
 
-        // resolve screening
+        return VerifyStaffAssignment(assignment);
+
+    }
+
+    private StaffAssignment VerifyStaffAssignment(StaffAssignment assignment) {
         if (assignment.getScreeningId() != null && !assignment.getScreeningId().isBlank()) {
             Screening s = screeningRepo.findById(assignment.getScreeningId()).orElse(null);
             assignment.setScreening(s);
@@ -87,31 +91,7 @@ public class StaffAssignmentService {
             throw new BusinessValidationException("Staff assignment with ID '" + assignment.getId() + "' does not exist");
         }
 
-        // resolve screening
-        if (assignment.getScreeningId() != null && !assignment.getScreeningId().isBlank()) {
-            Screening s = screeningRepo.findById(assignment.getScreeningId()).orElse(null);
-            assignment.setScreening(s);
-        }
-        // resolve staff: try support staff first, then technical operators
-        if (assignment.getStaffId() != null && !assignment.getStaffId().isBlank()) {
-            String sid = assignment.getStaffId();
-            // try support staff
-            supportStaffService.getSupportStaffById(sid).ifPresentOrElse(
-                    st -> assignment.setStaff(st),
-                    () -> technicalOperatorService.getTechnicalOperatorById(sid).ifPresent(assignment::setStaff)
-            );
-        }
-
-        if (assignment.getScreening() == null) throw new BusinessValidationException("Screening is required");
-        if (assignment.getStaff() == null) throw new BusinessValidationException("Staff is required");
-
-        try {
-            return assignmentRepo.save(assignment);
-        } catch (DataIntegrityViolationException ex) {
-            throw new BusinessValidationException("Failed to save assignment: " + ex.getMostSpecificCause().getMessage(), ex);
-        } catch (Exception ex) {
-            throw new BusinessValidationException("Failed to save assignment: " + ex.getMessage(), ex);
-        }
+        return VerifyStaffAssignment(assignment);
     }
 
     public void deleteAssignmentbyId(String id) {

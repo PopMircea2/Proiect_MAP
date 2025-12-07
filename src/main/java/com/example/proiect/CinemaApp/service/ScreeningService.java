@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ScreeningService {
@@ -63,6 +62,9 @@ public class ScreeningService {
         }
 
         // resolve hall/movie
+        return VerifyScreening(screening);
+    }
+    private Screening VerifyScreening(Screening screening) {
         if (screening.getHallId() != null && !screening.getHallId().isBlank()) {
             Hall h = hallRepo.findById(screening.getHallId()).orElse(null);
             screening.setHall(h);
@@ -94,27 +96,7 @@ public class ScreeningService {
             throw new BusinessValidationException("Screening with ID '" + screening.getId() + "' does not exist");
         }
 
-        // resolve hall/movie
-        if (screening.getHallId() != null && !screening.getHallId().isBlank()) {
-            Hall h = hallRepo.findById(screening.getHallId()).orElse(null);
-            screening.setHall(h);
-        }
-        if (screening.getMovieId() != null && !screening.getMovieId().isBlank()) {
-            Movie m = movieRepo.findById(screening.getMovieId()).orElse(null);
-            screening.setMovie(m);
-        }
-
-        // validate required fields
-        if (screening.getHall() == null) throw new BusinessValidationException("Hall is required");
-        if (screening.getMovie() == null) throw new BusinessValidationException("Movie is required");
-        if (screening.getDate() == null) throw new BusinessValidationException("Date is required");
-        try {
-            return screeningRepo.save(screening);
-        } catch (DataIntegrityViolationException ex) {
-            throw new BusinessValidationException("Failed to save screening: " + ex.getMostSpecificCause().getMessage(), ex);
-        } catch (Exception ex) {
-            throw new BusinessValidationException("Failed to save screening: " + ex.getMessage(), ex);
-        }
+        return VerifyScreening(screening);
     }
 
     public void deleteScreeningbyId(String id) {

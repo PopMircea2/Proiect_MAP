@@ -60,6 +60,10 @@ public class TicketService {
             throw new BusinessValidationException("Ticket with ID '" + ticket.getId() + "' already exists");
         }
 
+        return VerifyTicket(ticket);
+    }
+
+    private Ticket VerifyTicket(Ticket ticket) {
         if (ticket.getScreeningId() != null && !ticket.getScreeningId().isBlank()) {
             Screening s = screeningRepo.findById(ticket.getScreeningId()).orElse(null);
             ticket.setScreening(s);
@@ -96,31 +100,7 @@ public class TicketService {
             throw new BusinessValidationException("Ticket with ID '" + ticket.getId() + "' does not exist");
         }
 
-        if (ticket.getScreeningId() != null && !ticket.getScreeningId().isBlank()) {
-            Screening s = screeningRepo.findById(ticket.getScreeningId()).orElse(null);
-            ticket.setScreening(s);
-        }
-        if (ticket.getSeatId() != null && !ticket.getSeatId().isBlank()) {
-            Seat st = seatRepo.findById(ticket.getSeatId()).orElse(null);
-            ticket.setSeat(st);
-        }
-        if (ticket.getCustomerId() != null && !ticket.getCustomerId().isBlank()) {
-            Customer c = customerRepo.findById(ticket.getCustomerId()).orElse(null);
-            ticket.setCustomer(c);
-        }
-
-        if (ticket.getScreening() == null) throw new BusinessValidationException("Screening is required");
-        if (ticket.getSeat() == null) throw new BusinessValidationException("Seat is required");
-        if (ticket.getCustomer() == null) throw new BusinessValidationException("Customer is required");
-        if (ticket.getPrice() <= 0.0) throw new BusinessValidationException("Price must be positive");
-
-        try {
-            return ticketRepo.save(ticket);
-        } catch (DataIntegrityViolationException ex) {
-            throw new BusinessValidationException("Failed to save ticket: " + ex.getMostSpecificCause().getMessage(), ex);
-        } catch (Exception ex) {
-            throw new BusinessValidationException("Failed to save ticket: " + ex.getMessage(), ex);
-        }
+        return VerifyTicket(ticket);
     }
 
     public void deleteTicketbyId(String id) {

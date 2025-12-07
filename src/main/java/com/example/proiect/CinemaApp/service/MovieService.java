@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class MovieService {
@@ -37,6 +36,10 @@ public class MovieService {
             throw new BusinessValidationException("A movie with ID '" + movie.getId() + "' already exists");
         }
         // validate mandatory fields
+        return verifyMovie(movie);
+    }
+
+    private Movie verifyMovie(Movie movie) {
         if (movie.getTitle() == null || movie.getTitle().isBlank()) {
             throw new BusinessValidationException("Title is required");
         }
@@ -62,19 +65,7 @@ public class MovieService {
             throw new BusinessValidationException("Movie with ID '" + movie.getId() + "' does not exist");
         }
         // validate mandatory fields
-        if (movie.getTitle() == null || movie.getTitle().isBlank()) {
-            throw new BusinessValidationException("Title is required");
-        }
-        if (movie.getDurationMin() <= 0) {
-            throw new BusinessValidationException("Duration must be positive");
-        }
-        try {
-            return movieRepo.save(movie);
-        } catch (DataIntegrityViolationException ex) {
-            throw new BusinessValidationException("Failed to save movie: " + ex.getMostSpecificCause().getMessage(), ex);
-        } catch (Exception ex) {
-            throw new BusinessValidationException("Failed to save movie: " + ex.getMessage(), ex);
-        }
+        return verifyMovie(movie);
     }
 
     public void deleteMoviebyId(String id) {

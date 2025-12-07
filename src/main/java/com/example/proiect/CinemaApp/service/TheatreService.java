@@ -43,6 +43,10 @@ public class TheatreService {
         if (theatreRepo.existsById(theatre.getId())) {
             throw new BusinessValidationException("A theatre with ID '" + theatre.getId() + "' already exists");
         }
+        return VerifyTheatre(theatre);
+    }
+
+    private Theatre VerifyTheatre(Theatre theatre) {
         if (theatre.getName() == null || theatre.getName().isBlank()) {
             throw new BusinessValidationException("Name is required");
         }
@@ -65,19 +69,7 @@ public class TheatreService {
         if (!theatreRepo.existsById(theatre.getId())) {
             throw new BusinessValidationException("Theatre with ID '" + theatre.getId() + "' does not exist");
         }
-        if (theatre.getName() == null || theatre.getName().isBlank()) {
-            throw new BusinessValidationException("Name is required");
-        }
-        if (theatre.getCity() == null || theatre.getCity().isBlank()) {
-            throw new BusinessValidationException("City is required");
-        }
-        try {
-            return theatreRepo.save(theatre);
-        } catch (DataIntegrityViolationException ex) {
-            throw new BusinessValidationException("Failed to save theatre: " + ex.getMostSpecificCause().getMessage(), ex);
-        } catch (Exception ex) {
-            throw new BusinessValidationException("Failed to save theatre: " + ex.getMessage(), ex);
-        }
+        return VerifyTheatre(theatre);
     }
 
     public void deleteTheatrebyId(String id) {

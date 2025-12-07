@@ -1,7 +1,6 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Hall;
-import com.example.proiect.CinemaApp.model.Theatre;
 import com.example.proiect.CinemaApp.repository.HallJpaRepository;
 import com.example.proiect.CinemaApp.repository.TheatreJpaRepository;
 import com.example.proiect.CinemaApp.exception.BusinessValidationException;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class HallService {
@@ -57,22 +55,7 @@ public class HallService {
             throw new BusinessValidationException("A hall with ID '" + hall.getId() + "' already exists");
         }
 
-        if (hall.getName() == null || hall.getName().isBlank()) {
-            throw new BusinessValidationException("Name is required");
-        }
-        if (hall.getTheatre() == null) {
-            throw new BusinessValidationException("Theatre is required");
-        }
-        if (hall.getCapacity() <= 0) {
-            throw new BusinessValidationException("Capacity must be positive");
-        }
-        try {
-            return hallRepo.save(hall);
-        } catch (DataIntegrityViolationException ex) {
-            throw new BusinessValidationException("Failed to save hall: " + ex.getMostSpecificCause().getMessage(), ex);
-        } catch (Exception ex) {
-            throw new BusinessValidationException("Failed to save hall: " + ex.getMessage(), ex);
-        }
+        return VerifyHall(hall);
     }
 
     public Hall updateHall(Hall hall) {
@@ -86,6 +69,10 @@ public class HallService {
             throw new BusinessValidationException("Hall with ID '" + hall.getId() + "' does not exist");
         }
 
+        return VerifyHall(hall);
+    }
+
+    private Hall VerifyHall(Hall hall) {
         if (hall.getName() == null || hall.getName().isBlank()) {
             throw new BusinessValidationException("Name is required");
         }

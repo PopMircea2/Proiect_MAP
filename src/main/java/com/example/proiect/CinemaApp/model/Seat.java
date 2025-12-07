@@ -7,10 +7,10 @@ import jakarta.validation.constraints.*;
 @Table(name = "Seat")
 public class Seat {
     @Id
+    @NotBlank(message = "ID is required")
     @Column(name = "Id")
     private String id;
 
-    //@NotNull(message = "Hall is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HallId", referencedColumnName = "Id")
     private Hall hall;
@@ -18,7 +18,7 @@ public class Seat {
     @Transient
     private String hallId;
 
-    //@NotBlank(message = "Row label is required")
+    @NotBlank(message = "Row label is required")
     @Size(min = 1, max = 10, message = "Row label must be between 1 and 10 characters")
     @Column(name = "RowLabel")
     private String rowLabel;
