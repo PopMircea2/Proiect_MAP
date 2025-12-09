@@ -1,6 +1,7 @@
 package com.example.proiect.CinemaApp.service;
 
 import com.example.proiect.CinemaApp.model.Hall;
+import com.example.proiect.CinemaApp.model.Theatre;
 import com.example.proiect.CinemaApp.repository.HallJpaRepository;
 import com.example.proiect.CinemaApp.repository.TheatreJpaRepository;
 import com.example.proiect.CinemaApp.exception.BusinessValidationException;
@@ -16,7 +17,6 @@ public class HallService {
     private final HallJpaRepository hallRepo;
     private final TheatreJpaRepository theatreRepo;
 
-    // Single constructor: allow theatreRepo to be null if not present in the context
     public HallService(HallJpaRepository hallRepo, @Nullable TheatreJpaRepository theatreRepo) {
         this.hallRepo = hallRepo;
         this.theatreRepo = theatreRepo;
@@ -45,34 +45,35 @@ public class HallService {
     }
 
     public Hall addHall(Hall hall) {
-        // Check for empty ID
         if (hall.getId() == null || hall.getId().isBlank()) {
             throw new BusinessValidationException("ID is required and cannot be empty");
         }
-
-        // Check for duplicate ID
         if (hallRepo.existsById(hall.getId())) {
             throw new BusinessValidationException("A hall with ID '" + hall.getId() + "' already exists");
         }
-
         return VerifyHall(hall);
     }
 
     public Hall updateHall(Hall hall) {
-        // Check for empty ID
         if (hall.getId() == null || hall.getId().isBlank()) {
             throw new BusinessValidationException("ID is required and cannot be empty");
         }
-
-        // Check if hall exists
         if (!hallRepo.existsById(hall.getId())) {
             throw new BusinessValidationException("Hall with ID '" + hall.getId() + "' does not exist");
         }
-
         return VerifyHall(hall);
     }
 
     private Hall VerifyHall(Hall hall) {
+        String theatreId = hall.getTheatreId(); // Assumes getter exists in Hall.java
+        if (theatreId != null && !theatreId.isBlank()) {
+            if (theatreRepo == null) {
+                throw new BusinessValidationException("Theatre repository is not initialized");
+            }
+            Theatre t = theatreRepo.findById(theatreId)
+                    .orElseThrow(() -> new BusinessValidationException("Theatre with ID '" + theatreId + "' does not exist"));
+            hall.setTheatre(t);
+        }
         if (hall.getName() == null || hall.getName().isBlank()) {
             throw new BusinessValidationException("Name is required");
         }
@@ -82,6 +83,7 @@ public class HallService {
         if (hall.getCapacity() <= 0) {
             throw new BusinessValidationException("Capacity must be positive");
         }
+
         try {
             return hallRepo.save(hall);
         } catch (DataIntegrityViolationException ex) {

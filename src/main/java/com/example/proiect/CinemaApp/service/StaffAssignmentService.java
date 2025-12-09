@@ -57,17 +57,21 @@ public class StaffAssignmentService {
 
     private StaffAssignment VerifyStaffAssignment(StaffAssignment assignment) {
         if (assignment.getScreeningId() != null && !assignment.getScreeningId().isBlank()) {
-            Screening s = screeningRepo.findById(assignment.getScreeningId()).orElse(null);
+            Screening s = screeningRepo.findById(assignment.getScreeningId())
+                    .orElseThrow(() -> new BusinessValidationException("Screening with ID '" + assignment.getScreeningId() + "' does not exist"));
             assignment.setScreening(s);
         }
-        // resolve staff: try support staff first, then technical operators
+
         if (assignment.getStaffId() != null && !assignment.getStaffId().isBlank()) {
             String sid = assignment.getStaffId();
-            // try support staff
-            supportStaffService.getSupportStaffById(sid).ifPresentOrElse(
-                    st -> assignment.setStaff(st),
-                    () -> technicalOperatorService.getTechnicalOperatorById(sid).ifPresent(assignment::setStaff)
-            );
+            Optional<com.example.proiect.CinemaApp.model.SupportStaff> supportStaff = supportStaffService.getSupportStaffById(sid);
+            if (supportStaff.isPresent()) {
+                assignment.setStaff(supportStaff.get());
+            } else {
+                com.example.proiect.CinemaApp.model.TechnicalOperator techOp = technicalOperatorService.getTechnicalOperatorById(sid)
+                        .orElseThrow(() -> new BusinessValidationException("Staff member with ID '" + sid + "' does not exist"));
+                assignment.setStaff(techOp);
+            }
         }
 
         if (assignment.getScreening() == null) throw new BusinessValidationException("Screening is required");
@@ -83,7 +87,6 @@ public class StaffAssignmentService {
     }
 
     public StaffAssignment updateAssignment(StaffAssignment assignment) {
-        // For update, ID must exist and not be blank
         if (assignment.getId() == null || assignment.getId().isBlank()) {
             throw new BusinessValidationException("ID is required for update");
         }

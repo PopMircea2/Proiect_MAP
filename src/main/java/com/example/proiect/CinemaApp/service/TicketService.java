@@ -65,15 +65,20 @@ public class TicketService {
 
     private Ticket VerifyTicket(Ticket ticket) {
         if (ticket.getScreeningId() != null && !ticket.getScreeningId().isBlank()) {
-            Screening s = screeningRepo.findById(ticket.getScreeningId()).orElse(null);
+            Screening s = screeningRepo.findById(ticket.getScreeningId())
+                    .orElseThrow(() -> new BusinessValidationException("Screening with ID '" + ticket.getScreeningId() + "' does not exist"));
             ticket.setScreening(s);
         }
+
         if (ticket.getSeatId() != null && !ticket.getSeatId().isBlank()) {
-            Seat st = seatRepo.findById(ticket.getSeatId()).orElse(null);
+            Seat st = seatRepo.findById(ticket.getSeatId())
+                    .orElseThrow(() -> new BusinessValidationException("Seat with ID '" + ticket.getSeatId() + "' does not exist"));
             ticket.setSeat(st);
         }
+
         if (ticket.getCustomerId() != null && !ticket.getCustomerId().isBlank()) {
-            Customer c = customerRepo.findById(ticket.getCustomerId()).orElse(null);
+            Customer c = customerRepo.findById(ticket.getCustomerId())
+                    .orElseThrow(() -> new BusinessValidationException("Customer with ID '" + ticket.getCustomerId() + "' does not exist"));
             ticket.setCustomer(c);
         }
 
@@ -92,7 +97,6 @@ public class TicketService {
     }
 
     public Ticket updateTicket(Ticket ticket) {
-        // For update, ID must exist and not be blank
         if (ticket.getId() == null || ticket.getId().isBlank()) {
             throw new BusinessValidationException("ID is required for update");
         }

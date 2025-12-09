@@ -61,23 +61,31 @@ public class ScreeningService {
             throw new BusinessValidationException("A screening with ID '" + screening.getId() + "' already exists");
         }
 
-        // resolve hall/movie
         return VerifyScreening(screening);
     }
+
     private Screening VerifyScreening(Screening screening) {
-        if (screening.getHallId() != null && !screening.getHallId().isBlank()) {
-            Hall h = hallRepo.findById(screening.getHallId()).orElse(null);
+        // 1. Strict Validation for Hall ID
+        String hId = screening.getHallId();
+        if (hId != null && !hId.isBlank()) {
+            Hall h = hallRepo.findById(hId)
+                    .orElseThrow(() -> new BusinessValidationException("Hall with ID '" + hId + "' does not exist"));
             screening.setHall(h);
         }
-        if (screening.getMovieId() != null && !screening.getMovieId().isBlank()) {
-            Movie m = movieRepo.findById(screening.getMovieId()).orElse(null);
+
+        // 2. Strict Validation for Movie ID
+        String mId = screening.getMovieId();
+        if (mId != null && !mId.isBlank()) {
+            Movie m = movieRepo.findById(mId)
+                    .orElseThrow(() -> new BusinessValidationException("Movie with ID '" + mId + "' does not exist"));
             screening.setMovie(m);
         }
 
-        // validate required fields
         if (screening.getHall() == null) throw new BusinessValidationException("Hall is required");
         if (screening.getMovie() == null) throw new BusinessValidationException("Movie is required");
+
         if (screening.getDate() == null) throw new BusinessValidationException("Date is required");
+
         try {
             return screeningRepo.save(screening);
         } catch (DataIntegrityViolationException ex) {

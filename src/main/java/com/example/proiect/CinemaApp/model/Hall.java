@@ -17,10 +17,15 @@ public class Hall {
     @Column(name = "Name")
     private String name;
 
-    @NotNull(message = "Theatre is required")
+    //@NotNull(message = "Theatre is required") // Commented out to prevent validation error on the null object
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TheatreId", referencedColumnName = "Id")
     private Theatre theatre;
+
+    // --- ADD THIS TRANSIENT FIELD ---
+    @Transient
+    private String theatreId;
+    // --------------------------------
 
     @Positive(message = "Capacity must be positive")
     @Column(name = "Capacity")
@@ -32,43 +37,26 @@ public class Hall {
     @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings;
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public Theatre getTheatre() {
-        return theatre;
-    }
-    public void setTheatre(Theatre theatre) {
-        this.theatre = theatre;
-    }
-    public int getCapacity() {
-        return capacity;
-    }
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-    public List<Seat> getSeats() {
-        return seats;
-    }
-    public void setSeats(List<Seat> seats) {
-        this.seats = seats;
-    }
-    public List<Screening> getScreenings() {
-        return screenings;
-    }
-    public void setScreenings(List<Screening> screenings) {
-        this.screenings = screenings;
-    }
     public Hall() {}
+    public String getTheatreId() {
+        if (theatre != null && theatre.getId() != null) return theatre.getId();
+        return theatreId;
+    }
+    public void setTheatreId(String theatreId) {
+        this.theatreId = theatreId;
+    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public Theatre getTheatre() { return theatre; }
+    public void setTheatre(Theatre theatre) { this.theatre = theatre; }
+    public int getCapacity() { return capacity; }
+    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public List<Seat> getSeats() { return seats; }
+    public void setSeats(List<Seat> seats) { this.seats = seats; }
+    public List<Screening> getScreenings() { return screenings; }
+    public void setScreenings(List<Screening> screenings) { this.screenings = screenings; }
 
     public Hall(String id, String name, Theatre theatre, int capacity, List<Seat> seats, List<Screening> screenings) {
         this.id = id;
