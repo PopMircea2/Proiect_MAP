@@ -31,8 +31,20 @@ public class StaffAssignmentController {
     }
 
     @GetMapping
-    public String showAssignments(Model model) {
-        model.addAttribute("assignments", staffAssignmentService.getAllAssignments());
+    public String showAssignments(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String screeningId,
+            @RequestParam(required = false) String staffId,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+        model.addAttribute("assignments", staffAssignmentService.getAllAssignments(q, screeningId, staffId, sort, dir));
+        model.addAttribute("paramQ", q);
+        model.addAttribute("paramScreeningId", screeningId);
+        model.addAttribute("paramStaffId", staffId);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
         return "staffassignment/index";
     }
 

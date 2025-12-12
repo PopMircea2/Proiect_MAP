@@ -19,8 +19,18 @@ public class TheatreController {
     }
 
     @GetMapping
-    public String showTheatres(Model model) {
-        model.addAttribute("theatres", theatreService.getAllTheatres());
+    public String showTheatres(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String city,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+        model.addAttribute("theatres", theatreService.getAllTheatres(q, city, sort, dir));
+        model.addAttribute("paramQ", q);
+        model.addAttribute("paramCity", city);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
         return "theatre/index";
     }
 

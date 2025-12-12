@@ -22,8 +22,20 @@ public class SeatController {
     }
 
     @GetMapping
-    public String showSeats(Model model) {
-        model.addAttribute("seats", seatService.getAllSeats());
+    public String showSeats(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Integer columnNumber,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+
+        model.addAttribute("seats", seatService.getAllSeats(q, columnNumber, sort, dir));
+        model.addAttribute("paramQ", q);
+        model.addAttribute("paramColumnNumber", columnNumber);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
+
         return "seat/index";
     }
 

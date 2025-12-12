@@ -28,8 +28,24 @@ public class TicketController {
     }
 
     @GetMapping
-    public String showTickets(Model model) {
-        model.addAttribute("tickets", ticketService.getAllTickets());
+    public String showTickets(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String customerId,
+            @RequestParam(required = false) String screeningId,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+
+        model.addAttribute("tickets", ticketService.getAllTickets(q, customerId, screeningId, sort, dir));
+
+        // preserve UI state
+        model.addAttribute("paramQ", q);
+        model.addAttribute("paramCustomerId", customerId);
+        model.addAttribute("paramScreeningId", screeningId);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
+
         return "ticket/index";
     }
 

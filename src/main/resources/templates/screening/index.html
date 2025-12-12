@@ -17,19 +17,60 @@
         </div>
     </div>
 
+    <div class="card mb-4">
+        <div class="card-body">
+            <form th:action="@{/screenings}" method="get" class="row g-3">
+                <input type="hidden" name="sort" th:value="${paramSort}">
+                <input type="hidden" name="dir" th:value="${paramDir}">
+
+                <div class="col-md-4">
+                    <label for="q" class="form-label">Search Movie Title</label>
+                    <input type="text" class="form-control" id="q" name="q" th:value="${paramQ}" placeholder="Movie title">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="movieId" class="form-label">Movie ID</label>
+                    <input type="text" class="form-control" id="movieId" name="movieId" th:value="${paramMovieId}">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="date" class="form-label">Date (ISO)</label>
+                    <input type="text" class="form-control" id="date" name="date" th:value="${paramDate}" placeholder="yyyy-MM-ddTHH:mm:ss">
+                </div>
+
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary me-2">Filter</button>
+                    <a th:href="@{/screenings}" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped table-hover shadow-sm bg-white">
             <thead class="table-light">
             <tr>
                 <th>ID</th>
-                <th>Date</th>
+                <th>
+                    <a th:href="@{/screenings(sort='date', dir=${reverseDir}, q=${paramQ}, movieId=${paramMovieId}, date=${paramDate})}" class="text-decoration-none text-dark">
+                        Date
+                        <span th:if="${paramSort == 'date'}" th:text="${paramDir == 'asc' ? '▲' : '▼'}"></span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/screenings(sort='movie.title', dir=${reverseDir}, q=${paramQ}, movieId=${paramMovieId}, date=${paramDate})}" class="text-decoration-none text-dark">
+                        Movie
+                        <span th:if="${paramSort == 'movie.title'}" th:text="${paramDir == 'asc' ? '▲' : '▼'}"></span>
+                    </a>
+                </th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="screening : ${screenings}">
                 <td th:text="${screening.id}"></td>
-                <td th:text="${#temporals.format(screening.date, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#temporals.format(screening.date, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${screening.movie != null ? screening.movie.title : ''}"></td>
                 <td>
                     <a th:href="@{|/screenings/${screening.id}|}" class="btn btn-sm btn-outline-primary me-1">Details</a>
                     <a th:href="@{|/screenings/${screening.id}/edit|}" class="btn btn-sm btn-primary me-1">Edit</a>

@@ -5,10 +5,14 @@ import com.example.proiect.CinemaApp.repository.TechnicalOperatorJpaRepository;
 import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Service
 public class TechnicalOperatorService {
@@ -20,6 +24,29 @@ public class TechnicalOperatorService {
 
     public List<TechnicalOperator> getAllTechnicalOperators() {
         return technicalOperatorRepo.findAll();
+    }
+
+    // New: filterable + sortable
+    public List<TechnicalOperator> getAllTechnicalOperators(String q, String specialization, String sortBy, String sortDir) {
+        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        if ("desc".equalsIgnoreCase(sortDir)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Specification<TechnicalOperator> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (q != null && !q.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + q.toLowerCase() + "%"));
+            }
+            if (specialization != null && !specialization.isBlank()) {
+                predicates.add(cb.equal(root.get("specialization").as(String.class), specialization));
+            }
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return technicalOperatorRepo.findAll(spec, sort);
     }
 
     public Optional<TechnicalOperator> getTechnicalOperatorById(String id) {

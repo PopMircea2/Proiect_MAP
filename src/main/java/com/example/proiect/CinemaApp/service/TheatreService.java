@@ -6,9 +6,13 @@ import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Service
 public class TheatreService {
@@ -25,6 +29,33 @@ public class TheatreService {
             if (t.getHalls() != null) t.getHalls().size();
         }
         return list;
+    }
+
+    // New: filterable + sortable getAllTheatres
+    @Transactional(readOnly = true)
+    public List<Theatre> getAllTheatres(String q, String city, String sortBy, String sortDir) {
+        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        if ("desc".equalsIgnoreCase(sortDir)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Specification<Theatre> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (q != null && !q.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + q.toLowerCase() + "%"));
+            }
+
+            if (city != null && city.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("city")), "%" + city.toLowerCase() + "%"));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return theatreRepo.findAll(spec, sort);
     }
 
     @Transactional(readOnly = true)

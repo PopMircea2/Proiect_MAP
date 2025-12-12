@@ -10,8 +10,14 @@ import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 @Service
 public class ScreeningService {
@@ -36,6 +42,49 @@ public class ScreeningService {
             if (s.getMovie() != null) {
                 s.getMovie().getTitle();
             }
+        }
+        return list;
+    }
+
+    // New: filterable + sortable getAllScreenings
+    @Transactional(readOnly = true)
+    public List<Screening> getAllScreenings(String q, String movieId, String dateIso, String sortBy, String sortDir) {
+        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        if ("desc".equalsIgnoreCase(sortDir)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Specification<Screening> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (q != null && !q.isEmpty()) {
+                // search by related movie title
+                predicates.add(cb.like(cb.lower(root.join("movie").get("title")), "%" + q.toLowerCase() + "%"));
+            }
+
+            if (movieId != null && !movieId.isBlank()) {
+                predicates.add(cb.equal(root.get("movie").get("id"), movieId));
+            }
+
+            if (dateIso != null && !dateIso.isBlank()) {
+                try {
+                    LocalDateTime dt = LocalDateTime.parse(dateIso);
+                    predicates.add(cb.equal(root.get("date"), dt));
+                } catch (DateTimeParseException ex) {
+                    // ignore invalid date format filter
+                }
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        List<Screening> list = screeningRepo.findAll(spec, sort);
+        // initialize relations used by views
+        for (Screening s : list) {
+            if (s.getHall() != null) s.getHall().getName();
+            if (s.getMovie() != null) s.getMovie().getTitle();
         }
         return list;
     }

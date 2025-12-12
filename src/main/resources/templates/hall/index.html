@@ -17,13 +17,47 @@
         </div>
     </div>
 
+    <div class="card mb-4">
+        <div class="card-body">
+            <form th:action="@{/halls}" method="get" class="row g-3">
+                <input type="hidden" name="sort" th:value="${paramSort}">
+                <input type="hidden" name="dir" th:value="${paramDir}">
+
+                <div class="col-md-6">
+                    <label for="q" class="form-label">Search Name</label>
+                    <input type="text" class="form-control" id="q" name="q" th:value="${paramQ}" placeholder="Hall name">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="theatreId" class="form-label">Theatre ID</label>
+                    <input type="text" class="form-control" id="theatreId" name="theatreId" th:value="${paramTheatreId}">
+                </div>
+
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary me-2">Filter</button>
+                    <a th:href="@{/halls}" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped table-hover shadow-sm bg-white">
             <thead class="table-light">
             <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Capacity</th>
+                <th>
+                    <a th:href="@{/halls(sort='name', dir=${reverseDir}, q=${paramQ}, theatreId=${paramTheatreId})}" class="text-decoration-none text-dark">
+                        Name
+                        <span th:if="${paramSort == 'name'}" th:text="${paramDir == 'asc' ? '▲' : '▼'}"></span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/halls(sort='capacity', dir=${reverseDir}, q=${paramQ}, theatreId=${paramTheatreId})}" class="text-decoration-none text-dark">
+                        Capacity
+                        <span th:if="${paramSort == 'capacity'}" th:text="${paramDir == 'asc' ? '▲' : '▼'}"></span>
+                    </a>
+                </th>
                 <th>Actions</th>
             </tr>
             </thead>

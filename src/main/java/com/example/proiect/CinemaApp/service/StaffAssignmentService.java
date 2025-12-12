@@ -8,10 +8,14 @@ import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Service
 public class StaffAssignmentService {
@@ -31,6 +35,42 @@ public class StaffAssignmentService {
     @Transactional(readOnly = true)
     public List<StaffAssignment> getAllAssignments() {
         List<StaffAssignment> list = assignmentRepo.findAll();
+        for (StaffAssignment s : list) {
+            if (s.getScreening() != null) s.getScreening().getId();
+            if (s.getStaff() != null) s.getStaff().getName();
+        }
+        return list;
+    }
+
+    // New: filterable + sortable getAllAssignments
+    @Transactional(readOnly = true)
+    public List<StaffAssignment> getAllAssignments(String q, String screeningId, String staffId, String sortBy, String sortDir) {
+        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        if ("desc".equalsIgnoreCase(sortDir)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Specification<StaffAssignment> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (q != null && !q.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.join("staff").get("name")), "%" + q.toLowerCase() + "%"));
+            }
+
+            if (screeningId != null && !screeningId.isBlank()) {
+                predicates.add(cb.equal(root.get("screening").get("id"), screeningId));
+            }
+
+            if (staffId != null && !staffId.isBlank()) {
+                predicates.add(cb.equal(root.get("staff").get("id"), staffId));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        List<StaffAssignment> list = assignmentRepo.findAll(spec, sort);
         for (StaffAssignment s : list) {
             if (s.getScreening() != null) s.getScreening().getId();
             if (s.getStaff() != null) s.getStaff().getName();

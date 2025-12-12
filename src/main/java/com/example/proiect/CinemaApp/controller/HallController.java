@@ -22,8 +22,18 @@ public class HallController {
     }
 
     @GetMapping
-    public String showHalls(Model model) {
-        model.addAttribute("halls", hallService.getAllHalls());
+    public String showHalls(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String theatreId,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+        model.addAttribute("halls", hallService.getAllHalls(q, theatreId, sort, dir));
+        model.addAttribute("paramQ", q);
+        model.addAttribute("paramTheatreId", theatreId);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
         return "hall/index";
     }
 

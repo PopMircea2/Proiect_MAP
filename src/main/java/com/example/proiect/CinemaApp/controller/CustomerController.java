@@ -19,8 +19,16 @@ public class CustomerController {
     }
 
     @GetMapping
-    public String showCustomers(Model model) {
-        model.addAttribute("customers", customerService.getAllCustomers());
+    public String showCustomers(
+            @RequestParam(required = false) String q,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+        model.addAttribute("customers", customerService.getAllCustomers(q, sort, dir));
+        model.addAttribute("paramQ", q);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
         return "customer/index";
     }
 

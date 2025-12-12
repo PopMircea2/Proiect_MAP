@@ -7,8 +7,12 @@ import com.example.proiect.CinemaApp.repository.HallJpaRepository;
 import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 public class SeatService {
@@ -22,6 +26,32 @@ public class SeatService {
 
     public List<Seat> getAllSeats() {
         return seatRepo.findAll();
+    }
+
+    // New: filterable + sortable getAllSeats
+    public List<Seat> getAllSeats(String q, Integer columnNumber, String sortBy, String sortDir) {
+        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        if ("desc".equalsIgnoreCase(sortDir)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Specification<Seat> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (q != null && !q.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("rowLabel")), "%" + q.toLowerCase() + "%"));
+            }
+
+            if (columnNumber != null) {
+                predicates.add(cb.equal(root.get("columnNumber"), columnNumber));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return seatRepo.findAll(spec, sort);
     }
 
     public Optional<Seat> getSeatById(String id) {

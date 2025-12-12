@@ -19,8 +19,18 @@ public class SupportStaffController {
     }
 
     @GetMapping
-    public String showSupportStaff(Model model) {
-        model.addAttribute("supportstaff", supportStaffService.getAllSupportStaff());
+    public String showSupportStaff(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String role,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+        model.addAttribute("supportstaff", supportStaffService.getAllSupportStaff(q, role, sort, dir));
+        model.addAttribute("paramQ", q);
+        model.addAttribute("paramRole", role);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
         return "supportstaff/index";
     }
 

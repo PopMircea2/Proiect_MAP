@@ -6,9 +6,13 @@ import com.example.proiect.CinemaApp.repository.CustomerJpaRepository;
 import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Service
 public class CustomerService {
@@ -25,6 +29,29 @@ public class CustomerService {
             if (c.getTickets() != null) c.getTickets().size();
         }
         return list;
+    }
+
+    // New: filterable + sortable getAllCustomers
+    @Transactional(readOnly = true)
+    public List<Customer> getAllCustomers(String q, String sortBy, String sortDir) {
+        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        if ("desc".equalsIgnoreCase(sortDir)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Specification<Customer> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (q != null && !q.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + q.toLowerCase() + "%"));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return customerRepo.findAll(spec, sort);
     }
 
     @Transactional(readOnly = true)

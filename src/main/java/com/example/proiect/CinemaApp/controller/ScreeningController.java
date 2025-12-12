@@ -25,8 +25,22 @@ public class ScreeningController {
     }
 
     @GetMapping
-    public String showScreenings(Model model) {
-        model.addAttribute("screenings", screeningService.getAllScreenings());
+    public String showScreenings(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String movieId,
+            @RequestParam(required = false) String date,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+
+        model.addAttribute("screenings", screeningService.getAllScreenings(q, movieId, date, sort, dir));
+        model.addAttribute("paramQ", q);
+        model.addAttribute("paramMovieId", movieId);
+        model.addAttribute("paramDate", date);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
+
         return "screening/index";
     }
 

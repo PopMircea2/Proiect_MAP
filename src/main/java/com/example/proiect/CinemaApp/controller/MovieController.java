@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/movies")
 public class MovieController {
@@ -19,11 +21,11 @@ public class MovieController {
     }
 
     // Show list of movies
-    @GetMapping
-    public String showMovies(Model model) {
-        model.addAttribute("movies", movieService.getAllMovies());
-        return "movie/index";
-    }
+//    @GetMapping
+//    public String showMovies(Model model) {
+//        model.addAttribute("movies", movieService.getAllMovies());
+//        return "movie/index";
+//    }
 
     // Show details for a specific movie
     @GetMapping("/{id}")
@@ -84,5 +86,31 @@ public class MovieController {
             model.addAttribute("errorMessage", "Failed to update movie: " + e.getMessage());
             return "movie/form-update";
         }
+    }
+
+    @GetMapping
+    public String showMovies(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Double minRating,
+            @RequestParam(defaultValue = "title") String sort, // Default sort by title
+            @RequestParam(defaultValue = "asc") String dir,    // Default direction asc
+            Model model) {
+
+        // Fetch filtered and sorted list
+        List<Movie> movies = movieService.getAllMovies(title, minRating, sort, dir);
+
+        // Add data to model
+        model.addAttribute("movies", movies);
+
+        // Add current filter/sort values to model (to preserve them in the UI)
+        model.addAttribute("paramTitle", title);
+        model.addAttribute("paramMinRating", minRating);
+        model.addAttribute("paramSort", sort);
+        model.addAttribute("paramDir", dir);
+
+        // Calculate reverse direction for the table headers (if currently asc, next click should be desc)
+        model.addAttribute("reverseDir", "asc".equals(dir) ? "desc" : "asc");
+
+        return "movie/index";
     }
 }

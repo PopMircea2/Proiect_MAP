@@ -6,10 +6,14 @@ import com.example.proiect.CinemaApp.repository.SupportStaffJpaRepository;
 import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Service
 public class SupportStaffService {
@@ -21,6 +25,30 @@ public class SupportStaffService {
 
     public List<SupportStaff> getAllSupportStaff() {
         return supportStaffRepo.findAll();
+    }
+
+    // New: filterable + sortable
+    public List<SupportStaff> getAllSupportStaff(String q, String role, String sortBy, String sortDir) {
+        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        if ("desc".equalsIgnoreCase(sortDir)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Specification<SupportStaff> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (q != null && !q.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + q.toLowerCase() + "%"));
+            }
+            if (role != null && !role.isBlank()) {
+                // compare by enum name or string representation
+                predicates.add(cb.equal(root.get("role").as(String.class), role));
+            }
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return supportStaffRepo.findAll(spec, sort);
     }
 
     public Optional<SupportStaff> getSupportStaffById(String id) {

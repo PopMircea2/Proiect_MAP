@@ -12,9 +12,13 @@ import com.example.proiect.CinemaApp.exception.BusinessValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Service
 public class TicketService {
@@ -33,6 +37,50 @@ public class TicketService {
     @Transactional(readOnly = true)
     public List<Ticket> getAllTickets() {
         List<Ticket> list = ticketRepo.findAll();
+        for (Ticket t : list) {
+            if (t.getScreening() != null) t.getScreening().getId();
+            if (t.getCustomer() != null) t.getCustomer().getName();
+            if (t.getSeat() != null) t.getSeat().getRowLabel();
+        }
+        return list;
+    }
+
+    // New: filterable + sortable getAllTickets
+    @Transactional(readOnly = true)
+    public List<Ticket> getAllTickets(String q, String customerId, String screeningId, String sortBy, String sortDir) {
+        // 1. Build Sort
+        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        if ("desc".equalsIgnoreCase(sortDir)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        // 2. Build Specification
+        Specification<Ticket> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (q != null && !q.isEmpty()) {
+                // search seat row label and customer name
+                predicates.add(cb.or(
+                        cb.like(cb.lower(root.join("seat").get("rowLabel")), "%" + q.toLowerCase() + "%"),
+                        cb.like(cb.lower(root.join("customer").get("name")), "%" + q.toLowerCase() + "%")
+                ));
+            }
+
+            if (customerId != null && !customerId.isBlank()) {
+                predicates.add(cb.equal(root.get("customer").get("id"), customerId));
+            }
+
+            if (screeningId != null && !screeningId.isBlank()) {
+                predicates.add(cb.equal(root.get("screening").get("id"), screeningId));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        List<Ticket> list = ticketRepo.findAll(spec, sort);
+        // initialize relations for views
         for (Ticket t : list) {
             if (t.getScreening() != null) t.getScreening().getId();
             if (t.getCustomer() != null) t.getCustomer().getName();
