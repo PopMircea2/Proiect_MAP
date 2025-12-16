@@ -23,19 +23,14 @@
                 <input type="hidden" name="sort" th:value="${paramSort}">
                 <input type="hidden" name="dir" th:value="${paramDir}">
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="q" class="form-label">Search Movie Title</label>
                     <input type="text" class="form-control" id="q" name="q" th:value="${paramQ}" placeholder="Movie title">
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="movieId" class="form-label">Movie ID</label>
                     <input type="text" class="form-control" id="movieId" name="movieId" th:value="${paramMovieId}">
-                </div>
-
-                <div class="col-md-4">
-                    <label for="date" class="form-label">Date (ISO)</label>
-                    <input type="text" class="form-control" id="date" name="date" th:value="${paramDate}" placeholder="yyyy-MM-ddTHH:mm:ss">
                 </div>
 
                 <div class="col-12 d-flex justify-content-end">
@@ -52,13 +47,13 @@
             <tr>
                 <th>ID</th>
                 <th>
-                    <a th:href="@{/screenings(sort='date', dir=${reverseDir}, q=${paramQ}, movieId=${paramMovieId}, date=${paramDate})}" class="text-decoration-none text-dark">
+                    <a th:href="@{/screenings(sort='date', dir=${reverseDir}, q=${paramQ}, movieId=${paramMovieId})}" class="text-decoration-none text-dark">
                         Date
                         <span th:if="${paramSort == 'date'}" th:text="${paramDir == 'asc' ? '▲' : '▼'}"></span>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/screenings(sort='movie.title', dir=${reverseDir}, q=${paramQ}, movieId=${paramMovieId}, date=${paramDate})}" class="text-decoration-none text-dark">
+                    <a th:href="@{/screenings(sort='movie.title', dir=${reverseDir}, q=${paramQ}, movieId=${paramMovieId})}" class="text-decoration-none text-dark">
                         Movie
                         <span th:if="${paramSort == 'movie.title'}" th:text="${paramDir == 'asc' ? '▲' : '▼'}"></span>
                     </a>

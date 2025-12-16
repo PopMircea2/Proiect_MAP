@@ -49,7 +49,11 @@ public class ScreeningService {
     // New: filterable + sortable getAllScreenings
     @Transactional(readOnly = true)
     public List<Screening> getAllScreenings(String q, String movieId, String dateIso, String sortBy, String sortDir) {
-        Sort sort = Sort.by((sortBy == null || sortBy.isBlank()) ? "id" : sortBy);
+        // normalize and default sortBy to 'date' for convenience (upcoming first)
+        String prop = (sortBy == null || sortBy.isBlank()) ? "date" : sortBy;
+
+        // Support nested properties for sorting (e.g., movie.title). Spring Data Sort accepts the property as-is for nested path.
+        Sort sort = Sort.by(prop);
         if ("desc".equalsIgnoreCase(sortDir)) {
             sort = sort.descending();
         } else {
@@ -68,14 +72,7 @@ public class ScreeningService {
                 predicates.add(cb.equal(root.get("movie").get("id"), movieId));
             }
 
-            if (dateIso != null && !dateIso.isBlank()) {
-                try {
-                    LocalDateTime dt = LocalDateTime.parse(dateIso);
-                    predicates.add(cb.equal(root.get("date"), dt));
-                } catch (DateTimeParseException ex) {
-                    // ignore invalid date format filter
-                }
-            }
+            // date filter removed intentionally
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
