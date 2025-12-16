@@ -48,7 +48,7 @@ public class TheatreService {
                 predicates.add(cb.like(cb.lower(root.get("name")), "%" + q.toLowerCase() + "%"));
             }
 
-            if (city != null && city.isBlank()) {
+            if (city != null && !city.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("city")), "%" + city.toLowerCase() + "%"));
             }
 

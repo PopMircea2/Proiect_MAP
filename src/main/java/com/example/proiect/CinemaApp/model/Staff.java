@@ -38,7 +38,6 @@ public abstract class Staff {
     @PreUpdate
     private void ensureStaffType() {
         if (this.staffType == null || this.staffType.isBlank()) {
-            // Map concrete classes to the short DB values used in data.sql (lowercase)
             String cls = this.getClass().getSimpleName();
             if ("SupportStaff".equals(cls)) this.staffType = "support";
             else if ("TechnicalOperator".equals(cls)) this.staffType = "technical";

@@ -18,7 +18,7 @@ public class Movie {
 
     @Positive(message = "Duration must be positive")
     @Column(name = "DurationMin")
-    private int DurationMin;
+    private int durationMin;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings;
@@ -26,7 +26,7 @@ public class Movie {
     @DecimalMin(value = "0.0", message = "Rating must be at least 0.0")
     @DecimalMax(value = "10.0", message = "Rating must not exceed 10.0")
     @Column(name = "Rating")
-    private Double Rating;
+    private Double rating;
 
     public Movie() {
 
@@ -34,11 +34,11 @@ public class Movie {
 
 
     public Double getRating() {
-        return Rating;
+        return rating;
     }
 
     public void setRating(Double rating) {
-        Rating = rating;
+        this.rating = rating;
     }
 
     public String getId() {
@@ -58,11 +58,11 @@ public class Movie {
     }
 
     public int getDurationMin() {
-        return DurationMin;
+        return durationMin;
     }
 
     public void setDurationMin(int durationMin) {
-        DurationMin = durationMin;
+        this.durationMin = durationMin;
     }
 
     public List<Screening> getScreenings() {
@@ -73,11 +73,11 @@ public class Movie {
         this.screenings = screenings;
     }
 
-    public Movie(String id, String title, int durationMin, Double Rating ,List<Screening> screenings) {
+    public Movie(String id, String title, int durationMin, Double rating ,List<Screening> screenings) {
         this.id = id;
         this.title = title;
-        DurationMin = durationMin;
+        this.durationMin = durationMin;
         this.screenings = screenings;
-        this.Rating = Rating;
+        this.rating = rating;
     }
 }

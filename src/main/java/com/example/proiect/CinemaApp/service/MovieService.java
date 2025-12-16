@@ -77,8 +77,11 @@ public class MovieService {
 
 
     public List<Movie> getAllMovies(String title, Double minRating, String sortBy, String sortDir) {
-        // 1. Build the Sort object
-        Sort sort = Sort.by(sortBy);
+        // Normalize sortBy to Java property name (camelCase) and default to title
+        String prop = (sortBy == null || sortBy.isBlank()) ? "title" : Character.toLowerCase(sortBy.charAt(0)) + sortBy.substring(1);
+
+        // 1. Build the Sort object using normalized property
+        Sort sort = Sort.by(prop);
         if ("desc".equalsIgnoreCase(sortDir)) {
             sort = sort.descending();
         } else {
@@ -97,8 +100,8 @@ public class MovieService {
 
             // Filter by Minimum Rating (if provided)
             if (minRating != null) {
-                // roughly: WHERE rating >= minRating
-                predicates.add(cb.greaterThanOrEqualTo(root.get("Rating"), minRating));
+                // use normalized property name for rating
+                predicates.add(cb.greaterThanOrEqualTo(root.get("rating"), minRating));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
